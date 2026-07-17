@@ -18,6 +18,7 @@ import {
   Smartphone,
   Sprout,
   Tag,
+  Tractor,
   Wrench,
 } from "lucide-react";
 
@@ -35,6 +36,7 @@ const ICONS_BY_SLUG: Record<string, LucideIcon> = {
   "dlya-detey": Baby,
   "dom-i-sad": Sprout,
   zhivotnye: PawPrint,
+  "selskoe-hozyaystvo": Tractor,
   stroymaterialy: HardHat,
   mebel: Armchair,
   hobbi: Palette,

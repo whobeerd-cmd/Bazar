@@ -11,7 +11,7 @@ export default async function HomePage() {
       .is("parent_id", null)
       .eq("is_active", true)
       .order("sort_order")
-      .limit(12),
+      .limit(24),
     supabase
       .from("banners")
       .select("id, image_url, link_url")
