@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Палитра Bazar: тёплый почти-белый фон и тёплый почти-чёрный текст (единая
+ * "температура" вместо нейтрального серого по умолчанию) + глубокий зелёный
+ * акцент — цвет с флага Ингушетии, не случайный дефолт.
+ */
+:root {
+  --background: 40 20% 99%;
+  --foreground: 150 12% 12%;
+  --primary: 152 45% 27%;
+  --primary-hover: 152 48% 22%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 40 14% 95%;
+  --muted-foreground: 150 8% 42%;
+  --border: 40 10% 88%;
+  --border-strong: 40 8% 78%;
+  --accent: 38 68% 48%;
+  --accent-foreground: 30 30% 14%;
+  --radius: 0.625rem;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "tnum" 1;
+}
+
+::selection {
+  background: hsl(var(--primary) / 0.16);
+}
