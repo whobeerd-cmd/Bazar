@@ -34,7 +34,7 @@ export function ListingStatusActions({ listingId, status }: { listingId: string;
             type="button"
             disabled={isPending}
             onClick={() => run(() => submitListingAction(listingId))}
-            className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
+            className="btn-primary"
           >
             Отправить на модерацию
           </button>
@@ -48,7 +48,7 @@ export function ListingStatusActions({ listingId, status }: { listingId: string;
               if (!confirm("Удалить черновик без возможности восстановления?")) return;
               run(() => deleteListingAction(listingId));
             }}
-            className="rounded-md border border-border px-3 py-1.5 text-sm text-red-600 disabled:opacity-60"
+            className="btn-secondary text-red-600"
           >
             Удалить черновик
           </button>
@@ -60,7 +60,7 @@ export function ListingStatusActions({ listingId, status }: { listingId: string;
               type="button"
               disabled={isPending}
               onClick={() => run(() => markSoldAction(listingId))}
-              className="rounded-md border border-border px-3 py-1.5 text-sm disabled:opacity-60"
+              className="btn-secondary"
             >
               Отметить как продано
             </button>
@@ -68,7 +68,7 @@ export function ListingStatusActions({ listingId, status }: { listingId: string;
               type="button"
               disabled={isPending}
               onClick={() => run(() => archiveListingAction(listingId))}
-              className="rounded-md border border-border px-3 py-1.5 text-sm disabled:opacity-60"
+              className="btn-secondary"
             >
               В архив
             </button>

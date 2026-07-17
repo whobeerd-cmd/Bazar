@@ -56,7 +56,7 @@ export function AvatarUploader({
 
   return (
     <div className="flex items-center gap-4">
-      <div className="h-16 w-16 overflow-hidden rounded-full bg-muted">
+      <div className="h-16 w-16 overflow-hidden rounded-full border border-border bg-muted">
         {avatarUrl ? (
           <Image src={avatarUrl} alt="Аватар" width={64} height={64} className="h-16 w-16 object-cover" />
         ) : (
@@ -70,7 +70,7 @@ export function AvatarUploader({
           type="button"
           disabled={isPending}
           onClick={() => inputRef.current?.click()}
-          className="rounded-md border border-border px-3 py-1.5 text-sm disabled:opacity-60"
+          className="btn-secondary py-1.5"
         >
           {isPending ? "Загружаем..." : "Сменить фото"}
         </button>

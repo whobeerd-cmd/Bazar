@@ -46,8 +46,8 @@ export function ListingRow({ listing }: { listing: MyListing }) {
   }
 
   return (
-    <div className="flex items-center gap-4 rounded-lg border border-border p-3">
-      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-md bg-muted">
+    <div className="card flex items-center gap-4 p-3">
+      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
         {listing.cover_url && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={listing.cover_url} alt="" className="h-full w-full object-cover" />
@@ -57,24 +57,24 @@ export function ListingRow({ listing }: { listing: MyListing }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           {listing.status === "active" ? (
-            <Link href={`/listings/${listing.slug}`} className="truncate font-medium hover:underline">
+            <Link href={`/listings/${listing.slug}`} className="truncate font-medium text-foreground hover:underline">
               {listing.title}
             </Link>
           ) : (
-            <span className="truncate font-medium">{listing.title}</span>
+            <span className="truncate font-medium text-foreground">{listing.title}</span>
           )}
-          <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${statusInfo.className}`}>
+          <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${statusInfo.className}`}>
             {statusInfo.label}
           </span>
         </div>
-        <p className="mt-0.5 text-sm text-muted-foreground">
+        <p className="mt-0.5 text-sm font-medium text-muted-foreground">
           {formatPrice(listing.price_type, listing.price)}
         </p>
         {error && <p className="mt-1 text-xs text-red-700">{error}</p>}
       </div>
 
       <div className="flex shrink-0 flex-wrap items-center gap-2 text-sm">
-        <Link href={`/my-ads/${listing.id}/edit`} className="rounded-md border border-border px-3 py-1.5 hover:bg-muted">
+        <Link href={`/my-ads/${listing.id}/edit`} className="btn-secondary py-1.5">
           Редактировать
         </Link>
 
@@ -84,7 +84,7 @@ export function ListingRow({ listing }: { listing: MyListing }) {
               type="button"
               disabled={isPending}
               onClick={() => run(() => boostListingAction(listing.id))}
-              className="rounded-md border border-border px-3 py-1.5 disabled:opacity-60"
+              className="btn-secondary py-1.5"
             >
               Поднять в списке
             </button>
@@ -92,7 +92,7 @@ export function ListingRow({ listing }: { listing: MyListing }) {
               type="button"
               disabled={isPending}
               onClick={() => run(() => markSoldAction(listing.id))}
-              className="rounded-md border border-border px-3 py-1.5 disabled:opacity-60"
+              className="btn-secondary py-1.5"
             >
               Продано
             </button>
@@ -104,7 +104,7 @@ export function ListingRow({ listing }: { listing: MyListing }) {
             type="button"
             disabled={isPending}
             onClick={() => run(() => archiveListingAction(listing.id))}
-            className="rounded-md border border-border px-3 py-1.5 disabled:opacity-60"
+            className="btn-secondary py-1.5"
           >
             В архив
           </button>
@@ -118,7 +118,7 @@ export function ListingRow({ listing }: { listing: MyListing }) {
               if (!confirm("Удалить черновик без возможности восстановления?")) return;
               run(() => deleteListingAction(listing.id));
             }}
-            className="rounded-md border border-border px-3 py-1.5 text-red-600 disabled:opacity-60"
+            className="btn-secondary py-1.5 text-red-600"
           >
             Удалить
           </button>

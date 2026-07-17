@@ -11,17 +11,17 @@ export default async function AdminBannersPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Баннеры</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Баннеры</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Управление рекламными баннерами на главной странице.
       </p>
 
-      <div className="mt-6 rounded-lg border border-border p-4">
-        <p className="mb-3 text-sm font-medium">Добавить баннер</p>
+      <div className="card mt-6 p-5">
+        <p className="mb-3 text-sm font-semibold text-foreground">Добавить баннер</p>
         <BannerForm />
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-lg border border-border">
+      <div className="card mt-6 overflow-x-auto">
         <table className="w-full text-left">
           <thead className="border-b border-border bg-muted text-xs text-muted-foreground">
             <tr>

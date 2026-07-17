@@ -7,8 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { ListingsMap } from "@/components/map/ListingsMap";
 import { INGUSHETIA_CENTER } from "@/lib/map/constants";
 
-const inputClass =
-  "mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary";
+const inputClass = "field-input";
 
 type CategoryOption = { id: number; name: string; depth: number };
 type CityOption = { id: number; name: string };
@@ -79,11 +78,11 @@ export function ListingForm({
   }, [categoryId]);
 
   return (
-    <form action={formAction} className="max-w-xl space-y-4">
+    <form action={formAction} className="space-y-5">
       {defaultValues && <input type="hidden" name="id" value={defaultValues.id} />}
 
       <div>
-        <label htmlFor="title" className="text-sm font-medium">
+        <label htmlFor="title" className="field-label">
           Заголовок
         </label>
         <input
@@ -96,7 +95,7 @@ export function ListingForm({
       </div>
 
       <div>
-        <label htmlFor="categoryId" className="text-sm font-medium">
+        <label htmlFor="categoryId" className="field-label">
           Категория
         </label>
         <select
@@ -118,7 +117,7 @@ export function ListingForm({
       </div>
 
       <div>
-        <label htmlFor="cityId" className="text-sm font-medium">
+        <label htmlFor="cityId" className="field-label">
           Населённый пункт
         </label>
         <select
@@ -138,7 +137,7 @@ export function ListingForm({
       </div>
 
       <div>
-        <label htmlFor="description" className="text-sm font-medium">
+        <label htmlFor="description" className="field-label">
           Описание
         </label>
         <textarea
@@ -153,7 +152,7 @@ export function ListingForm({
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="priceType" className="text-sm font-medium">
+          <label htmlFor="priceType" className="field-label">
             Цена
           </label>
           <select
@@ -169,7 +168,7 @@ export function ListingForm({
           </select>
         </div>
         <div>
-          <label htmlFor="price" className="text-sm font-medium">
+          <label htmlFor="price" className="field-label">
             Сумма, ₽
           </label>
           <input
@@ -180,13 +179,13 @@ export function ListingForm({
             step="1"
             disabled={priceType !== "fixed"}
             defaultValue={defaultValues?.price ?? ""}
-            className={inputClass + " disabled:opacity-50"}
+            className={`${inputClass} disabled:opacity-50`}
           />
         </div>
       </div>
 
       <div>
-        <p className="text-sm font-medium">Состояние</p>
+        <p className="field-label">Состояние</p>
         <div className="mt-1 flex gap-4 text-sm">
           <label className="flex items-center gap-2">
             <input
@@ -210,7 +209,7 @@ export function ListingForm({
       </div>
 
       <div>
-        <label htmlFor="addressText" className="text-sm font-medium">
+        <label htmlFor="addressText" className="field-label">
           Адрес (необязательно)
         </label>
         <input
@@ -227,7 +226,7 @@ export function ListingForm({
         <button
           type="button"
           onClick={() => setShowMap((v) => !v)}
-          className="text-sm text-primary underline"
+          className="text-sm font-medium text-primary hover:underline"
         >
           {showMap ? "Скрыть карту" : "Указать точку на карте"}
         </button>
@@ -255,8 +254,8 @@ export function ListingForm({
       </div>
 
       {attributes.length > 0 && (
-        <div className="space-y-4 rounded-md border border-border p-4">
-          <p className="text-sm font-medium">Характеристики категории</p>
+        <div className="space-y-4 rounded-lg border border-border p-4">
+          <p className="field-label">Характеристики категории</p>
           {attributes.map((attr) => {
             const existing = attributeValues?.[attr.id];
             return (
@@ -311,17 +310,13 @@ export function ListingForm({
       )}
 
       {state?.error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
+        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
       )}
       {state?.success && (
-        <p className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">{state.success}</p>
+        <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{state.success}</p>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-60"
-      >
+      <button type="submit" disabled={isPending} className="btn-primary">
         {isPending ? "Сохраняем..." : mode === "create" ? "Создать черновик" : "Сохранить"}
       </button>
     </form>

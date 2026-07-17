@@ -42,7 +42,7 @@ export function LogoUploader({ currentLogoUrl }: { currentLogoUrl: string | null
 
   return (
     <div className="flex items-center gap-4">
-      <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-md border border-border bg-muted">
+      <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg border border-border bg-muted">
         {logoUrl ? (
           <Image src={logoUrl} alt="Лого" width={64} height={64} className="h-16 w-16 object-contain" />
         ) : (
@@ -54,7 +54,7 @@ export function LogoUploader({ currentLogoUrl }: { currentLogoUrl: string | null
           type="button"
           disabled={isPending}
           onClick={() => inputRef.current?.click()}
-          className="rounded-md border border-border px-3 py-1.5 text-sm disabled:opacity-60"
+          className="btn-secondary py-1.5"
         >
           {isPending ? "Загружаем..." : "Загрузить лого"}
         </button>

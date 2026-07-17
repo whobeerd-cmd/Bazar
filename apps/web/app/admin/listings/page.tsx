@@ -32,7 +32,7 @@ export default async function AdminListingsPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Объявления</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Объявления</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Очередь модерации и обзор всех объявлений — снять VIP или отправить в архив можно
         в любой момент, не только при первой проверке.
@@ -43,7 +43,7 @@ export default async function AdminListingsPage({
           <Link
             key={tab.status}
             href={tab.status === "pending" ? "/admin/listings" : `/admin/listings?status=${tab.status}`}
-            className={`rounded-full border px-3 py-1 text-sm ${
+            className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${
               status === tab.status
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border hover:bg-muted"
@@ -56,7 +56,9 @@ export default async function AdminListingsPage({
 
       <div className="mt-6 space-y-3">
         {!listings || listings.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Здесь пока пусто.</p>
+          <div className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            Здесь пока пусто.
+          </div>
         ) : status === "pending" ? (
           (listings as any[]).map((l) => {
             const seller = Array.isArray(l.profiles) ? l.profiles[0] : l.profiles;

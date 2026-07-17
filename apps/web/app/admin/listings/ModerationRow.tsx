@@ -26,9 +26,9 @@ export function ModerationRow({ listing }: { listing: PendingListing }) {
   );
 
   return (
-    <div className="rounded-lg border border-border p-4">
+    <div className="card p-4">
       <div className="flex items-center gap-4">
-        <div className="h-16 w-16 shrink-0 overflow-hidden rounded-md bg-muted">
+        <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
           {listing.cover_url && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={listing.cover_url} alt="" className="h-full w-full object-cover" />
@@ -39,7 +39,7 @@ export function ModerationRow({ listing }: { listing: PendingListing }) {
             href={`/listings/${listing.slug}`}
             target="_blank"
             rel="noreferrer"
-            className="font-medium hover:underline"
+            className="font-medium text-foreground hover:underline"
           >
             {listing.title}
           </a>
@@ -64,14 +64,14 @@ export function ModerationRow({ listing }: { listing: PendingListing }) {
                   if (result?.error) setError(result.error);
                 });
               }}
-              className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
+              className="btn-primary py-1.5"
             >
               Одобрить
             </button>
             <button
               type="button"
               onClick={() => setRejecting((v) => !v)}
-              className="rounded-md border border-border px-3 py-1.5 text-sm"
+              className="btn-secondary py-1.5"
             >
               Отклонить
             </button>
@@ -89,12 +89,12 @@ export function ModerationRow({ listing }: { listing: PendingListing }) {
             name="reason"
             required
             placeholder="Причина отклонения"
-            className="flex-1 rounded-md border border-border bg-background px-3 py-1.5 text-sm"
+            className="field-input mt-0 flex-1"
           />
           <button
             type="submit"
             disabled={isRejectPending}
-            className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-60"
+            className="rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-60"
           >
             {isRejectPending ? "..." : "Отклонить"}
           </button>

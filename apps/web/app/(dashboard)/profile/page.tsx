@@ -21,20 +21,22 @@ export default async function ProfilePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Профиль</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Профиль</h1>
       <p className="mt-1 text-sm text-muted-foreground">{user.email}</p>
 
-      <div className="mt-6">
+      <div className="card mt-6 max-w-md p-6">
         <AvatarUploader userId={user.id} currentAvatarUrl={profile?.avatar_url ?? null} />
+
+        <div className="mt-6 border-t border-border pt-6">
+          <ProfileForm
+            defaultFullName={profile?.full_name ?? ""}
+            defaultPhone={profile?.phone ?? ""}
+          />
+        </div>
       </div>
 
-      <ProfileForm
-        defaultFullName={profile?.full_name ?? ""}
-        defaultPhone={profile?.phone ?? ""}
-      />
-
       {!profile?.email_verified && (
-        <p className="mt-6 max-w-md rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800">
+        <p className="mt-6 max-w-md rounded-lg bg-amber-50 px-3 py-2.5 text-sm text-amber-800">
           Email ещё не подтверждён — проверьте почту и перейдите по ссылке из письма.
         </p>
       )}

@@ -35,10 +35,10 @@ export function ComplaintRow({ complaint }: { complaint: ComplaintItem }) {
   }
 
   return (
-    <div className="rounded-lg border border-border p-4">
+    <div className="card p-4">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-sm font-medium">{REASON_LABELS[complaint.reason] ?? complaint.reason}</p>
+          <p className="text-sm font-semibold text-foreground">{REASON_LABELS[complaint.reason] ?? complaint.reason}</p>
           {complaint.listing_slug ? (
             <a
               href={`/listings/${complaint.listing_slug}`}
@@ -61,7 +61,7 @@ export function ComplaintRow({ complaint }: { complaint: ComplaintItem }) {
               type="button"
               disabled={isPending}
               onClick={() => resolve("reviewed")}
-              className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
+              className="btn-primary py-1.5"
             >
               Рассмотрено
             </button>
@@ -69,7 +69,7 @@ export function ComplaintRow({ complaint }: { complaint: ComplaintItem }) {
               type="button"
               disabled={isPending}
               onClick={() => resolve("dismissed")}
-              className="rounded-md border border-border px-3 py-1.5 text-sm disabled:opacity-60"
+              className="btn-secondary py-1.5"
             >
               Отклонить жалобу
             </button>

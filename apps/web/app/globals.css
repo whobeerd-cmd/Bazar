@@ -31,3 +31,24 @@ body {
 ::selection {
   background: hsl(var(--primary) / 0.16);
 }
+
+@layer components {
+  .field-label {
+    @apply text-xs font-semibold uppercase tracking-wide text-muted-foreground;
+  }
+  .field-input {
+    @apply mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25;
+  }
+  .btn-primary {
+    @apply rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary-hover disabled:opacity-60;
+  }
+  .btn-secondary {
+    @apply rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-muted disabled:opacity-60;
+  }
+  .btn-ghost {
+    @apply rounded-full px-3 py-1.5 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground disabled:opacity-60;
+  }
+  .card {
+    @apply rounded-xl border border-border bg-background shadow-card;
+  }
+}

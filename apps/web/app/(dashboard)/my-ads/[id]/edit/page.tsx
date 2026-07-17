@@ -50,47 +50,47 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
   return (
     <div>
       <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">Редактирование объявления</h1>
-        <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Редактирование объявления</h1>
+        <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
           {STATUS_LABELS[listing.status] ?? listing.status}
         </span>
       </div>
 
       {listing.status === "rejected" && listing.rejection_reason && (
-        <p className="mt-3 max-w-xl rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p className="mt-3 max-w-xl rounded-lg bg-red-50 px-3 py-2.5 text-sm text-red-700">
           Причина отклонения: {listing.rejection_reason}
         </p>
       )}
 
-      <div className="mt-6 max-w-xl">
-        <p className="mb-2 text-sm font-medium">Фото</p>
+      <div className="card mt-6 max-w-xl p-6">
+        <p className="mb-3 text-sm font-semibold text-foreground">Фото</p>
         <ImageUploader userId={user.id} listingId={id} initialImages={images ?? []} />
-      </div>
 
-      <div className="mt-8">
-        <ListingForm
-          mode="edit"
-          categories={categories}
-          cities={cities}
-          defaultValues={{
-            id: listing.id,
-            title: listing.title,
-            categoryId: listing.category_id,
-            cityId: listing.city_id,
-            description: listing.description,
-            price: listing.price,
-            priceType: listing.price_type,
-            condition: listing.condition,
-            addressText: listing.address_text,
-            lat: listing.lat,
-            lng: listing.lng,
-          }}
-          attributeValues={attributeValues}
-        />
-      </div>
+        <div className="mt-6 border-t border-border pt-6">
+          <ListingForm
+            mode="edit"
+            categories={categories}
+            cities={cities}
+            defaultValues={{
+              id: listing.id,
+              title: listing.title,
+              categoryId: listing.category_id,
+              cityId: listing.city_id,
+              description: listing.description,
+              price: listing.price,
+              priceType: listing.price_type,
+              condition: listing.condition,
+              addressText: listing.address_text,
+              lat: listing.lat,
+              lng: listing.lng,
+            }}
+            attributeValues={attributeValues}
+          />
+        </div>
 
-      <div className="mt-8 max-w-xl border-t border-border pt-6">
-        <ListingStatusActions listingId={id} status={listing.status} />
+        <div className="mt-6 border-t border-border pt-6">
+          <ListingStatusActions listingId={id} status={listing.status} />
+        </div>
       </div>
     </div>
   );

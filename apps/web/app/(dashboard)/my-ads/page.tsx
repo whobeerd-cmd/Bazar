@@ -33,17 +33,16 @@ export default async function MyAdsPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Мои объявления</h1>
-        <Link
-          href="/my-ads/new"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-        >
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Мои объявления</h1>
+        <Link href="/my-ads/new" className="btn-primary">
           + Разместить объявление
         </Link>
       </div>
 
       {enriched.length === 0 ? (
-        <p className="mt-8 text-sm text-muted-foreground">У вас пока нет объявлений.</p>
+        <div className="mt-8 rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+          У вас пока нет объявлений.
+        </div>
       ) : (
         <div className="mt-8 space-y-8">
           {SECTIONS.map((section) => {

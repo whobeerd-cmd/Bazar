@@ -17,11 +17,11 @@ export default async function NewListingPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Новое объявление</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Новое объявление</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Заполните основные поля — фото и отправку на модерацию можно будет сделать на следующем шаге.
       </p>
-      <div className="mt-6">
+      <div className="card mt-6 max-w-xl p-6">
         <ListingForm mode="create" categories={categories} cities={cities} />
       </div>
     </div>

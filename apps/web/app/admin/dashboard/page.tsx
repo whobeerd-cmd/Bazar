@@ -28,7 +28,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Дашборд</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Дашборд</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Общая статистика. Объявления и доход появятся здесь после соответствующих модулей.
       </p>
@@ -36,9 +36,9 @@ export default async function AdminDashboardPage() {
       <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
         {stats.map((stat) => {
           const content = (
-            <div className="rounded-lg border border-border p-4">
-              <div className="text-2xl font-semibold">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
+            <div className="card p-4 transition hover:border-border-strong hover:shadow-card-hover">
+              <div className="text-2xl font-extrabold text-foreground">{stat.value}</div>
+              <div className="mt-0.5 text-sm text-muted-foreground">{stat.label}</div>
             </div>
           );
           return stat.href ? (

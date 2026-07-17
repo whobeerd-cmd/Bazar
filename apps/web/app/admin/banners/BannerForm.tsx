@@ -42,7 +42,7 @@ export function BannerForm() {
       <input type="hidden" name="imageUrl" value={imageUrl ?? ""} />
 
       <div>
-        <label className="text-xs font-medium text-muted-foreground">Картинка баннера</label>
+        <label className="field-label">Картинка баннера</label>
         <div className="mt-1 flex items-center gap-3">
           {imageUrl && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -52,7 +52,7 @@ export function BannerForm() {
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={isUploading}
-            className="rounded-md border border-border px-3 py-1.5 text-sm disabled:opacity-60"
+            className="btn-secondary py-1.5"
           >
             {isUploading ? "Загружаем..." : imageUrl ? "Заменить картинку" : "Загрузить картинку"}
           </button>
@@ -69,19 +69,19 @@ export function BannerForm() {
 
       <div className="grid grid-cols-3 gap-4">
         <div>
-          <label className="text-xs font-medium text-muted-foreground">Ссылка при клике</label>
+          <label className="field-label">Ссылка при клике</label>
           <input
             name="linkUrl"
             placeholder="/category/nedvizhimost"
-            className="mt-1 w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm"
+            className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-muted-foreground">Место показа</label>
+          <label className="field-label">Место показа</label>
           <select
             name="position"
             defaultValue="home_top"
-            className="mt-1 w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm"
+            className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
           >
             <option value="home_top">Верх главной</option>
             <option value="home_middle">Середина главной</option>
@@ -89,12 +89,12 @@ export function BannerForm() {
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-muted-foreground">Порядок</label>
+          <label className="field-label">Порядок</label>
           <input
             name="sortOrder"
             type="number"
             defaultValue={0}
-            className="mt-1 w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm"
+            className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
           />
         </div>
       </div>
@@ -105,17 +105,13 @@ export function BannerForm() {
       </label>
 
       {state?.error && (
-        <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
+        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
       )}
       {state?.success && (
-        <p className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">{state.success}</p>
+        <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{state.success}</p>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending || !imageUrl}
-        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-60"
-      >
+      <button type="submit" disabled={isPending || !imageUrl} className="btn-primary">
         {isPending ? "Сохраняем..." : "Добавить баннер"}
       </button>
       {!imageUrl && (

@@ -88,7 +88,7 @@ export function ImageUploader({
     <div>
       <div className="flex flex-wrap gap-3">
         {images.map((image) => (
-          <div key={image.id} className="group relative h-24 w-24 overflow-hidden rounded-md bg-muted">
+          <div key={image.id} className="group relative h-24 w-24 overflow-hidden rounded-lg border border-border bg-muted">
             <Image src={image.url} alt="" fill className="object-cover" />
             <button
               type="button"
@@ -104,7 +104,7 @@ export function ImageUploader({
           type="button"
           disabled={isPending}
           onClick={() => inputRef.current?.click()}
-          className="flex h-24 w-24 flex-col items-center justify-center rounded-md border border-dashed border-border text-xs text-muted-foreground hover:bg-muted disabled:opacity-60"
+          className="flex h-24 w-24 flex-col items-center justify-center rounded-lg border border-dashed border-border text-xs text-muted-foreground transition hover:border-border-strong hover:bg-muted disabled:opacity-60"
         >
           {isPending ? "Загружаем..." : "+ Фото"}
         </button>

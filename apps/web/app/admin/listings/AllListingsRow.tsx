@@ -45,8 +45,8 @@ export function AllListingsRow({ listing }: { listing: AdminListing }) {
   }
 
   return (
-    <div className="flex items-center gap-4 rounded-lg border border-border p-3">
-      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md bg-muted">
+    <div className="card flex items-center gap-4 p-3">
+      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-muted">
         {listing.cover_url && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={listing.cover_url} alt="" className="h-full w-full object-cover" />
@@ -55,7 +55,7 @@ export function AllListingsRow({ listing }: { listing: AdminListing }) {
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <a href={`/listings/${listing.slug}`} target="_blank" rel="noreferrer" className="truncate font-medium hover:underline">
+          <a href={`/listings/${listing.slug}`} target="_blank" rel="noreferrer" className="truncate font-medium text-foreground hover:underline">
             {listing.title}
           </a>
           <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${statusInfo.className}`}>
@@ -89,7 +89,7 @@ export function AllListingsRow({ listing }: { listing: AdminListing }) {
               if (!confirm("Отправить объявление в архив?")) return;
               run(() => adminArchiveListingAction(listing.id));
             }}
-            className="rounded-md border border-border px-3 py-1.5 disabled:opacity-60"
+            className="btn-secondary py-1.5"
           >
             В архив
           </button>

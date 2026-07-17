@@ -29,14 +29,16 @@ export default async function AdminComplaintsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Жалобы</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Жалобы</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Жалобы пользователей на объявления. Новые — сверху.
       </p>
 
       <div className="mt-6 space-y-3">
         {rows.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Жалоб пока нет.</p>
+          <div className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            Жалоб пока нет.
+          </div>
         ) : (
           rows.map((complaint) => <ComplaintRow key={complaint.id} complaint={complaint} />)
         )}

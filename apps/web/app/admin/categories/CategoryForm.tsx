@@ -44,32 +44,32 @@ export function CategoryForm({
       {mode === "edit" && category && <input type="hidden" name="id" value={category.id} />}
 
       <div className="sm:col-span-2">
-        <label className="text-xs font-medium text-muted-foreground">Название</label>
+        <label className="field-label">Название</label>
         <input
           name="name"
           defaultValue={category?.name}
           required
-          className="mt-1 w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm"
+          className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
         />
       </div>
 
       <div className="sm:col-span-1">
-        <label className="text-xs font-medium text-muted-foreground">ЧПУ-адрес (slug)</label>
+        <label className="field-label">ЧПУ-адрес (slug)</label>
         <input
           name="slug"
           defaultValue={category?.slug}
           placeholder="nedvizhimost"
           required
-          className="mt-1 w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm"
+          className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
         />
       </div>
 
       <div className="sm:col-span-1">
-        <label className="text-xs font-medium text-muted-foreground">Родительская</label>
+        <label className="field-label">Родительская</label>
         <select
           name="parentId"
           defaultValue={category?.parent_id ?? ""}
-          className="mt-1 w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm"
+          className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
         >
           <option value="">— верхний уровень —</option>
           {parentOptions
@@ -84,30 +84,30 @@ export function CategoryForm({
 
       <div className="sm:col-span-1 flex items-end gap-2">
         <div className="flex-1">
-          <label className="text-xs font-medium text-muted-foreground">Порядок</label>
+          <label className="field-label">Порядок</label>
           <input
             name="sortOrder"
             type="number"
             defaultValue={category?.sort_order ?? 0}
-            className="mt-1 w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm"
+            className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
           />
         </div>
         <button
           type="submit"
           disabled={isPending}
-          className="shrink-0 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
+          className="btn-primary shrink-0 py-1.5"
         >
           {isPending ? "..." : mode === "create" ? "Добавить" : "Сохранить"}
         </button>
       </div>
 
       {state?.error && (
-        <p className="sm:col-span-5 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p className="sm:col-span-5 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
           {state.error}
         </p>
       )}
       {state?.success && (
-        <p className="sm:col-span-5 rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">
+        <p className="sm:col-span-5 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
           {state.success}
         </p>
       )}
