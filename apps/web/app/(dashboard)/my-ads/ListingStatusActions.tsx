@@ -6,7 +6,7 @@ import {
   archiveListingAction,
   deleteListingAction,
   markSoldAction,
-  submitListingAction,
+  publishListingAction,
 } from "@/lib/actions/listings";
 
 export function ListingStatusActions({ listingId, status }: { listingId: string; status: string }) {
@@ -33,10 +33,10 @@ export function ListingStatusActions({ listingId, status }: { listingId: string;
           <button
             type="button"
             disabled={isPending}
-            onClick={() => run(() => submitListingAction(listingId))}
+            onClick={() => run(() => publishListingAction(listingId))}
             className="btn-primary"
           >
-            Отправить на модерацию
+            Опубликовать
           </button>
         )}
 

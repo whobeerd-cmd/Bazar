@@ -6,10 +6,10 @@ import type { AuthActionState } from "@/lib/actions/auth";
 import { createClient } from "@/lib/supabase/client";
 import { ListingsMap } from "@/components/map/ListingsMap";
 import { INGUSHETIA_CENTER } from "@/lib/map/constants";
+import type { CategoryNode } from "@/lib/categories";
 
 const inputClass = "field-input";
 
-type CategoryOption = { id: number; name: string; depth: number };
 type CityOption = { id: number; name: string };
 type CategoryAttribute = {
   id: number;
@@ -19,6 +19,17 @@ type CategoryAttribute = {
   is_required: boolean;
 };
 
+// Ищет узел по id и возвращает путь от верхнего раздела до него —
+// нужно, чтобы при редактировании сразу открыть нужный раздел/подраздел.
+function findCategoryPath(tree: CategoryNode[], id: number): CategoryNode[] | null {
+  for (const node of tree) {
+    if (node.id === id) return [node];
+    const childPath = findCategoryPath(node.children, id);
+    if (childPath) return [node, ...childPath];
+  }
+  return null;
+}
+
 export function ListingForm({
   mode,
   categories,
@@ -27,7 +38,7 @@ export function ListingForm({
   attributeValues,
 }: {
   mode: "create" | "edit";
-  categories: CategoryOption[];
+  categories: CategoryNode[];
   cities: CityOption[];
   defaultValues?: {
     id: string;
@@ -47,7 +58,9 @@ export function ListingForm({
   const action = mode === "create" ? createListingAction : updateListingAction;
   const [state, formAction, isPending] = useActionState<AuthActionState, FormData>(action, null);
 
-  const [categoryId, setCategoryId] = useState<number | "">(defaultValues?.categoryId ?? "");
+  const initialPath = defaultValues ? findCategoryPath(categories, defaultValues.categoryId) : null;
+  const [topCategoryId, setTopCategoryId] = useState<number | "">(initialPath?.[0]?.id ?? "");
+  const [subCategoryId, setSubCategoryId] = useState<number | "">(initialPath?.[1]?.id ?? "");
   const [priceType, setPriceType] = useState(defaultValues?.priceType ?? "fixed");
   const [attributes, setAttributes] = useState<CategoryAttribute[]>([]);
   const [showMap, setShowMap] = useState(false);
@@ -56,6 +69,14 @@ export function ListingForm({
       ? [defaultValues.lat, defaultValues.lng]
       : null
   );
+
+  const topNode = categories.find((c) => c.id === topCategoryId);
+  const hasSubcategories = (topNode?.children.length ?? 0) > 0;
+  const selectedNode = hasSubcategories
+    ? topNode?.children.find((c) => c.id === subCategoryId)
+    : topNode;
+  const categoryId = hasSubcategories ? subCategoryId : topCategoryId;
+  const showCondition = selectedNode?.showCondition ?? true;
 
   useEffect(() => {
     if (!categoryId) {
@@ -80,6 +101,7 @@ export function ListingForm({
   return (
     <form action={formAction} className="space-y-5">
       {defaultValues && <input type="hidden" name="id" value={defaultValues.id} />}
+      <input type="hidden" name="categoryId" value={categoryId} />
 
       <div>
         <label htmlFor="title" className="field-label">
@@ -94,26 +116,50 @@ export function ListingForm({
         />
       </div>
 
-      <div>
-        <label htmlFor="categoryId" className="field-label">
-          Категория
-        </label>
-        <select
-          id="categoryId"
-          name="categoryId"
-          required
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : "")}
-          className={inputClass}
-        >
-          <option value="">Выберите категорию</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {"— ".repeat(c.depth)}
-              {c.name}
-            </option>
-          ))}
-        </select>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div>
+          <label htmlFor="topCategoryId" className="field-label">
+            Раздел
+          </label>
+          <select
+            id="topCategoryId"
+            required
+            value={topCategoryId}
+            onChange={(e) => {
+              setTopCategoryId(e.target.value ? Number(e.target.value) : "");
+              setSubCategoryId("");
+            }}
+            className={inputClass}
+          >
+            <option value="">Выберите раздел</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {hasSubcategories && (
+          <div>
+            <label htmlFor="subCategoryId" className="field-label">
+              Подраздел
+            </label>
+            <select
+              id="subCategoryId"
+              required
+              value={subCategoryId}
+              onChange={(e) => setSubCategoryId(e.target.value ? Number(e.target.value) : "")}
+              className={inputClass}
+            >
+              <option value="">Выберите подраздел</option>
+              {topNode!.children.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <div>
@@ -184,29 +230,33 @@ export function ListingForm({
         </div>
       </div>
 
-      <div>
-        <p className="field-label">Состояние</p>
-        <div className="mt-1 flex gap-4 text-sm">
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              name="condition"
-              value="new"
-              defaultChecked={(defaultValues?.condition ?? "used") === "new"}
-            />
-            Новое
-          </label>
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              name="condition"
-              value="used"
-              defaultChecked={(defaultValues?.condition ?? "used") === "used"}
-            />
-            Б/у
-          </label>
+      {showCondition ? (
+        <div>
+          <p className="field-label">Состояние</p>
+          <div className="mt-1 flex gap-4 text-sm">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="condition"
+                value="new"
+                defaultChecked={(defaultValues?.condition ?? "used") === "new"}
+              />
+              Новое
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="condition"
+                value="used"
+                defaultChecked={(defaultValues?.condition ?? "used") === "used"}
+              />
+              Б/у
+            </label>
+          </div>
         </div>
-      </div>
+      ) : (
+        <input type="hidden" name="condition" value="used" />
+      )}
 
       <div>
         <label htmlFor="addressText" className="field-label">
@@ -317,7 +367,7 @@ export function ListingForm({
       )}
 
       <button type="submit" disabled={isPending} className="btn-primary">
-        {isPending ? "Сохраняем..." : mode === "create" ? "Создать черновик" : "Сохранить"}
+        {isPending ? "Сохраняем..." : mode === "create" ? "Далее: добавить фото" : "Сохранить"}
       </button>
     </form>
   );

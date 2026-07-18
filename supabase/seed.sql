@@ -211,3 +211,16 @@ insert into public.categories (parent_id, name, slug, sort_order) values
   ((select id from public.categories where slug = 'biznes'), 'Продажа бизнеса', 'prodazha-biznesa', 20),
   ((select id from public.categories where slug = 'biznes'), 'Деловое партнёрство', 'delovoe-partnerstvo', 30)
 on conflict (slug) do nothing;
+
+-- "Новое/б/у" не имеет смысла для недвижимости, услуг, вакансий, живых
+-- животных/растений и продажи бизнеса — см. миграцию 0012.
+update public.categories set show_condition = false
+where slug in (
+  'nedvizhimost', 'kvartiry', 'doma', 'zemelnye-uchastki', 'kommercheskaya-nedvizhimost', 'garazhi-i-parkovki',
+  'rabota', 'vakansii', 'ischu-rabotu',
+  'uslugi', 'remont-i-stroitelstvo', 'krasota-i-zdorove', 'obuchenie-i-repetitorstvo',
+  'prazdniki-i-meropriyatiya', 'yuridicheskie-i-finansovye', 'gruzoperevozki', 'prochie-uslugi',
+  'remont-bytovoy-tehniki', 'avtouslugi',
+  'selskoe-hozyaystvo', 'zhivotnye', 'ptitsy', 'korma', 'rasteniya-selhoz', 'pchely',
+  'biznes', 'prodazha-biznesa', 'delovoe-partnerstvo'
+);

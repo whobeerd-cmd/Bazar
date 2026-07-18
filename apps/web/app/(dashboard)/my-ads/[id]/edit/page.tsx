@@ -3,7 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { ListingForm } from "../../ListingForm";
 import { ImageUploader } from "../../ImageUploader";
 import { ListingStatusActions } from "../../ListingStatusActions";
-import { buildCategoryOptions, getCityOptions } from "../../categoryOptions";
+import { getCityOptions } from "../../categoryOptions";
+import { getCategoryTree } from "@/lib/categories";
 
 const STATUS_LABELS: Record<string, string> = {
   draft: "Черновик",
@@ -39,7 +40,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
       .eq("listing_id", id)
       .order("sort_order"),
     supabase.from("listing_attributes").select("attribute_id, value").eq("listing_id", id),
-    buildCategoryOptions(supabase),
+    getCategoryTree(),
     getCityOptions(supabase),
   ]);
 
@@ -49,8 +50,13 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
 
   return (
     <div>
-      <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Редактирование объявления</h1>
+      {listing.status === "draft" && (
+        <p className="text-sm font-semibold text-primary">Шаг 2 из 2</p>
+      )}
+      <div className="mt-1 flex items-center gap-3">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
+          {listing.status === "draft" ? "Фото и публикация" : "Редактирование объявления"}
+        </h1>
         <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
           {STATUS_LABELS[listing.status] ?? listing.status}
         </span>

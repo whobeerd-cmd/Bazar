@@ -186,12 +186,10 @@ export async function updateListingAction(
     return { error: parsed.error.issues[0]?.message };
   }
 
-  // Правка уже опубликованного объявления отправляет его на повторную модерацию
-  const nextStatus = listing.status === "active" ? "pending" : listing.status;
-
+  // Правки не сбрасывают статус — объявление остаётся опубликованным как было.
   const { error } = await supabase
     .from("listings")
-    .update({ ...parsedListingPayload(parsed.data), status: nextStatus })
+    .update({ ...parsedListingPayload(parsed.data), status: listing.status })
     .eq("id", id);
 
   if (error) return { error: "Не получилось сохранить: " + error.message };
@@ -201,18 +199,14 @@ export async function updateListingAction(
 
   revalidatePath(`/my-ads/${id}/edit`);
   revalidatePath("/my-ads");
-  return {
-    success:
-      nextStatus === "pending" && listing.status === "active"
-        ? "Изменения сохранены, объявление отправлено на повторную проверку"
-        : "Изменения сохранены",
-  };
+  return { success: "Изменения сохранены" };
 }
 
 // ----------------------------------------------------------------------------
-// Отправка черновика/отклонённого объявления на модерацию
+// Публикация черновика/отклонённого объявления — сразу активно, без очереди
+// на модерацию.
 // ----------------------------------------------------------------------------
-export async function submitListingAction(listingId: string) {
+export async function publishListingAction(listingId: string) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -222,7 +216,7 @@ export async function submitListingAction(listingId: string) {
   const listing = await getOwnListingOrThrow(supabase, listingId, user.id).catch(() => null);
   if (!listing) return { error: "Объявление не найдено" };
   if (!["draft", "rejected"].includes(listing.status)) {
-    return { error: "Отправить на модерацию можно только черновик или отклонённое объявление" };
+    return { error: "Опубликовать можно только черновик или отклонённое объявление" };
   }
 
   const { count } = await supabase
@@ -231,19 +225,20 @@ export async function submitListingAction(listingId: string) {
     .eq("listing_id", listingId);
 
   if (!count || count === 0) {
-    return { error: "Добавьте хотя бы одно фото перед отправкой на модерацию" };
+    return { error: "Добавьте хотя бы одно фото перед публикацией" };
   }
 
   const { error } = await supabase
     .from("listings")
-    .update({ status: "pending", rejection_reason: null })
+    .update({ status: "active", rejection_reason: null })
     .eq("id", listingId);
 
   if (error) return { error: error.message };
 
   revalidatePath("/my-ads");
   revalidatePath(`/my-ads/${listingId}/edit`);
-  return { success: "Объявление отправлено на модерацию" };
+  revalidatePath("/admin/listings");
+  return { success: "Объявление опубликовано" };
 }
 
 // ----------------------------------------------------------------------------
