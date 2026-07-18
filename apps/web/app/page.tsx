@@ -37,12 +37,6 @@ export default async function HomePage() {
             >
               Разместить объявление
             </Link>
-            <Link
-              href="/map"
-              className="rounded-full border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-muted"
-            >
-              Смотреть на карте
-            </Link>
           </div>
         </div>
       </section>

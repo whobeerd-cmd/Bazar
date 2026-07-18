@@ -127,9 +127,6 @@ export default async function RootLayout({
             </form>
 
             <nav className="ml-auto flex items-center gap-1 text-sm sm:gap-2">
-              <Link href="/map" className="hidden rounded-full px-3 py-1.5 text-muted-foreground transition hover:bg-muted hover:text-foreground sm:inline-block">
-                Карта
-              </Link>
               {isAdmin && (
                 <Link href="/admin/dashboard" className="hidden rounded-full px-3 py-1.5 text-muted-foreground transition hover:bg-muted hover:text-foreground sm:inline-block">
                   Админка
