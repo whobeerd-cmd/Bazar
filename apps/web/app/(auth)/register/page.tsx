@@ -90,7 +90,7 @@ export default function RegisterPage() {
         <div className="h-px flex-1 bg-border" />
       </div>
 
-      <GoogleButton />
+      <GoogleButton next="/" />
     </div>
   );
 }
