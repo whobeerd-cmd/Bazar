@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Golos_Text } from "next/font/google";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getCategoryTree } from "@/lib/categories";
+import { CategoryMegaMenu } from "@/components/CategoryMegaMenu";
 import "./globals.css";
 
 const golosText = Golos_Text({
@@ -66,6 +68,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const { siteName, logoUrl } = await getSiteSettings();
+  const categoryTree = await getCategoryTree();
 
   let userLabel: string | null = null;
   let isAdmin = false;
@@ -104,6 +107,10 @@ export default async function RootLayout({
               )}
               {siteName}
             </Link>
+
+            <div className="hidden shrink-0 sm:block">
+              <CategoryMegaMenu tree={categoryTree} />
+            </div>
 
             <form action="/search" method="get" className="hidden max-w-md flex-1 sm:block">
               <div className="relative">

@@ -120,6 +120,7 @@ insert into public.categories (parent_id, name, slug, sort_order) values
   ((select id from public.categories where slug = 'nedvizhimost'), 'Дома', 'doma', 20),
   ((select id from public.categories where slug = 'nedvizhimost'), 'Земельные участки', 'zemelnye-uchastki', 30),
   ((select id from public.categories where slug = 'nedvizhimost'), 'Коммерческая недвижимость', 'kommercheskaya-nedvizhimost', 40),
+  ((select id from public.categories where slug = 'nedvizhimost'), 'Гаражи и парковочные места', 'garazhi-i-parkovki', 45),
 
   ((select id from public.categories where slug = 'avtomobili'), 'Легковые автомобили', 'legkovye-avtomobili', 10),
   ((select id from public.categories where slug = 'avtomobili'), 'Грузовики и спецтехника', 'gruzoviki-i-spetstehnika', 20),
@@ -138,6 +139,7 @@ insert into public.categories (parent_id, name, slug, sort_order) values
   ((select id from public.categories where slug = 'uslugi'), 'Юридические и финансовые', 'yuridicheskie-i-finansovye', 50),
   ((select id from public.categories where slug = 'uslugi'), 'Грузоперевозки', 'gruzoperevozki', 60),
   ((select id from public.categories where slug = 'uslugi'), 'Прочие услуги', 'prochie-uslugi', 70),
+  ((select id from public.categories where slug = 'uslugi'), 'Ремонт бытовой техники', 'remont-bytovoy-tehniki', 45),
 
   ((select id from public.categories where slug = 'telefony'), 'Смартфоны', 'smartfony', 10),
   ((select id from public.categories where slug = 'telefony'), 'Аксессуары для телефонов', 'aksessuary-dlya-telefonov', 20),
@@ -155,6 +157,7 @@ insert into public.categories (parent_id, name, slug, sort_order) values
   ((select id from public.categories where slug = 'elektronika'), 'Фототехника', 'fototehnika', 20),
   ((select id from public.categories where slug = 'elektronika'), 'Видеонаблюдение', 'videonablyudenie', 30),
   ((select id from public.categories where slug = 'elektronika'), 'Аккаунты и цифровые товары', 'akkaunty-i-cifrovye-tovary', 40),
+  ((select id from public.categories where slug = 'elektronika'), 'Умные часы и гаджеты', 'umnye-chasy-i-gadzhety', 50),
 
   ((select id from public.categories where slug = 'bytovaya-tehnika'), 'Телевизоры', 'televizory', 10),
   ((select id from public.categories where slug = 'bytovaya-tehnika'), 'Холодильники', 'holodilniki', 20),
@@ -164,6 +167,7 @@ insert into public.categories (parent_id, name, slug, sort_order) values
 
   ((select id from public.categories where slug = 'odezhda'), 'Мужская одежда', 'muzhskaya-odezhda', 10),
   ((select id from public.categories where slug = 'odezhda'), 'Женская одежда', 'zhenskaya-odezhda', 20),
+  ((select id from public.categories where slug = 'odezhda'), 'Аксессуары', 'odezhda-aksessuary', 30),
   ((select id from public.categories where slug = 'obuv'), 'Мужская обувь', 'muzhskaya-obuv', 10),
   ((select id from public.categories where slug = 'obuv'), 'Женская обувь', 'zhenskaya-obuv', 20),
   ((select id from public.categories where slug = 'obuv'), 'Детская обувь', 'detskaya-obuv', 30),
@@ -176,17 +180,21 @@ insert into public.categories (parent_id, name, slug, sort_order) values
   ((select id from public.categories where slug = 'dom-i-sad'), 'Растения и цветы', 'rasteniya-i-cvety', 10),
   ((select id from public.categories where slug = 'dom-i-sad'), 'Посуда и текстиль', 'posuda-i-tekstil', 20),
   ((select id from public.categories where slug = 'dom-i-sad'), 'Освещение и декор', 'osveschenie-i-dekor', 30),
+  ((select id from public.categories where slug = 'dom-i-sad'), 'Бытовая химия и хозтовары', 'hoztovary', 40),
 
   ((select id from public.categories where slug = 'stroymaterialy'), 'Электрика', 'elektrika', 10),
   ((select id from public.categories where slug = 'stroymaterialy'), 'Сантехника', 'santehnika', 20),
   ((select id from public.categories where slug = 'stroymaterialy'), 'Инструменты', 'instrumenty', 30),
   ((select id from public.categories where slug = 'stroymaterialy'), 'Отделочные материалы', 'otdelochnye-materialy', 40),
+  ((select id from public.categories where slug = 'stroymaterialy'), 'Двери и окна', 'dveri-i-okna', 45),
 
   ((select id from public.categories where slug = 'mebel'), 'Для гостиной', 'dlya-gostinoy', 10),
   ((select id from public.categories where slug = 'mebel'), 'Для кухни', 'dlya-kuhni', 20),
   ((select id from public.categories where slug = 'mebel'), 'Для спальни', 'dlya-spalni', 30),
+  ((select id from public.categories where slug = 'mebel'), 'Для ванной', 'dlya-vannoy', 35),
   ((select id from public.categories where slug = 'mebel'), 'Офисная мебель', 'ofisnaya-mebel', 40),
   ((select id from public.categories where slug = 'mebel'), 'Сборка и ремонт мебели', 'sborka-i-remont-mebeli', 50),
+  ((select id from public.categories where slug = 'mebel'), 'Другая мебель', 'drugaya-mebel', 55),
 
   ((select id from public.categories where slug = 'hobbi'), 'Книги', 'knigi', 10),
   ((select id from public.categories where slug = 'hobbi'), 'Музыкальные инструменты', 'muzykalnye-instrumenty', 20),
