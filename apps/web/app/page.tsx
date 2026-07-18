@@ -80,12 +80,12 @@ export default async function HomePage() {
               <li key={category.id}>
                 <Link
                   href={`/category/${category.slug}`}
-                  className="group flex flex-col items-center gap-2.5 rounded-xl border border-border bg-background p-5 text-center shadow-card transition hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover"
+                  className="group flex flex-col items-center gap-3 rounded-xl border border-border bg-background p-5 text-center shadow-card transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card-hover"
                 >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/8 text-primary transition group-hover:bg-primary/14">
-                    <CategoryIcon slug={category.slug} className="h-5 w-5" />
+                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/12 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
+                    <CategoryIcon slug={category.slug} className="h-7 w-7" />
                   </span>
-                  <span className="text-sm font-medium text-foreground">{category.name}</span>
+                  <span className="text-sm font-semibold text-foreground">{category.name}</span>
                 </Link>
               </li>
             ))}
