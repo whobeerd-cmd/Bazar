@@ -15,48 +15,6 @@ const passwordSchema = z
   .min(8, "Пароль должен быть не короче 8 символов");
 
 // ----------------------------------------------------------------------------
-// Регистрация
-// ----------------------------------------------------------------------------
-export async function signUpAction(
-  _prevState: AuthActionState,
-  formData: FormData
-): Promise<AuthActionState> {
-  const fullName = String(formData.get("fullName") ?? "").trim();
-  const emailResult = emailSchema.safeParse(formData.get("email"));
-  const passwordResult = passwordSchema.safeParse(formData.get("password"));
-
-  if (!emailResult.success) {
-    return { error: emailResult.error.issues[0]?.message };
-  }
-  if (!passwordResult.success) {
-    return { error: passwordResult.error.issues[0]?.message };
-  }
-  if (!fullName) {
-    return { error: "Укажите имя" };
-  }
-
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
-    email: emailResult.data,
-    password: passwordResult.data,
-    options: {
-      data: { full_name: fullName },
-      // Supabase отправит письмо со ссылкой вида /auth/confirm?token_hash=...&type=email
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/auth/confirm`,
-    },
-  });
-
-  if (error) {
-    return { error: translateAuthError(error.message) };
-  }
-
-  return {
-    success:
-      "Мы отправили письмо со ссылкой подтверждения на вашу почту. Перейдите по ней, чтобы завершить регистрацию.",
-  };
-}
-
-// ----------------------------------------------------------------------------
 // Вход
 // ----------------------------------------------------------------------------
 export async function signInAction(

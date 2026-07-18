@@ -15,7 +15,7 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const [mode, setMode] = useState<"password" | "magic">("password");
+  const [mode, setMode] = useState<"magic" | "password">("magic");
   const [passwordState, passwordFormAction, isPasswordPending] = useActionState<
     AuthActionState,
     FormData
@@ -37,9 +37,19 @@ function LoginForm() {
         </Link>
       </p>
 
+      <div className="mt-6">
+        <GoogleButton next={next} />
+      </div>
+
+      <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+        <div className="h-px flex-1 bg-border" />
+        или
+        <div className="h-px flex-1 bg-border" />
+      </div>
+
       {mode === "password" ? (
         <>
-          <form action={passwordFormAction} className="mt-6 space-y-4">
+          <form action={passwordFormAction} className="space-y-4">
             <input type="hidden" name="next" value={next} />
 
             <div>
@@ -103,7 +113,7 @@ function LoginForm() {
         </>
       ) : (
         <>
-          <form action={magicFormAction} className="mt-6 space-y-4">
+          <form action={magicFormAction} className="space-y-4">
             <div>
               <label htmlFor="magic-email" className="text-sm font-medium">
                 Email
@@ -150,14 +160,6 @@ function LoginForm() {
           </button>
         </>
       )}
-
-      <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
-        <div className="h-px flex-1 bg-border" />
-        или
-        <div className="h-px flex-1 bg-border" />
-      </div>
-
-      <GoogleButton next={next} />
     </div>
   );
 }

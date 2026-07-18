@@ -2,12 +2,12 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import { signUpAction, type AuthActionState } from "@/lib/actions/auth";
+import { signInWithMagicLinkAction, type AuthActionState } from "@/lib/actions/auth";
 import { GoogleButton } from "../GoogleButton";
 
 export default function RegisterPage() {
   const [state, formAction, isPending] = useActionState<AuthActionState, FormData>(
-    signUpAction,
+    signInWithMagicLinkAction,
     null
   );
 
@@ -21,21 +21,17 @@ export default function RegisterPage() {
         </Link>
       </p>
 
-      <form action={formAction} className="mt-6 space-y-4">
-        <div>
-          <label htmlFor="fullName" className="text-sm font-medium">
-            Имя
-          </label>
-          <input
-            id="fullName"
-            name="fullName"
-            type="text"
-            required
-            autoComplete="name"
-            className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
-          />
-        </div>
+      <div className="mt-6">
+        <GoogleButton next="/" />
+      </div>
 
+      <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+        <div className="h-px flex-1 bg-border" />
+        или
+        <div className="h-px flex-1 bg-border" />
+      </div>
+
+      <form action={formAction} className="space-y-4">
         <div>
           <label htmlFor="email" className="text-sm font-medium">
             Email
@@ -48,22 +44,9 @@ export default function RegisterPage() {
             autoComplete="email"
             className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
           />
-        </div>
-
-        <div>
-          <label htmlFor="password" className="text-sm font-medium">
-            Пароль
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            autoComplete="new-password"
-            className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
-          />
-          <p className="mt-1 text-xs text-muted-foreground">Не короче 8 символов</p>
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            Без пароля — пришлём ссылку для входа на почту, имя можно будет указать в профиле.
+          </p>
         </div>
 
         {state?.error && (
@@ -80,24 +63,9 @@ export default function RegisterPage() {
           disabled={isPending}
           className="w-full rounded-full bg-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary-hover disabled:opacity-60"
         >
-          {isPending ? "Создаём аккаунт..." : "Зарегистрироваться"}
+          {isPending ? "Отправляем..." : "Зарегистрироваться по почте"}
         </button>
       </form>
-
-      <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
-        <div className="h-px flex-1 bg-border" />
-        или
-        <div className="h-px flex-1 bg-border" />
-      </div>
-
-      <GoogleButton next="/" />
-
-      <p className="mt-4 text-center text-sm text-muted-foreground">
-        Не хотите придумывать пароль?{" "}
-        <Link href="/login" className="underline underline-offset-4">
-          Зарегистрируйтесь по ссылке на почту
-        </Link>
-      </p>
     </div>
   );
 }
