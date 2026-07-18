@@ -4,12 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
-  { href: "/admin/dashboard", label: "Дашборд" },
-  { href: "/admin/listings", label: "Объявления" },
-  { href: "/admin/complaints", label: "Жалобы" },
-  { href: "/admin/categories", label: "Категории" },
-  { href: "/admin/banners", label: "Баннеры" },
-  { href: "/admin/settings", label: "Настройки сайта" },
+  { href: "/admin/dashboard", label: "Дашборд", hint: "Общая статистика сайта" },
+  { href: "/admin/listings", label: "Объявления", hint: "Модерация и все объявления" },
+  { href: "/admin/complaints", label: "Жалобы", hint: "Жалобы на объявления" },
+  { href: "/admin/users", label: "Пользователи", hint: "Роли, блокировка" },
+  { href: "/admin/categories", label: "Категории", hint: "Разделы каталога" },
+  { href: "/admin/banners", label: "Баннеры", hint: "Реклама на главной" },
+  { href: "/admin/settings", label: "Настройки сайта", hint: "Название, лого, контакты" },
+  { href: "/admin/audit-log", label: "Журнал действий", hint: "Кто что менял" },
 ];
 
 export function AdminNav() {
@@ -23,11 +25,14 @@ export function AdminNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`block rounded-lg px-3 py-2 font-medium transition ${
-              active ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"
+            className={`block rounded-lg px-3 py-2 transition ${
+              active ? "bg-primary/10" : "hover:bg-muted"
             }`}
           >
-            {item.label}
+            <span className={`block font-medium ${active ? "text-primary" : "text-foreground"}`}>
+              {item.label}
+            </span>
+            <span className="block text-xs text-muted-foreground">{item.hint}</span>
           </Link>
         );
       })}
