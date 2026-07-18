@@ -91,6 +91,13 @@ export default function RegisterPage() {
       </div>
 
       <GoogleButton next="/" />
+
+      <p className="mt-4 text-center text-sm text-muted-foreground">
+        Не хотите придумывать пароль?{" "}
+        <Link href="/login" className="underline underline-offset-4">
+          Зарегистрируйтесь по ссылке на почту
+        </Link>
+      </p>
     </div>
   );
 }

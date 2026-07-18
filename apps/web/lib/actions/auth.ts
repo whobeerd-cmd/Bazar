@@ -82,6 +82,36 @@ export async function signInAction(
 }
 
 // ----------------------------------------------------------------------------
+// Вход по ссылке на почту, без пароля — работает и для новых пользователей
+// (создаёт аккаунт при первом входе), и для уже зарегистрированных.
+// ----------------------------------------------------------------------------
+export async function signInWithMagicLinkAction(
+  _prevState: AuthActionState,
+  formData: FormData
+): Promise<AuthActionState> {
+  const emailResult = emailSchema.safeParse(formData.get("email"));
+  if (!emailResult.success) {
+    return { error: emailResult.error.issues[0]?.message };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithOtp({
+    email: emailResult.data,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/auth/confirm`,
+    },
+  });
+
+  if (error) {
+    return { error: translateAuthError(error.message) };
+  }
+
+  return {
+    success: "Мы отправили ссылку для входа на вашу почту — перейдите по ней с этого устройства.",
+  };
+}
+
+// ----------------------------------------------------------------------------
 // Выход
 // ----------------------------------------------------------------------------
 export async function signOutAction() {
