@@ -97,6 +97,7 @@ export default async function RootLayout({
   return (
     <html lang="ru" className={golosText.variable}>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <div aria-hidden className="h-[3px] bg-gradient-to-r from-primary via-primary to-accent" />
         <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur-sm">
           <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3.5 sm:gap-6">
             <Link href="/" className="flex shrink-0 items-center gap-2 text-[1.35rem] font-extrabold tracking-tight text-foreground">

@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { getCategoryTree } from "@/lib/categories";
+
+const VALUE_PROPS = ["Бесплатно для частных лиц", "Без посредников", "Каждое объявление проверяется"];
 
 function subcategoryLabel(count: number) {
   const mod10 = count % 10;
@@ -24,22 +27,47 @@ export default async function HomePage() {
 
   return (
     <div>
-      <section className="border-b border-border bg-muted/40">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
-          <h1 className="max-w-2xl text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
-            Объявления Ингушетии — без лишнего шума
+      <section className="relative overflow-hidden border-b border-border">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(55% 70% at 12% 0%, hsl(var(--primary) / 0.12), transparent 60%), radial-gradient(45% 55% at 100% 5%, hsl(var(--accent) / 0.14), transparent 60%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
+          <span className="inline-flex items-center rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
+            Республика Ингушетия
+          </span>
+          <h1 className="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl">
+            Объявления без лишнего шума
           </h1>
           <p className="mt-4 max-w-lg text-base text-muted-foreground sm:text-lg">
             Недвижимость, авто, работа и услуги — рядом с вами. Никакой сторонней
             рекламы, только то, что вы ищете.
           </p>
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/my-ads/new"
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary-hover"
+              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-card-hover"
             >
               Разместить объявление
             </Link>
+            <Link
+              href="/search"
+              className="rounded-full border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition hover:-translate-y-0.5 hover:border-border-strong hover:bg-muted"
+            >
+              Смотреть объявления
+            </Link>
+          </div>
+          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2">
+            {VALUE_PROPS.map((item) => (
+              <span key={item} className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <Check className="h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
+                {item}
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -67,8 +95,9 @@ export default async function HomePage() {
           </div>
         )}
 
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Категории</h2>
+        <div>
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground">Категории</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Выберите раздел или наведите на карточку, чтобы увидеть подразделы</p>
         </div>
 
         {categories && categories.length > 0 ? (
