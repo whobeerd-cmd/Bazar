@@ -1,11 +1,37 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { queryListings } from "@/lib/listings/query";
 import { parseListingFilters, flattenSearchParams, type RawSearchParams } from "@/lib/listings/parseFilters";
 import { FiltersForm } from "@/components/listings/FiltersForm";
 import { ListingCardView } from "@/components/listings/ListingCardView";
 import { Pagination } from "@/components/listings/Pagination";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: category } = await supabase
+    .from("categories")
+    .select("name")
+    .eq("slug", slug)
+    .eq("is_active", true)
+    .single();
+
+  if (!category) return {};
+
+  const title = category.name;
+  const description = `${category.name} в Ингушетии — объявления от частных лиц, без посредников.`;
+  return {
+    title,
+    description,
+    openGraph: { title, description },
+  };
+}
 
 export default async function CategoryPage({
   params,

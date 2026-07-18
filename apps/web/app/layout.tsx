@@ -48,7 +48,9 @@ async function getSiteSettings() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const { siteName, siteDescription } = await getSiteSettings();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   return {
+    metadataBase: new URL(siteUrl),
     title: {
       default: siteName,
       template: `%s — ${siteName}`,
@@ -58,6 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: siteName,
       description: siteDescription,
       locale: "ru_RU",
+      type: "website",
     },
   };
 }
@@ -175,6 +178,9 @@ export default async function RootLayout({
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="font-semibold text-foreground">{siteName}</p>
               <p>Площадка объявлений Республики Ингушетия</p>
+              <Link href="/rules" className="hover:text-foreground hover:underline">
+                Правила размещения
+              </Link>
               <p>© {new Date().getFullYear()} {siteName}</p>
             </div>
           </div>

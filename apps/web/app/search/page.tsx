@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { queryListings } from "@/lib/listings/query";
 import { parseListingFilters, flattenSearchParams, type RawSearchParams } from "@/lib/listings/parseFilters";
 import { FiltersForm } from "@/components/listings/FiltersForm";
 import { ListingCardView } from "@/components/listings/ListingCardView";
 import { Pagination } from "@/components/listings/Pagination";
+
+// Динамические результаты поиска не индексируем — избегаем "тонкого"
+// дублирующегося контента в выдаче, категории индексируются отдельно.
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+};
 
 export default async function SearchPage({
   searchParams,

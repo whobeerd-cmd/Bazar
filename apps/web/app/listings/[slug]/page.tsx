@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { formatPrice } from "@/lib/format";
 import { ListingsMap } from "@/components/map/ListingsMap";
@@ -7,6 +8,47 @@ import { PhoneReveal } from "./PhoneReveal";
 import { FavoriteButton } from "./FavoriteButton";
 import { CommentForm } from "./CommentForm";
 import { DeleteCommentButton } from "./DeleteCommentButton";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("id, title, description, price, price_type, status, cities(name)")
+    .eq("slug", slug)
+    .eq("status", "active")
+    .single();
+
+  if (!listing) return {};
+
+  const { data: image } = await supabase
+    .from("listing_images")
+    .select("url")
+    .eq("listing_id", listing.id)
+    .order("sort_order")
+    .limit(1)
+    .maybeSingle();
+
+  const city = Array.isArray(listing.cities) ? listing.cities[0] : listing.cities;
+  const title = `${listing.title} — ${formatPrice(listing.price_type, listing.price)}`;
+  const description = city?.name
+    ? `${city.name} · ${listing.description.slice(0, 150) || listing.title}`
+    : listing.description.slice(0, 150) || listing.title;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: image?.url ? [image.url] : undefined,
+    },
+  };
+}
 
 export default async function ListingPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
