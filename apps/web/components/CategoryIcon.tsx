@@ -1,6 +1,7 @@
 import {
   Armchair,
   Baby,
+  Boxes,
   Briefcase,
   Building2,
   Car,
@@ -43,6 +44,7 @@ const ICONS_BY_SLUG: Record<string, LucideIcon> = {
   sport: Dumbbell,
   biznes: Building2,
   "otdam-darom": Gift,
+  raznoe: Boxes,
 };
 
 export function CategoryIcon({ slug, className }: { slug: string; className?: string }) {
