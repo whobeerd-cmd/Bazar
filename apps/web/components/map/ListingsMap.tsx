@@ -60,10 +60,7 @@ export function ListingsMap({
   const apiKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY;
 
   useEffect(() => {
-    if (!apiKey) {
-      setError("Карта временно недоступна — не настроен ключ Яндекс.Карт (см. MANUAL_STEPS.md)");
-      return;
-    }
+    if (!apiKey) return;
     if (!containerRef.current) return;
 
     let cancelled = false;
@@ -104,7 +101,7 @@ export function ListingsMap({
           });
         }
       })
-      .catch((err: Error) => setError(err.message));
+      .catch(() => setError("Карта временно недоступна"));
 
     return () => {
       cancelled = true;
@@ -115,6 +112,8 @@ export function ListingsMap({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiKey, JSON.stringify(points), JSON.stringify(center), JSON.stringify(pickedPoint), interactive]);
+
+  if (!apiKey) return null;
 
   if (error) {
     return (

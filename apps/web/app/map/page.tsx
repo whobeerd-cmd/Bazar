@@ -29,14 +29,20 @@ export default async function MapPage() {
           : "Пока нет опубликованных объявлений с местоположением"}
       </p>
 
-      <div className="mt-6">
-        <ListingsMap
-          points={points}
-          center={points[0] ? [points[0].lat, points[0].lng] : INGUSHETIA_CENTER}
-          zoom={points.length > 0 ? 11 : 9}
-          height={560}
-        />
-      </div>
+      {process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY ? (
+        <div className="mt-6">
+          <ListingsMap
+            points={points}
+            center={points[0] ? [points[0].lat, points[0].lng] : INGUSHETIA_CENTER}
+            zoom={points.length > 0 ? 11 : 9}
+            height={560}
+          />
+        </div>
+      ) : (
+        <div className="mt-6 flex h-40 items-center justify-center rounded-xl border border-dashed border-border text-sm text-muted-foreground">
+          Карта скоро будет доступна
+        </div>
+      )}
     </div>
   );
 }

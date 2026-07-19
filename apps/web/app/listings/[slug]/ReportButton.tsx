@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Flag } from "lucide-react";
 import { reportListingAction } from "@/lib/actions/listings";
 import type { AuthActionState } from "@/lib/actions/auth";
 
@@ -21,15 +22,24 @@ export function ReportButton({ listingId, isAuthenticated }: { listingId: string
 
   if (!isAuthenticated) {
     return (
-      <a href="/login" className="text-sm text-muted-foreground underline">
-        Войдите, чтобы пожаловаться
+      <a
+        href="/login"
+        className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+      >
+        <Flag className="h-4 w-4" />
+        Пожаловаться
       </a>
     );
   }
 
   if (!open) {
     return (
-      <button type="button" onClick={() => setOpen(true)} className="text-sm text-muted-foreground underline">
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+      >
+        <Flag className="h-4 w-4" />
         Пожаловаться
       </button>
     );
@@ -40,15 +50,11 @@ export function ReportButton({ listingId, isAuthenticated }: { listingId: string
   }
 
   return (
-    <form action={formAction} className="max-w-sm space-y-3 rounded-md border border-border p-4">
+    <form action={formAction} className="space-y-3 rounded-xl border border-border bg-muted/40 p-4">
       <input type="hidden" name="listingId" value={listingId} />
-      <p className="text-sm font-medium">Пожаловаться на объявление</p>
+      <p className="text-sm font-semibold text-foreground">Пожаловаться на объявление</p>
 
-      <select
-        name="reason"
-        required
-        className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
-      >
+      <select name="reason" required className="field-input">
         {REASONS.map((r) => (
           <option key={r.value} value={r.value}>
             {r.label}
@@ -56,24 +62,15 @@ export function ReportButton({ listingId, isAuthenticated }: { listingId: string
         ))}
       </select>
 
-      <textarea
-        name="comment"
-        placeholder="Комментарий (необязательно)"
-        rows={3}
-        className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
-      />
+      <textarea name="comment" placeholder="Комментарий (необязательно)" rows={3} className="field-input" />
 
       {state?.error && <p className="text-sm text-red-700">{state.error}</p>}
 
       <div className="flex gap-2">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
-        >
+        <button type="submit" disabled={isPending} className="btn-primary">
           {isPending ? "Отправляем..." : "Отправить"}
         </button>
-        <button type="button" onClick={() => setOpen(false)} className="text-sm text-muted-foreground">
+        <button type="button" onClick={() => setOpen(false)} className="btn-ghost">
           Отмена
         </button>
       </div>

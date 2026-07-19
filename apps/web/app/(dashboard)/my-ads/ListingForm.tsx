@@ -315,13 +315,15 @@ export function ListingForm({
       <div>
         <input type="hidden" name="lat" value={pickedPoint ? pickedPoint[0] : ""} />
         <input type="hidden" name="lng" value={pickedPoint ? pickedPoint[1] : ""} />
-        <button
-          type="button"
-          onClick={() => setShowMap((v) => !v)}
-          className="text-sm font-medium text-primary hover:underline"
-        >
-          {showMap ? "Скрыть карту" : "Указать точку на карте"}
-        </button>
+        {process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY && (
+          <button
+            type="button"
+            onClick={() => setShowMap((v) => !v)}
+            className="text-sm font-medium text-primary hover:underline"
+          >
+            {showMap ? "Скрыть карту" : "Указать точку на карте"}
+          </button>
+        )}
         {pickedPoint && (
           <span className="ml-2 text-xs text-muted-foreground">
             Точка выбрана ({pickedPoint[0].toFixed(4)}, {pickedPoint[1].toFixed(4)})
