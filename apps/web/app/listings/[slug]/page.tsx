@@ -60,7 +60,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
   const { data: listing } = await supabase
     .from("listings")
     .select(
-      "id, title, description, price, price_type, condition, deal_type, address_text, lat, lng, status, created_at, user_id, categories(name), cities(name, lat, lng), profiles(full_name, avatar_url, phone)"
+      "id, title, description, price, price_type, condition, deal_type, address_text, lat, lng, status, created_at, user_id, categories(name), cities(name, lat, lng), profiles!listings_user_id_fkey(full_name, avatar_url, phone)"
     )
     .eq("slug", slug)
     .single();

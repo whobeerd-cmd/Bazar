@@ -23,7 +23,9 @@ export default async function AdminListingsPage({
 
   let query = supabase
     .from("listings")
-    .select("id, title, slug, price, price_type, created_at, cover_image_url, is_vip, status, profiles(full_name)");
+    .select(
+      "id, title, slug, price, price_type, created_at, cover_image_url, is_vip, status, profiles!listings_user_id_fkey(full_name)"
+    );
 
   query = status === "all" ? query : query.eq("status", status);
   query = status === "pending" ? query.order("created_at") : query.order("created_at", { ascending: false });

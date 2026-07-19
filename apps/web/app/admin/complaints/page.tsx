@@ -7,7 +7,7 @@ export default async function AdminComplaintsPage() {
   const { data: complaints } = await supabase
     .from("complaints")
     .select(
-      "id, reason, comment, status, created_at, listings(title, slug), profiles(full_name)"
+      "id, reason, comment, status, created_at, listings(title, slug), profiles!complaints_user_id_fkey(full_name)"
     )
     .order("status", { ascending: true })
     .order("created_at", { ascending: false });
