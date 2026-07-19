@@ -3,23 +3,29 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { ConfirmFallback } from "./ConfirmFallback";
 
-// Supabase присылает в письме ссылку вида:
-//   /auth/confirm?token_hash=...&type=email      (подтверждение регистрации)
-//   /auth/confirm?token_hash=...&type=recovery   (восстановление пароля)
-// Это работает, только если шаблон письма в Supabase настроен на
-// {{ .TokenHash }}. Если шаблон не менялся (значение по умолчанию —
-// {{ .ConfirmationURL }}), Supabase сначала сам проверяет токен на своём
-// сервере и присылает сюда сессию не в query, а в #фрагменте адреса —
-// сервер его не видит, поэтому ConfirmFallback забирает её на клиенте.
+// В проекте включён PKCE-флоу — письмо со ссылкой на подтверждение ведёт не
+// прямо на сайт, а на собственный /auth/v1/verify Supabase (это его
+// стандартная ссылка {{ .ConfirmationURL }}). Supabase сам проверяет токен и
+// уже потом редиректит сюда с кодом ?code=... — его нужно обменять на сессию
+// через exchangeCodeForSession, точно так же, как это уже делает вход через
+// Google в /auth/callback. token_hash/type и #фрагмент — запасные варианты
+// на случай, если письмо когда-нибудь настроят иначе.
 export default async function ConfirmPage({
   searchParams,
 }: {
-  searchParams: Promise<{ token_hash?: string; type?: string }>;
+  searchParams: Promise<{ code?: string; token_hash?: string; type?: string }>;
 }) {
-  const { token_hash: tokenHash, type } = await searchParams;
+  const { code, token_hash: tokenHash, type } = await searchParams;
+  const supabase = await createClient();
+
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      redirect(type === "recovery" ? "/update-password" : "/");
+    }
+  }
 
   if (tokenHash && type) {
-    const supabase = await createClient();
     const { error } = await supabase.auth.verifyOtp({
       type: type as EmailOtpType,
       token_hash: tokenHash,
