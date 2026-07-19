@@ -383,6 +383,8 @@ export async function addListingImagesAction(listingId: string, urls: string[]) 
     .eq("listing_id", listingId);
 
   const startOrder = count ?? 0;
+  if (startOrder + urls.length > 7) return { error: "Максимум 7 фото на объявление" };
+
   const rows = urls.map((url, i) => ({ listing_id: listingId, url, sort_order: startOrder + i }));
 
   const { error } = await supabase.from("listing_images").insert(rows);

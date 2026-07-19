@@ -26,8 +26,8 @@ export function ImageUploader({
     if (files.length === 0) return;
     setError(null);
 
-    if (images.length + files.length > 12) {
-      setError("Максимум 12 фото на объявление");
+    if (images.length + files.length > 7) {
+      setError("Максимум 7 фото на объявление");
       return;
     }
 
@@ -119,7 +119,7 @@ export function ImageUploader({
         className="hidden"
       />
 
-      <p className="mt-2 text-xs text-muted-foreground">До 12 фото, каждое не больше 10 МБ.</p>
+      <p className="mt-2 text-xs text-muted-foreground">До 7 фото, каждое не больше 10 МБ.</p>
       {error && <p className="mt-1 text-xs text-red-700">{error}</p>}
     </div>
   );
