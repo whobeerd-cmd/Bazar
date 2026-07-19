@@ -15,7 +15,7 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const [mode, setMode] = useState<"magic" | "password">("magic");
+  const [mode, setMode] = useState<"magic" | "password">("password");
   const [passwordState, passwordFormAction, isPasswordPending] = useActionState<
     AuthActionState,
     FormData

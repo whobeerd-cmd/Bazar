@@ -40,6 +40,45 @@ export async function signInAction(
 }
 
 // ----------------------------------------------------------------------------
+// Регистрация по почте и паролю — основной способ. Не зависит от перехода по
+// ссылке в письме: если у проекта отключено обязательное подтверждение
+// почты, сессия появляется сразу; если включено — Supabase присылает письмо
+// для подтверждения (ту же ссылку обрабатывает /auth/confirm).
+// ----------------------------------------------------------------------------
+export async function signUpAction(
+  _prevState: AuthActionState,
+  formData: FormData
+): Promise<AuthActionState> {
+  const emailResult = emailSchema.safeParse(formData.get("email"));
+  if (!emailResult.success) {
+    return { error: emailResult.error.issues[0]?.message };
+  }
+  const passwordResult = passwordSchema.safeParse(formData.get("password"));
+  if (!passwordResult.success) {
+    return { error: passwordResult.error.issues[0]?.message };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signUp({
+    email: emailResult.data,
+    password: passwordResult.data,
+  });
+
+  if (error) {
+    return { error: translateAuthError(error.message) };
+  }
+
+  if (data.session) {
+    redirect("/");
+  }
+
+  return {
+    success:
+      "Мы отправили письмо для подтверждения на вашу почту — перейдите по ссылке из него, чтобы завершить регистрацию.",
+  };
+}
+
+// ----------------------------------------------------------------------------
 // Вход по ссылке на почту, без пароля — работает и для новых пользователей
 // (создаёт аккаунт при первом входе), и для уже зарегистрированных.
 // ----------------------------------------------------------------------------
@@ -136,5 +175,11 @@ function translateAuthError(message: string): string {
     "Email not confirmed": "Email ещё не подтверждён — проверьте почту",
     "Password should be at least 6 characters": "Пароль слишком короткий",
   };
-  return known[message] ?? message;
+  if (known[message]) return known[message];
+  // На необычные/непонятные ответы Supabase (пустые тела ошибок и т.п.) не
+  // показываем пользователю сырой текст вроде "{}" — только понятное сообщение.
+  if (!message || !/[a-zA-Zа-яА-Я]/.test(message) || message.length > 200) {
+    return "Не получилось выполнить запрос — попробуйте ещё раз через минуту";
+  }
+  return message;
 }
