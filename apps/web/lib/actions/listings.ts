@@ -27,7 +27,7 @@ async function getOwnListingOrThrow(
 ) {
   const { data: listing } = await supabase
     .from("listings")
-    .select("id, user_id, status")
+    .select("id, user_id, status, category_id, deal_type")
     .eq("id", listingId)
     .single();
 
@@ -223,13 +223,25 @@ export async function publishListingAction(listingId: string) {
     return { error: "Опубликовать можно только черновик или отклонённое объявление" };
   }
 
-  const { count } = await supabase
-    .from("listing_images")
-    .select("id", { count: "exact", head: true })
-    .eq("listing_id", listingId);
+  // Фото не нужны для объявлений "Куплю"/"Сниму" (человек ищет, а не
+  // предлагает — фотографировать нечего) и для категорий, где фото не
+  // имеют смысла (услуги, вакансии/резюме и т.п.).
+  const isSeekingDeal = listing.deal_type === "buy" || listing.deal_type === "rent_seek";
+  const { data: category } = await supabase
+    .from("categories")
+    .select("requires_photo")
+    .eq("id", listing.category_id)
+    .single();
 
-  if (!count || count === 0) {
-    return { error: "Добавьте хотя бы одно фото перед публикацией" };
+  if (!isSeekingDeal && category?.requires_photo !== false) {
+    const { count } = await supabase
+      .from("listing_images")
+      .select("id", { count: "exact", head: true })
+      .eq("listing_id", listingId);
+
+    if (!count || count === 0) {
+      return { error: "Добавьте хотя бы одно фото перед публикацией" };
+    }
   }
 
   const { error } = await supabase

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Golos_Text } from "next/font/google";
 import Link from "next/link";
+import { CircleUserRound } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getCategoryTree } from "@/lib/categories";
 import { CategoryMegaMenu } from "@/components/CategoryMegaMenu";
@@ -89,6 +90,13 @@ export default async function RootLayout({
         .eq("user_id", user.id);
       const codes = (userRoles ?? []).map((row: any) => row.roles?.code);
       isAdmin = codes.some((code: string) => code === "admin" || code === "superadmin");
+
+      // Отметка "в сети" для админки — best-effort, не блокирует рендер страницы.
+      supabase
+        .from("profiles")
+        .update({ last_seen_at: new Date().toISOString() })
+        .eq("id", user.id)
+        .then(() => {});
     }
   } catch {
     userLabel = null;
@@ -112,7 +120,7 @@ export default async function RootLayout({
               {siteName}
             </Link>
 
-            <div className="hidden shrink-0 sm:block">
+            <div className="shrink-0">
               <CategoryMegaMenu tree={categoryTree} />
             </div>
 
@@ -148,13 +156,23 @@ export default async function RootLayout({
                   href="/my-ads/new"
                   className="rounded-full bg-primary px-3.5 py-1.5 font-medium text-primary-foreground shadow-sm transition hover:bg-primary-hover"
                 >
-                  + Подать объявление
+                  <span className="sm:hidden">+</span>
+                  <span className="hidden sm:inline">+ Подать объявление</span>
                 </Link>
               )}
               {userLabel ? (
-                <Link href="/profile" className="ml-1 rounded-full px-3 py-1.5 font-medium text-foreground transition hover:bg-muted">
-                  {userLabel}
-                </Link>
+                <>
+                  <Link
+                    href="/profile"
+                    className="ml-1 flex h-8 w-8 items-center justify-center rounded-full text-foreground transition hover:bg-muted sm:hidden"
+                    aria-label="Профиль"
+                  >
+                    <CircleUserRound className="h-5 w-5" strokeWidth={1.8} />
+                  </Link>
+                  <Link href="/profile" className="ml-1 hidden rounded-full px-3 py-1.5 font-medium text-foreground transition hover:bg-muted sm:inline-block">
+                    {userLabel}
+                  </Link>
+                </>
               ) : (
                 <>
                   <Link href="/login" className="rounded-full px-3 py-1.5 text-foreground transition hover:bg-muted">
@@ -162,7 +180,7 @@ export default async function RootLayout({
                   </Link>
                   <Link
                     href="/register"
-                    className="rounded-full bg-primary px-3.5 py-1.5 font-medium text-primary-foreground shadow-sm transition hover:bg-primary-hover"
+                    className="hidden rounded-full bg-primary px-3.5 py-1.5 font-medium text-primary-foreground shadow-sm transition hover:bg-primary-hover sm:inline-block"
                   >
                     Регистрация
                   </Link>
@@ -170,6 +188,27 @@ export default async function RootLayout({
               )}
             </nav>
           </div>
+
+          <form action="/search" method="get" className="border-t border-border px-4 py-2.5 sm:hidden">
+            <div className="relative">
+              <svg
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <circle cx="9" cy="9" r="6.5" />
+                <path d="M17.5 17.5 13.9 13.9" strokeLinecap="round" />
+              </svg>
+              <input
+                type="text"
+                name="q"
+                placeholder="Поиск объявлений..."
+                className="w-full rounded-full border border-border bg-muted/60 py-2 pl-9 pr-4 text-sm outline-none transition focus:border-border-strong focus:bg-background focus:ring-2 focus:ring-primary/25"
+              />
+            </div>
+          </form>
         </header>
 
         <main>{children}</main>

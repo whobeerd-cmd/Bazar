@@ -136,8 +136,11 @@ export function ListingForm({
             required
             value={topCategoryId}
             onChange={(e) => {
-              setTopCategoryId(e.target.value ? Number(e.target.value) : "");
+              const id = e.target.value ? Number(e.target.value) : "";
+              setTopCategoryId(id);
               setSubCategoryId("");
+              const node = categories.find((c) => c.id === id);
+              if (node?.slug === "otdam-darom") setPriceType("free");
             }}
             className={inputClass}
           >

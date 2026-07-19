@@ -46,7 +46,7 @@ export default async function CategoryPage({
 
   const { data: category } = await supabase
     .from("categories")
-    .select("id, name, slug, parent_id, is_active")
+    .select("id, name, slug, parent_id, is_active, show_condition, show_deal_type")
     .eq("slug", slug)
     .single();
 
@@ -58,7 +58,7 @@ export default async function CategoryPage({
       : Promise.resolve({ data: null }),
     supabase
       .from("categories")
-      .select("id, name, slug")
+      .select("id, name, slug, show_condition, show_deal_type")
       .eq("parent_id", category.id)
       .eq("is_active", true)
       .order("sort_order"),
@@ -66,6 +66,8 @@ export default async function CategoryPage({
   ]);
 
   const categoryIds = [category.id, ...((children ?? []).map((c) => c.id))];
+  const showCondition = category.show_condition || (children ?? []).some((c) => c.show_condition);
+  const showDealType = category.show_deal_type || (children ?? []).some((c) => c.show_deal_type);
   const filters = parseListingFilters(rawSearchParams);
   const { items, count, page, pageSize } = await queryListings(supabase, { ...filters, categoryIds });
 
@@ -105,6 +107,8 @@ export default async function CategoryPage({
             cities={cities ?? []}
             current={flattenSearchParams(rawSearchParams)}
             searchPlaceholder="Искать в этой категории"
+            showCondition={showCondition}
+            showDealType={showDealType}
           />
         </aside>
 

@@ -354,3 +354,13 @@ insert into public.categories (parent_id, name, slug, sort_order) values
   ((select id from public.categories where slug = 'stroymaterialy'), 'Отопление и вентиляция', 'otoplenie-i-ventilyaciya', 15),
   ((select id from public.categories where slug = 'sport'), 'Спортивное питание', 'sportivnoe-pitanie', 45)
 on conflict (slug) do nothing;
+
+-- Фото не обязательны для услуг/работы/партнёрства — см. миграцию 0016.
+update public.categories set requires_photo = false
+where slug in (
+  'rabota', 'vakansii', 'ischu-rabotu',
+  'uslugi', 'remont-i-stroitelstvo', 'gruzoperevozki', 'prazdniki-i-meropriyatiya',
+  'krasota-i-zdorove', 'obuchenie-i-repetitorstvo', 'yuridicheskie-i-finansovye',
+  'remont-bytovoy-tehniki', 'avtouslugi', 'prochie-uslugi', 'it-uslugi',
+  'delovoe-partnerstvo'
+);

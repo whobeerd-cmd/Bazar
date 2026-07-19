@@ -4,14 +4,18 @@ import { createClient } from "@/lib/supabase/server";
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
 
+  const onlineSince = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+
   const [
     { count: usersCount },
+    { count: onlineCount },
     { count: categoriesCount },
     { count: bannersCount },
     { count: pendingListingsCount },
     { count: newComplaintsCount },
   ] = await Promise.all([
     supabase.from("profiles").select("*", { count: "exact", head: true }),
+    supabase.from("profiles").select("*", { count: "exact", head: true }).gte("last_seen_at", onlineSince),
     supabase.from("categories").select("*", { count: "exact", head: true }),
     supabase.from("banners").select("*", { count: "exact", head: true }),
     supabase.from("listings").select("*", { count: "exact", head: true }).eq("status", "pending"),
@@ -22,6 +26,7 @@ export default async function AdminDashboardPage() {
     { label: "На модерации", value: pendingListingsCount ?? 0, href: "/admin/listings" },
     { label: "Новых жалоб", value: newComplaintsCount ?? 0, href: "/admin/complaints" },
     { label: "Пользователей", value: usersCount ?? 0, href: "/admin/users" },
+    { label: "Сейчас онлайн", value: onlineCount ?? 0, href: "/admin/users" },
     { label: "Категорий", value: categoriesCount ?? 0, href: "/admin/categories" },
     { label: "Баннеров", value: bannersCount ?? 0, href: "/admin/banners" },
   ];
@@ -71,7 +76,7 @@ export default async function AdminDashboardPage() {
         Общая статистика. Доход появится здесь, когда будет реальная монетизация.
       </p>
 
-      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
         {stats.map((stat) => (
           <Link key={stat.label} href={stat.href}>
             <div className="card p-4 transition hover:border-border-strong hover:shadow-card-hover">

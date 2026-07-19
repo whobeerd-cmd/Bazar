@@ -23,11 +23,15 @@ export function FiltersForm({
   cities,
   current,
   searchPlaceholder,
+  showCondition = true,
+  showDealType = true,
 }: {
   basePath: string;
   cities: { id: number; name: string }[];
   current: ListingFiltersValues;
   searchPlaceholder: string;
+  showCondition?: boolean;
+  showDealType?: boolean;
 }) {
   return (
     <form
@@ -92,29 +96,33 @@ export function FiltersForm({
         </div>
       </div>
 
-      <div>
-        <label htmlFor="condition" className={labelClass}>
-          Состояние
-        </label>
-        <select id="condition" name="condition" defaultValue={current.condition ?? ""} className={inputClass}>
-          <option value="">Любое</option>
-          <option value="new">Новое</option>
-          <option value="used">Б/у</option>
-        </select>
-      </div>
+      {showCondition && (
+        <div>
+          <label htmlFor="condition" className={labelClass}>
+            Состояние
+          </label>
+          <select id="condition" name="condition" defaultValue={current.condition ?? ""} className={inputClass}>
+            <option value="">Любое</option>
+            <option value="new">Новое</option>
+            <option value="used">Б/у</option>
+          </select>
+        </div>
+      )}
 
-      <div>
-        <label htmlFor="deal_type" className={labelClass}>
-          Тип сделки
-        </label>
-        <select id="deal_type" name="deal_type" defaultValue={current.deal_type ?? ""} className={inputClass}>
-          <option value="">Любой</option>
-          <option value="sale">Продам</option>
-          <option value="rent_out">Сдам</option>
-          <option value="buy">Куплю</option>
-          <option value="rent_seek">Сниму</option>
-        </select>
-      </div>
+      {showDealType && (
+        <div>
+          <label htmlFor="deal_type" className={labelClass}>
+            Тип сделки
+          </label>
+          <select id="deal_type" name="deal_type" defaultValue={current.deal_type ?? ""} className={inputClass}>
+            <option value="">Любой</option>
+            <option value="sale">Продам</option>
+            <option value="rent_out">Сдам</option>
+            <option value="buy">Куплю</option>
+            <option value="rent_seek">Сниму</option>
+          </select>
+        </div>
+      )}
 
       <div className="space-y-2.5 border-t border-border pt-4 text-sm text-foreground">
         <label className="flex items-center gap-2.5">

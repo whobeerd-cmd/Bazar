@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { getCategoryTree } from "@/lib/categories";
 
-const VALUE_PROPS = ["Бесплатно для частных лиц", "Без посредников", "Каждое объявление проверяется"];
+const VALUE_PROPS = ["Бесплатно для частных лиц", "Без посредников", "Публикация сразу, без ожидания"];
 
 function subcategoryLabel(count: number) {
   const mod10 = count % 10;
