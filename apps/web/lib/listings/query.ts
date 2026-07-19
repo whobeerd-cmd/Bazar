@@ -11,6 +11,7 @@ export type ListingFilters = {
   priceMin?: number;
   priceMax?: number;
   condition?: "new" | "used";
+  dealType?: "sale" | "rent_out" | "buy" | "rent_seek";
   hasPhoto?: boolean;
   hasVideo?: boolean;
   vipOnly?: boolean;
@@ -25,6 +26,7 @@ export type ListingCard = {
   slug: string;
   price: number | null;
   price_type: string;
+  deal_type: string | null;
   cover_image_url: string | null;
   is_vip: boolean;
   created_at: string;
@@ -42,7 +44,7 @@ export async function queryListings(supabase: Supabase, filters: ListingFilters)
   let query = supabase
     .from("listings")
     .select(
-      "id, title, slug, price, price_type, cover_image_url, is_vip, created_at, cities(name)",
+      "id, title, slug, price, price_type, deal_type, cover_image_url, is_vip, created_at, cities(name)",
       { count: "exact" }
     )
     .eq("status", "active");
@@ -52,6 +54,7 @@ export async function queryListings(supabase: Supabase, filters: ListingFilters)
   }
   if (filters.cityId) query = query.eq("city_id", filters.cityId);
   if (filters.condition) query = query.eq("condition", filters.condition);
+  if (filters.dealType) query = query.eq("deal_type", filters.dealType);
   if (filters.hasPhoto) query = query.not("cover_image_url", "is", null);
   if (filters.hasVideo) query = query.eq("has_video", true);
   if (filters.vipOnly) query = query.eq("is_vip", true);
@@ -84,6 +87,7 @@ export async function queryListings(supabase: Supabase, filters: ListingFilters)
       slug: row.slug,
       price: row.price,
       price_type: row.price_type,
+      deal_type: row.deal_type,
       cover_image_url: row.cover_image_url,
       is_vip: row.is_vip,
       created_at: row.created_at,

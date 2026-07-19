@@ -9,6 +9,7 @@ export type ListingFiltersValues = {
   price_min?: string;
   price_max?: string;
   condition?: string;
+  deal_type?: string;
   has_photo?: string;
   has_video?: string;
   vip?: string;
@@ -99,6 +100,19 @@ export function FiltersForm({
           <option value="">Любое</option>
           <option value="new">Новое</option>
           <option value="used">Б/у</option>
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="deal_type" className={labelClass}>
+          Тип сделки
+        </label>
+        <select id="deal_type" name="deal_type" defaultValue={current.deal_type ?? ""} className={inputClass}>
+          <option value="">Любой</option>
+          <option value="sale">Продам</option>
+          <option value="rent_out">Сдам</option>
+          <option value="buy">Куплю</option>
+          <option value="rent_seek">Сниму</option>
         </select>
       </div>
 

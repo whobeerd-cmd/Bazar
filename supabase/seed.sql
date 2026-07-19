@@ -224,3 +224,7 @@ where slug in (
   'selskoe-hozyaystvo', 'zhivotnye', 'ptitsy', 'korma', 'rasteniya-selhoz', 'pchely',
   'biznes', 'prodazha-biznesa', 'delovoe-partnerstvo'
 );
+
+-- Тип сделки (Продам/Сдам/Куплю/Сниму) — только для недвижимости, см. миграцию 0013.
+update public.categories set show_deal_type = true
+where slug in ('nedvizhimost', 'kvartiry', 'doma', 'zemelnye-uchastki', 'kommercheskaya-nedvizhimost', 'garazhi-i-parkovki');

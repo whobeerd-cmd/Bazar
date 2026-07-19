@@ -10,6 +10,13 @@ import type { CategoryNode } from "@/lib/categories";
 
 const inputClass = "field-input";
 
+const DEAL_TYPE_OPTIONS = [
+  { value: "sale", label: "Продам" },
+  { value: "rent_out", label: "Сдам" },
+  { value: "buy", label: "Куплю" },
+  { value: "rent_seek", label: "Сниму" },
+] as const;
+
 type CityOption = { id: number; name: string };
 type CategoryAttribute = {
   id: number;
@@ -49,6 +56,7 @@ export function ListingForm({
     price: number | null;
     priceType: "fixed" | "negotiable" | "free";
     condition: "new" | "used";
+    dealType: "sale" | "rent_out" | "buy" | "rent_seek" | null;
     addressText: string | null;
     lat: number | null;
     lng: number | null;
@@ -62,6 +70,7 @@ export function ListingForm({
   const [topCategoryId, setTopCategoryId] = useState<number | "">(initialPath?.[0]?.id ?? "");
   const [subCategoryId, setSubCategoryId] = useState<number | "">(initialPath?.[1]?.id ?? "");
   const [priceType, setPriceType] = useState(defaultValues?.priceType ?? "fixed");
+  const [dealType, setDealType] = useState(defaultValues?.dealType ?? "");
   const [attributes, setAttributes] = useState<CategoryAttribute[]>([]);
   const [showMap, setShowMap] = useState(false);
   const [pickedPoint, setPickedPoint] = useState<[number, number] | null>(
@@ -77,6 +86,7 @@ export function ListingForm({
     : topNode;
   const categoryId = hasSubcategories ? subCategoryId : topCategoryId;
   const showCondition = selectedNode?.showCondition ?? true;
+  const showDealType = selectedNode?.showDealType ?? false;
 
   useEffect(() => {
     if (!categoryId) {
@@ -161,6 +171,35 @@ export function ListingForm({
           </div>
         )}
       </div>
+
+      {showDealType && (
+        <div>
+          <p className="field-label">Тип сделки</p>
+          <div className="mt-1.5 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+            {DEAL_TYPE_OPTIONS.map((opt) => (
+              <label
+                key={opt.value}
+                className={`flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border px-3 py-2 transition ${
+                  dealType === opt.value
+                    ? "border-primary bg-primary/10 font-semibold text-primary"
+                    : "border-border text-foreground hover:bg-muted"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="dealType"
+                  value={opt.value}
+                  checked={dealType === opt.value}
+                  onChange={() => setDealType(opt.value)}
+                  required
+                  className="sr-only"
+                />
+                {opt.label}
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div>
         <label htmlFor="cityId" className="field-label">

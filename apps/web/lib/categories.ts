@@ -5,6 +5,7 @@ export type CategoryNode = {
   name: string;
   slug: string;
   showCondition: boolean;
+  showDealType: boolean;
   children: CategoryNode[];
 };
 
@@ -12,7 +13,7 @@ export async function getCategoryTree(): Promise<CategoryNode[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("categories")
-    .select("id, name, slug, parent_id, show_condition")
+    .select("id, name, slug, parent_id, show_condition, show_deal_type")
     .eq("is_active", true)
     .order("sort_order");
 
@@ -24,6 +25,7 @@ export async function getCategoryTree(): Promise<CategoryNode[]> {
       name: row.name,
       slug: row.slug,
       showCondition: row.show_condition,
+      showDealType: row.show_deal_type,
       children: [],
     })
   );

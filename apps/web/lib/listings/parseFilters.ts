@@ -9,6 +9,7 @@ function first(value: string | string[] | undefined) {
 export function parseListingFilters(searchParams: RawSearchParams): ListingFilters {
   const sort = first(searchParams.sort);
   const condition = first(searchParams.condition);
+  const dealType = first(searchParams.deal_type);
   const priceMin = first(searchParams.price_min);
   const priceMax = first(searchParams.price_max);
   const city = first(searchParams.city);
@@ -20,6 +21,9 @@ export function parseListingFilters(searchParams: RawSearchParams): ListingFilte
     priceMin: priceMin ? Number(priceMin) : undefined,
     priceMax: priceMax ? Number(priceMax) : undefined,
     condition: condition === "new" || condition === "used" ? condition : undefined,
+    dealType: ["sale", "rent_out", "buy", "rent_seek"].includes(dealType ?? "")
+      ? (dealType as "sale" | "rent_out" | "buy" | "rent_seek")
+      : undefined,
     hasPhoto: first(searchParams.has_photo) === "1",
     hasVideo: first(searchParams.has_video) === "1",
     vipOnly: first(searchParams.vip) === "1",

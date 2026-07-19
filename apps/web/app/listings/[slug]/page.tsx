@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { formatPrice } from "@/lib/format";
+import { formatDealType, formatPrice } from "@/lib/format";
 import { ListingsMap } from "@/components/map/ListingsMap";
 import { ReportButton } from "./ReportButton";
 import { PhoneReveal } from "./PhoneReveal";
@@ -60,7 +60,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
   const { data: listing } = await supabase
     .from("listings")
     .select(
-      "id, title, description, price, price_type, condition, address_text, lat, lng, status, created_at, user_id, categories(name), cities(name, lat, lng), profiles(full_name, avatar_url, phone)"
+      "id, title, description, price, price_type, condition, deal_type, address_text, lat, lng, status, created_at, user_id, categories(name), cities(name, lat, lng), profiles(full_name, avatar_url, phone)"
     )
     .eq("slug", slug)
     .single();
@@ -106,9 +106,16 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
         </p>
       )}
 
-      <p className="text-sm font-medium text-muted-foreground">
-        {category?.name}
-        {city?.name ? ` · ${city.name}` : ""}
+      <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-muted-foreground">
+        <span>
+          {category?.name}
+          {city?.name ? ` · ${city.name}` : ""}
+        </span>
+        {formatDealType(listing.deal_type) && (
+          <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-foreground">
+            {formatDealType(listing.deal_type)}
+          </span>
+        )}
       </p>
       <h1 className="mt-1 text-[1.75rem] font-extrabold leading-tight tracking-tight text-foreground sm:text-3xl">
         {listing.title}

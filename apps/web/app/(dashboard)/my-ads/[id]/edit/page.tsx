@@ -26,7 +26,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
   const { data: listing } = await supabase
     .from("listings")
     .select(
-      "id, user_id, title, category_id, city_id, description, price, price_type, condition, address_text, lat, lng, status, rejection_reason"
+      "id, user_id, title, category_id, city_id, description, price, price_type, condition, deal_type, address_text, lat, lng, status, rejection_reason"
     )
     .eq("id", id)
     .single();
@@ -86,6 +86,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
               price: listing.price,
               priceType: listing.price_type,
               condition: listing.condition,
+              dealType: listing.deal_type,
               addressText: listing.address_text,
               lat: listing.lat,
               lng: listing.lng,

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ImageOff } from "lucide-react";
-import { formatPrice } from "@/lib/format";
+import { formatDealType, formatPrice } from "@/lib/format";
 import type { ListingCard } from "@/lib/listings/query";
 
 export function ListingCardView({ listing }: { listing: ListingCard }) {
@@ -25,6 +25,11 @@ export function ListingCardView({ listing }: { listing: ListingCard }) {
         {listing.is_vip && (
           <span className="absolute left-2 top-2 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-accent-foreground shadow-sm">
             VIP
+          </span>
+        )}
+        {formatDealType(listing.deal_type) && (
+          <span className="absolute right-2 top-2 rounded-full bg-background/90 px-2 py-0.5 text-[11px] font-semibold text-foreground shadow-sm">
+            {formatDealType(listing.deal_type)}
           </span>
         )}
       </div>
