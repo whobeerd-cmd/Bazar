@@ -14,8 +14,12 @@ export default async function AdminDashboardPage() {
     { count: pendingListingsCount },
     { count: newComplaintsCount },
   ] = await Promise.all([
-    supabase.from("profiles").select("*", { count: "exact", head: true }),
-    supabase.from("profiles").select("*", { count: "exact", head: true }).gte("last_seen_at", onlineSince),
+    supabase.from("profiles").select("*", { count: "exact", head: true }).eq("is_demo", false),
+    supabase
+      .from("profiles")
+      .select("*", { count: "exact", head: true })
+      .eq("is_demo", false)
+      .gte("last_seen_at", onlineSince),
     supabase.from("categories").select("*", { count: "exact", head: true }),
     supabase.from("banners").select("*", { count: "exact", head: true }),
     supabase.from("listings").select("*", { count: "exact", head: true }).eq("status", "pending"),

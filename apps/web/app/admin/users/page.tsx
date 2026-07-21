@@ -12,6 +12,7 @@ export default async function AdminUsersPage({
   let query = supabase
     .from("profiles")
     .select("id, full_name, phone, avatar_url, is_blocked, created_at, last_seen_at, user_roles(roles(code))")
+    .eq("is_demo", false)
     .order("created_at", { ascending: false })
     .limit(100);
 
@@ -19,7 +20,7 @@ export default async function AdminUsersPage({
 
   const [{ data: profiles }, { count: totalCount }] = await Promise.all([
     query,
-    supabase.from("profiles").select("id", { count: "exact", head: true }),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("is_demo", false),
   ]);
 
   const users: AdminUser[] = (profiles ?? []).map((p: any) => ({
