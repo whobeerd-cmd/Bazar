@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ImageOff, ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
 
-export function ListingGallery({
+// Общая галерея фото с лайтбоксом — используется страницами объявления и
+// бизнеса (одинаковая логика, разные владельцы данных).
+export function Gallery({
   images,
   title,
   isVip,

@@ -147,5 +147,5 @@ export function generateListingContent(category) {
   const config = category.config;
   const item = pick(config.items);
   const generator = ARCHETYPES[config.archetype] ?? ARCHETYPES["generic-item"];
-  return generator(item, config);
+  return { ...generator(item, config), item };
 }

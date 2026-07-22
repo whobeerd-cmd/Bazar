@@ -364,3 +364,23 @@ where slug in (
   'remont-bytovoy-tehniki', 'avtouslugi', 'prochie-uslugi', 'it-uslugi',
   'delovoe-partnerstvo'
 );
+
+-- Категории бизнес-справочника — см. миграцию 0019.
+insert into public.business_categories (name, slug, sort_order) values
+  ('Кафе и рестораны', 'kafe-i-restorany', 10),
+  ('Продуктовые магазины', 'produktovye-magaziny', 20),
+  ('Стройматериалы и ремонт', 'stroymaterialy-i-remont-biznes', 30),
+  ('Одежда и обувь', 'odezhda-i-obuv-biznes', 40),
+  ('Красота и здоровье', 'krasota-i-zdorove-biznes', 50),
+  ('Медицина и аптеки', 'medicina-i-apteki', 60),
+  ('Автосервисы и автомойки', 'avtoservisy', 70),
+  ('Мебель и интерьер', 'mebel-i-interer-biznes', 80),
+  ('Электроника и техника', 'elektronika-biznes', 90),
+  ('Образование и кружки', 'obrazovanie-i-kruzhki', 100),
+  ('Госуслуги и финансы', 'gosuslugi-i-finansy', 110),
+  ('Гостиницы и туризм', 'gostinicy-i-turizm', 120),
+  ('Развлечения и досуг', 'razvlecheniya-i-dosug', 130),
+  ('Спорт и фитнес', 'sport-i-fitnes-biznes', 140),
+  ('Свадьбы и мероприятия', 'svadby-i-meropriyatiya', 150),
+  ('Другое', 'drugoe-biznes', 160)
+on conflict (slug) do nothing;

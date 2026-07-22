@@ -17,6 +17,13 @@ const ACTION_LABELS: Record<string, string> = {
   revoke_role: "снял(а) роль",
   block_user: "заблокировал(а)",
   unblock_user: "разблокировал(а)",
+  verify_business: "отметил(а) проверенным",
+  unverify_business: "снял(а) отметку проверенного",
+  feature_business: "отметил(а) рекомендуемым",
+  unfeature_business: "снял(а) отметку рекомендуемого",
+  set_status_active: "опубликовал(а)",
+  set_status_hidden: "скрыл(а)",
+  set_status_archived: "отправил(а) в архив",
 };
 
 const ENTITY_LABELS: Record<string, string> = {
@@ -25,6 +32,7 @@ const ENTITY_LABELS: Record<string, string> = {
   listing: "объявление",
   complaint: "жалобу",
   user: "пользователя",
+  business: "бизнес",
 };
 
 export default async function AdminAuditLogPage() {

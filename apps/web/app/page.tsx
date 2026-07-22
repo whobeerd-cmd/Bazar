@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check, Building2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { getCategoryTree } from "@/lib/categories";
+import { queryBusinesses } from "@/lib/business/queries";
+import { BusinessCardView } from "@/components/business/BusinessCardView";
 
 const VALUE_PROPS = ["Бесплатно для частных лиц", "Без посредников", "Публикация сразу, без ожидания"];
 
@@ -16,13 +18,14 @@ function subcategoryLabel(count: number) {
 
 export default async function HomePage() {
   const supabase = await createClient();
-  const [categories, { data: banners }] = await Promise.all([
+  const [categories, { data: banners }, { items: featuredBusinesses }] = await Promise.all([
     getCategoryTree(),
     supabase
       .from("banners")
       .select("id, image_url, link_url")
       .eq("position", "home_top")
       .order("sort_order"),
+    queryBusinesses(supabase, { sort: "rating", pageSize: 4 }),
   ]);
 
   return (
@@ -59,6 +62,13 @@ export default async function HomePage() {
               className="rounded-full border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition hover:-translate-y-0.5 hover:border-border-strong hover:bg-muted"
             >
               Смотреть объявления
+            </Link>
+            <Link
+              href="/business"
+              className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent-foreground transition hover:-translate-y-0.5 hover:bg-accent/15"
+            >
+              <Building2 className="h-4 w-4" />
+              Бизнесы
             </Link>
           </div>
           <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2">
@@ -144,6 +154,28 @@ export default async function HomePage() {
           <p className="mt-8 text-sm text-muted-foreground">
             Категории пока не загружены — выполните supabase/seed.sql.
           </p>
+        )}
+
+        {featuredBusinesses.length > 0 && (
+          <div className="mt-14">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-extrabold tracking-tight text-foreground">Проверенные бизнесы</h2>
+                <p className="mt-1 text-sm text-muted-foreground">Заведения и компании Ингушетии с лучшим рейтингом</p>
+              </div>
+              <Link href="/business" className="hidden text-sm font-semibold text-primary hover:underline sm:inline">
+                Все бизнесы →
+              </Link>
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {featuredBusinesses.map((business) => (
+                <BusinessCardView key={business.id} business={business} />
+              ))}
+            </div>
+            <Link href="/business" className="mt-4 inline-block text-sm font-semibold text-primary hover:underline sm:hidden">
+              Все бизнесы →
+            </Link>
+          </div>
         )}
       </div>
     </div>

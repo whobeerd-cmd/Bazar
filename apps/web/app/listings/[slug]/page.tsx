@@ -5,7 +5,7 @@ import { ChevronLeft, MapPin, Clock } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { formatDealType, formatPrice } from "@/lib/format";
 import { ListingsMap } from "@/components/map/ListingsMap";
-import { ListingGallery } from "./ListingGallery";
+import { Gallery } from "@/components/media/Gallery";
 import { ReportButton } from "./ReportButton";
 import { PhoneReveal } from "./PhoneReveal";
 import { FavoriteButton } from "./FavoriteButton";
@@ -159,7 +159,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
 
       <div className="mt-4 lg:grid lg:grid-cols-3 lg:items-start lg:gap-8">
         <div className="lg:col-span-2">
-          <ListingGallery images={images ?? []} title={listing.title} isVip={listing.is_vip} />
+          <Gallery images={images ?? []} title={listing.title} isVip={listing.is_vip} />
 
           <div className="mt-5">
             {(formatDealType(listing.deal_type) || listing.condition) && (

@@ -2,7 +2,7 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Пути, доступные только авторизованным пользователям.
-const PROTECTED_PREFIXES = ["/profile", "/my-ads", "/drafts", "/favorites", "/messages", "/notifications", "/balance", "/admin"];
+const PROTECTED_PREFIXES = ["/profile", "/my-ads", "/my-business", "/drafts", "/favorites", "/messages", "/notifications", "/balance", "/admin"];
 
 export async function middleware(request: NextRequest) {
   const isProtected = PROTECTED_PREFIXES.some((prefix) =>
@@ -13,6 +13,21 @@ export async function middleware(request: NextRequest) {
   // главная причина лишних запросов, из-за которых на бесплатном плане
   // быстро срабатывает "Request rate limit reached".
   if (!isProtected) {
+    return NextResponse.next();
+  }
+
+  // Server Actions (POST с заголовком Next-Action) выполняются в том же
+  // Node-процессе, что и страница, и там уже есть свой закэшированный
+  // Supabase-клиент (lib/supabase/server.ts, через React.cache), который
+  // сам проверяет auth.getUser() внутри экшна. Middleware же выполняется
+  // в отдельном Edge-рантайме — если он тоже полезет обновлять токен на
+  // этом же запросе, будет гонка за один refresh-токен, и один из двух
+  // клиентов упадёт с "Invalid Refresh Token: Already Used", разлогинив
+  // пользователя прямо на сабмите формы. Экшны сами возвращают ошибку
+  // "Нужно войти в аккаунт", если пользователь не авторизован, поэтому
+  // здесь для них безопасно просто пропустить запрос без повторной
+  // проверки/обновления сессии.
+  if (request.headers.get("next-action")) {
     return NextResponse.next();
   }
 

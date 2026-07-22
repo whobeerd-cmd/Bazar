@@ -66,7 +66,7 @@ export const SURNAMES = [
 export const CATEGORY_CONFIG = {
   // --- Автомобили ---
   "legkovye-avtomobili": { archetype: "vehicle", pexels: "sedan car", items: ["ВАЗ 2114", "Приора", "Гранта", "Toyota Camry", "Hyundai Solaris", "Kia Rio", "Ford Focus", "Renault Logan", "Nissan Almera", "Volkswagen Polo"], priceMin: 150000, priceMax: 1800000 },
-  "gruzoviki-i-spetstehnika": { archetype: "vehicle", pexels: "truck", items: ["ГАЗель", "КамАЗ", "МАЗ", "трактор МТЗ", "экскаватор"], priceMin: 300000, priceMax: 3500000 },
+  "gruzoviki-i-spetstehnika": { archetype: "vehicle", pexels: "truck", items: ["ГАЗель", "КамАЗ", "МАЗ", "трактор МТЗ", "экскаватор"], priceMin: 300000, priceMax: 3500000, itemPexels: { "ГАЗель": "cargo van", "КамАЗ": "truck", "МАЗ": "truck", "трактор МТЗ": "farm tractor", "экскаватор": "excavator construction" } },
   "mototransport": { archetype: "vehicle", pexels: "motorcycle", items: ["скутер", "мопед Альфа", "мотоцикл Racer", "квадроцикл"], priceMin: 30000, priceMax: 400000 },
   "avtozapchasti": { archetype: "generic-item", pexels: "car parts", items: ["комплект тормозных колодок", "амортизаторы", "радиатор охлаждения", "стартер", "генератор", "фары", "бампер", "капот"], priceMin: 500, priceMax: 25000 },
   "shiny-i-diski": { archetype: "generic-item", pexels: "car tires wheels", items: ["зимняя резина R15", "литые диски R16", "летняя резина R14", "комплект колёс"], priceMin: 3000, priceMax: 40000 },
@@ -106,7 +106,7 @@ export const CATEGORY_CONFIG = {
 
   // --- Бытовая техника ---
   "televizory": { archetype: "electronics", pexels: "television", items: ["телевизор Samsung", "телевизор LG", "Smart TV"], priceMin: 8000, priceMax: 55000 },
-  "melkaya-tehnika": { archetype: "electronics", pexels: "kitchen appliance", items: ["микроволновка", "мультиварка", "блендер", "пылесос"], priceMin: 1500, priceMax: 15000 },
+  "melkaya-tehnika": { archetype: "electronics", pexels: "kitchen appliance", items: ["микроволновка", "мультиварка", "блендер", "пылесос"], priceMin: 1500, priceMax: 15000, itemPexels: { "микроволновка": "microwave oven", "мультиварка": "multicooker", "блендер": "blender kitchen", "пылесос": "vacuum cleaner" } },
   "kondicionery": { archetype: "electronics", pexels: "air conditioner", items: ["сплит-система", "кондиционер"], priceMin: 8000, priceMax: 35000 },
   "holodilniki": { archetype: "electronics", pexels: "refrigerator kitchen", items: ["холодильник Samsung", "холодильник Indesit", "холодильник LG"], priceMin: 8000, priceMax: 45000 },
   "stiralnye-mashiny": { archetype: "electronics", pexels: "washing machine", items: ["стиральная машина", "стиральная машина с сушкой"], priceMin: 7000, priceMax: 35000 },
@@ -121,20 +121,20 @@ export const CATEGORY_CONFIG = {
 
   // --- Для детей ---
   "detskaya-odezhda-i-obuv": { archetype: "clothing", pexels: "kids clothing", items: ["детский комбинезон", "детская куртка", "комплект одежды"], priceMin: 300, priceMax: 3500 },
-  "igrushki": { archetype: "generic-item", pexels: "kids toys", items: ["конструктор", "кукла", "радиоуправляемая машинка", "мягкая игрушка"], priceMin: 300, priceMax: 4000 },
+  "igrushki": { archetype: "generic-item", pexels: "kids toys", items: ["конструктор", "кукла", "радиоуправляемая машинка", "мягкая игрушка"], priceMin: 300, priceMax: 4000, itemPexels: { "конструктор": "building blocks toy", "кукла": "doll toy", "радиоуправляемая машинка": "rc toy car", "мягкая игрушка": "plush toy" } },
   "kolyaski-i-avtokresla": { archetype: "generic-item", pexels: "baby stroller", items: ["коляска", "автокресло", "переноска"], priceMin: 2000, priceMax: 20000 },
   "detskaya-mebel": { archetype: "generic-item", pexels: "kids furniture room", items: ["детская кроватка", "манеж", "детский стол"], priceMin: 2000, priceMax: 18000 },
 
   // --- Дом и сад ---
   "rasteniya-i-cvety": { archetype: "generic-item", pexels: "plants flowers pot", items: ["комнатное растение", "рассада", "саженцы"], priceMin: 200, priceMax: 3000 },
   "podarki-i-suveniry": { archetype: "generic-item", pexels: "gifts souvenirs", items: ["подарочный набор", "сувенир", "часы настенные"], priceMin: 300, priceMax: 4000 },
-  "posuda-i-tekstil": { archetype: "generic-item", pexels: "kitchenware textile", items: ["набор посуды", "постельное бельё", "шторы"], priceMin: 500, priceMax: 6000 },
-  "osveschenie-i-dekor": { archetype: "generic-item", pexels: "home decor lighting", items: ["люстра", "торшер", "картина", "ковёр"], priceMin: 500, priceMax: 8000 },
+  "posuda-i-tekstil": { archetype: "generic-item", pexels: "kitchenware textile", items: ["набор посуды", "постельное бельё", "шторы"], priceMin: 500, priceMax: 6000, itemPexels: { "набор посуды": "dinnerware set", "постельное бельё": "bedding linen", "шторы": "curtains window" } },
+  "osveschenie-i-dekor": { archetype: "generic-item", pexels: "home decor lighting", items: ["люстра", "торшер", "картина", "ковёр"], priceMin: 500, priceMax: 8000, itemPexels: { "люстра": "chandelier ceiling light", "торшер": "floor lamp", "картина": "wall painting art", "ковёр": "carpet rug" } },
   "hoztovary": { archetype: "generic-item", pexels: "household goods", items: ["набор для уборки", "хозтовары"], priceMin: 200, priceMax: 2500 },
 
   // --- Стройматериалы ---
   "santehnika": { archetype: "generic-item", pexels: "plumbing bathroom", items: ["смеситель", "унитаз", "раковина", "душевая кабина"], priceMin: 1500, priceMax: 25000 },
-  "otoplenie-i-ventilyaciya": { archetype: "generic-item", pexels: "heating boiler", items: ["газовый котёл", "радиатор отопления", "вентилятор промышленный"], priceMin: 3000, priceMax: 45000 },
+  "otoplenie-i-ventilyaciya": { archetype: "generic-item", pexels: "heating boiler", items: ["газовый котёл", "радиатор отопления", "вентилятор промышленный"], priceMin: 3000, priceMax: 45000, itemPexels: { "газовый котёл": "gas boiler heating", "радиатор отопления": "radiator heating", "вентилятор промышленный": "industrial fan" } },
   "otdelochnye-materialy": { archetype: "generic-item", pexels: "construction materials tiles", items: ["плитка", "ламинат", "обои", "штукатурка"], priceMin: 500, priceMax: 15000 },
   "elektrika": { archetype: "generic-item", pexels: "electrical wiring tools", items: ["кабель", "розетки и выключатели", "щиток электрический"], priceMin: 300, priceMax: 10000 },
   "instrumenty": { archetype: "generic-item", pexels: "hand tools", items: ["перфоратор", "болгарка", "шуруповёрт", "набор инструментов"], priceMin: 1500, priceMax: 20000 },
@@ -151,8 +151,8 @@ export const CATEGORY_CONFIG = {
 
   // --- Хобби ---
   "knigi": { archetype: "generic-item", pexels: "books stack", items: ["собрание сочинений", "детские книги", "учебники"], priceMin: 100, priceMax: 2000 },
-  "muzykalnye-instrumenty": { archetype: "generic-item", pexels: "musical instrument guitar", items: ["гитара", "синтезатор", "барабаны"], priceMin: 2000, priceMax: 30000 },
-  "kollekcionirovanie": { archetype: "generic-item", pexels: "collectibles antique", items: ["монеты", "значки", "марки"], priceMin: 300, priceMax: 8000 },
+  "muzykalnye-instrumenty": { archetype: "generic-item", pexels: "musical instrument guitar", items: ["гитара", "синтезатор", "барабаны"], priceMin: 2000, priceMax: 30000, itemPexels: { "гитара": "acoustic guitar", "синтезатор": "synthesizer keyboard", "барабаны": "drum kit" } },
+  "kollekcionirovanie": { archetype: "generic-item", pexels: "collectibles antique", items: ["монеты", "значки", "марки"], priceMin: 300, priceMax: 8000, itemPexels: { "монеты": "coins collection", "значки": "pin badges collection", "марки": "postage stamps collection" } },
   "rukodelie": { archetype: "generic-item", pexels: "craft supplies sewing", items: ["швейная машинка", "пряжа", "набор для рукоделия"], priceMin: 500, priceMax: 8000 },
 
   // --- Спорт ---
@@ -169,10 +169,10 @@ export const CATEGORY_CONFIG = {
   "delovoe-partnerstvo": { archetype: "service", pexels: "business partnership", items: ["ищу партнёра по бизнесу", "инвестиции в проект"], priceMin: 0, priceMax: 0 },
 
   // --- Сельское хозяйство ---
-  "zhivotnye": { archetype: "generic-item", pexels: "farm animal", items: ["телёнок", "баран", "корова", "щенок", "котёнок"], priceMin: 1000, priceMax: 60000 },
-  "ptitsy": { archetype: "generic-item", pexels: "chicken poultry farm", items: ["куры несушки", "утки", "гуси", "индюки"], priceMin: 300, priceMax: 3000 },
-  "korma": { archetype: "generic-item", pexels: "animal feed grain", items: ["комбикорм", "сено", "зерно"], priceMin: 300, priceMax: 2500 },
-  "selhozoborudovanie": { archetype: "generic-item", pexels: "agricultural equipment", items: ["плуг", "культиватор", "мотоблок"], priceMin: 5000, priceMax: 200000 },
+  "zhivotnye": { archetype: "generic-item", pexels: "farm animal", items: ["телёнок", "баран", "корова", "щенок", "котёнок"], priceMin: 1000, priceMax: 60000, itemPexels: { "телёнок": "calf cow", "баран": "ram sheep", "корова": "cow", "щенок": "puppy dog", "котёнок": "kitten cat" } },
+  "ptitsy": { archetype: "generic-item", pexels: "chicken poultry farm", items: ["куры несушки", "утки", "гуси", "индюки"], priceMin: 300, priceMax: 3000, itemPexels: { "куры несушки": "chicken hen", "утки": "duck", "гуси": "goose", "индюки": "turkey bird" } },
+  "korma": { archetype: "generic-item", pexels: "animal feed grain", items: ["комбикорм", "сено", "зерно"], priceMin: 300, priceMax: 2500, itemPexels: { "комбикорм": "animal feed bag", "сено": "hay bales", "зерно": "grain wheat" } },
+  "selhozoborudovanie": { archetype: "generic-item", pexels: "agricultural equipment", items: ["плуг", "культиватор", "мотоблок"], priceMin: 5000, priceMax: 200000, itemPexels: { "плуг": "plow farm", "культиватор": "cultivator farm", "мотоблок": "walk behind tractor" } },
   "produkty-pitaniya": { archetype: "generic-item", pexels: "farm produce food", items: ["домашний мёд", "фермерский сыр", "овощи с огорода"], priceMin: 200, priceMax: 2000 },
   "rasteniya-selhoz": { archetype: "generic-item", pexels: "crop plants field", items: ["саженцы фруктовых деревьев", "рассада овощей"], priceMin: 100, priceMax: 1500 },
   "pchely": { archetype: "generic-item", pexels: "beekeeping honey", items: ["пчелосемьи", "улей", "мёд"], priceMin: 1000, priceMax: 15000 },
