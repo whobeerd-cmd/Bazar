@@ -1,10 +1,10 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Building2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { queryBusinesses, getBusinessCategories, type BusinessSort } from "@/lib/business/queries";
 import { BusinessFiltersForm } from "@/components/business/BusinessFiltersForm";
 import { BusinessCardView } from "@/components/business/BusinessCardView";
+import { BusinessCategoryIcon } from "@/components/business/BusinessCategoryIcon";
 import { Pagination } from "@/components/listings/Pagination";
 
 export const metadata: Metadata = {
@@ -39,6 +39,13 @@ export default async function BusinessDirectoryPage({
   const { items: featured } = isFiltering
     ? { items: [] }
     : await queryBusinesses(supabase, { sort: "rating", pageSize: 4 });
+
+  const categoryGroups = new Map<string, typeof categories>();
+  for (const category of categories) {
+    const label = category.group_label ?? "Другое";
+    if (!categoryGroups.has(label)) categoryGroups.set(label, []);
+    categoryGroups.get(label)!.push(category);
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -80,22 +87,26 @@ export default async function BusinessDirectoryPage({
             </div>
           )}
 
-          <div className="mt-10">
-            <h2 className="text-lg font-bold tracking-tight text-foreground">Разделы</h2>
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {categories.map((category) => (
-                <Link
-                  key={category.id}
-                  href={`/business/category/${category.slug}`}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-background p-4 shadow-card transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card-hover"
-                >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
-                    <Building2 className="h-5 w-5" />
-                  </span>
-                  <span className="text-sm font-semibold text-foreground">{category.name}</span>
-                </Link>
-              ))}
-            </div>
+          <div className="mt-10 space-y-8">
+            {Array.from(categoryGroups.entries()).map(([label, group]) => (
+              <div key={label}>
+                <h2 className="text-lg font-bold tracking-tight text-foreground">{label}</h2>
+                <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                  {group.map((category) => (
+                    <Link
+                      key={category.id}
+                      href={`/business/category/${category.slug}`}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-background p-4 shadow-card transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card-hover"
+                    >
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary">
+                        <BusinessCategoryIcon slug={category.slug} className="h-5 w-5" />
+                      </span>
+                      <span className="text-sm font-semibold text-foreground">{category.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="mt-10 rounded-xl border border-dashed border-border p-6 text-center">

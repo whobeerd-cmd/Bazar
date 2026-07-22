@@ -78,7 +78,7 @@ export async function queryBusinesses(supabase: Supabase, filters: BusinessFilte
 export async function getBusinessCategories(supabase: Supabase) {
   const { data } = await supabase
     .from("business_categories")
-    .select("id, name, slug, sort_order")
+    .select("id, name, slug, sort_order, group_label")
     .eq("is_active", true)
     .order("sort_order");
   return data ?? [];

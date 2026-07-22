@@ -5,7 +5,7 @@ import { createBusinessAction, updateBusinessAction } from "@/lib/actions/busine
 import type { AuthActionState } from "@/lib/actions/auth";
 import { DAY_KEYS, DAY_LABELS, type BusinessHours } from "@/lib/business/hours";
 
-export type BusinessCategoryOption = { id: number; name: string };
+export type BusinessCategoryOption = { id: number; name: string; group_label: string | null };
 export type CityOption = { id: number; name: string };
 
 export function BusinessForm({
@@ -34,6 +34,13 @@ export function BusinessForm({
   const action = mode === "create" ? createBusinessAction : updateBusinessAction;
   const [state, formAction, isPending] = useActionState<AuthActionState, FormData>(action, null);
 
+  const categoryGroups = new Map<string, BusinessCategoryOption[]>();
+  for (const category of categories) {
+    const label = category.group_label ?? "Другое";
+    if (!categoryGroups.has(label)) categoryGroups.set(label, []);
+    categoryGroups.get(label)!.push(category);
+  }
+
   return (
     <form action={formAction} className="space-y-5">
       {defaultValues && <input type="hidden" name="id" value={defaultValues.id} />}
@@ -54,10 +61,14 @@ export function BusinessForm({
             <option value="" disabled>
               Выберите
             </option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
+            {Array.from(categoryGroups.entries()).map(([label, group]) => (
+              <optgroup key={label} label={label}>
+                {group.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </div>
