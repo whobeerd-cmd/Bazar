@@ -170,7 +170,7 @@ export default async function RootLayout({
                     <CircleUserRound className="h-5 w-5" strokeWidth={1.8} />
                   </Link>
                   <Link href="/profile" className="ml-1 hidden rounded-full px-3 py-1.5 font-medium text-foreground transition hover:bg-muted sm:inline-block">
-                    {userLabel}
+                    Мой профиль
                   </Link>
                 </>
               ) : (
