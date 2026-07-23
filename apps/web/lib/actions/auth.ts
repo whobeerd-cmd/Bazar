@@ -58,10 +58,13 @@ export async function signUpAction(
     return { error: passwordResult.error.issues[0]?.message };
   }
 
+  const captchaToken = String(formData.get("captchaToken") ?? "") || undefined;
+
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
     email: emailResult.data,
     password: passwordResult.data,
+    options: { captchaToken },
   });
 
   if (error) {
@@ -91,11 +94,14 @@ export async function signInWithMagicLinkAction(
     return { error: emailResult.error.issues[0]?.message };
   }
 
+  const captchaToken = String(formData.get("captchaToken") ?? "") || undefined;
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email: emailResult.data,
     options: {
       emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/auth/confirm`,
+      captchaToken,
     },
   });
 
@@ -129,9 +135,12 @@ export async function requestPasswordResetAction(
     return { error: emailResult.error.issues[0]?.message };
   }
 
+  const captchaToken = String(formData.get("captchaToken") ?? "") || undefined;
+
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(emailResult.data, {
     redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/auth/confirm?type=recovery`,
+    captchaToken,
   });
 
   if (error) {

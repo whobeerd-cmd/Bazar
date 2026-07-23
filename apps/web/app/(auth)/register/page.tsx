@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { signUpAction, signInWithMagicLinkAction, type AuthActionState } from "@/lib/actions/auth";
 import { GoogleButton } from "../GoogleButton";
+import { Turnstile } from "@/components/Turnstile";
 
 export default function RegisterPage() {
   const [mode, setMode] = useState<"password" | "magic">("password");
@@ -15,6 +16,9 @@ export default function RegisterPage() {
     signInWithMagicLinkAction,
     null
   );
+
+  const [passwordCaptcha, setPasswordCaptcha] = useState("");
+  const [magicCaptcha, setMagicCaptcha] = useState("");
 
   return (
     <div>
@@ -69,6 +73,9 @@ export default function RegisterPage() {
               <p className="mt-1.5 text-xs text-muted-foreground">Не короче 8 символов.</p>
             </div>
 
+            <input type="hidden" name="captchaToken" value={passwordCaptcha} />
+            <Turnstile key={passwordState?.error ?? "initial"} onToken={setPasswordCaptcha} />
+
             {passwordState?.error && (
               <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
                 {passwordState.error}
@@ -113,6 +120,9 @@ export default function RegisterPage() {
                 раза (бывает у некоторых почтовых сервисов), надёжнее зарегистрироваться по паролю.
               </p>
             </div>
+
+            <input type="hidden" name="captchaToken" value={magicCaptcha} />
+            <Turnstile key={magicState?.error ?? "initial"} onToken={setMagicCaptcha} />
 
             {magicState?.error && (
               <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{magicState.error}</p>

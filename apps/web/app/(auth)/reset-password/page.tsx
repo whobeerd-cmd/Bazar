@@ -1,14 +1,16 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { requestPasswordResetAction, type AuthActionState } from "@/lib/actions/auth";
+import { Turnstile } from "@/components/Turnstile";
 
 export default function ResetPasswordPage() {
   const [state, formAction, isPending] = useActionState<AuthActionState, FormData>(
     requestPasswordResetAction,
     null
   );
+  const [captchaToken, setCaptchaToken] = useState("");
 
   return (
     <div>
@@ -31,6 +33,9 @@ export default function ResetPasswordPage() {
             className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
           />
         </div>
+
+        <input type="hidden" name="captchaToken" value={captchaToken} />
+        <Turnstile key={state?.error ?? "initial"} onToken={setCaptchaToken} />
 
         {state?.error && (
           <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
