@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireStaff, logAdminAction } from "@/lib/auth/admin";
-import { businessSchema, parsedBusinessPayload } from "@/lib/actions/business";
+import { businessSchema, parsedBusinessPayload } from "@/lib/business/validation";
 import type { AuthActionState } from "@/lib/actions/auth";
 
 export async function adminToggleVerifiedAction(businessId: string, isVerified: boolean) {
