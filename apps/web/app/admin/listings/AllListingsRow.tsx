@@ -2,7 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { adminArchiveListingAction, toggleListingVipAction } from "@/lib/actions/admin/listings";
+import {
+  adminArchiveListingAction,
+  adminDeleteListingAction,
+  toggleListingVipAction,
+} from "@/lib/actions/admin/listings";
 import { formatPrice } from "@/lib/format";
 
 const STATUS_LABELS: Record<string, { label: string; className: string }> = {
@@ -94,6 +98,17 @@ export function AllListingsRow({ listing }: { listing: AdminListing }) {
             В архив
           </button>
         )}
+        <button
+          type="button"
+          disabled={isPending}
+          onClick={() => {
+            if (!confirm("Удалить объявление без возможности восстановления?")) return;
+            run(() => adminDeleteListingAction(listing.id));
+          }}
+          className="btn-secondary py-1.5 text-red-600"
+        >
+          Удалить
+        </button>
       </div>
     </div>
   );

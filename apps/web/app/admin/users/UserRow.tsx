@@ -69,7 +69,7 @@ export function UserRow({ user, isSelf }: { user: AdminUser; isSelf: boolean }) 
 
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium text-foreground">
-          {user.full_name || "Без имени"}
+          {user.full_name || "Пользователь"}
           {isSelf && <span className="ml-1.5 text-xs font-normal text-muted-foreground">(вы)</span>}
         </p>
         <p className="text-sm text-muted-foreground">{user.phone || "Телефон не указан"}</p>
@@ -115,7 +115,7 @@ export function UserRow({ user, isSelf }: { user: AdminUser; isSelf: boolean }) 
           disabled={isPending || isSelf}
           onClick={() => {
             const next = !user.is_blocked;
-            if (next && !confirm(`Заблокировать пользователя "${user.full_name || "без имени"}"?`)) return;
+            if (next && !confirm(`Заблокировать пользователя "${user.full_name || "Пользователь"}"?`)) return;
             run(() => toggleUserBlockedAction(user.id, next));
           }}
           className="btn-secondary py-1.5 disabled:opacity-40"

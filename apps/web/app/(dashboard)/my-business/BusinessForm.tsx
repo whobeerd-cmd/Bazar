@@ -13,10 +13,12 @@ export function BusinessForm({
   categories,
   cities,
   defaultValues,
+  action: actionOverride,
 }: {
   mode: "create" | "edit";
   categories: BusinessCategoryOption[];
   cities: CityOption[];
+  action?: typeof createBusinessAction;
   defaultValues?: {
     id: string;
     name: string;
@@ -31,7 +33,7 @@ export function BusinessForm({
     hours: BusinessHours;
   };
 }) {
-  const action = mode === "create" ? createBusinessAction : updateBusinessAction;
+  const action = actionOverride ?? (mode === "create" ? createBusinessAction : updateBusinessAction);
   const [state, formAction, isPending] = useActionState<AuthActionState, FormData>(action, null);
 
   const categoryGroups = new Map<string, BusinessCategoryOption[]>();

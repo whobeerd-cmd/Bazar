@@ -100,6 +100,10 @@ export function AdminBusinessRow({ business }: { business: AdminBusiness }) {
           Рекомендуем
         </label>
 
+        <a href={`/admin/businesses/${business.id}/edit`} className="btn-secondary py-1.5">
+          Редактировать
+        </a>
+
         {business.status !== "hidden" ? (
           <button
             type="button"

@@ -72,7 +72,7 @@ export async function signUpAction(
   }
 
   if (data.session) {
-    redirect("/");
+    redirect("/profile?required=1");
   }
 
   return {

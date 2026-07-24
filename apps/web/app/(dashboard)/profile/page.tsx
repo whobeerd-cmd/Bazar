@@ -3,7 +3,12 @@ import { createClient } from "@/lib/supabase/server";
 import { ProfileForm } from "./ProfileForm";
 import { AvatarUploader } from "./AvatarUploader";
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ required?: string }>;
+}) {
+  const { required } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -23,6 +28,12 @@ export default async function ProfilePage() {
     <div>
       <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Профиль</h1>
       <p className="mt-1 text-sm text-muted-foreground">{user.email}</p>
+
+      {required === "1" && !profile?.full_name?.trim() && (
+        <p className="mt-4 max-w-md rounded-lg bg-amber-50 px-3 py-2.5 text-sm text-amber-800">
+          Укажите имя, чтобы продолжить пользоваться личным кабинетом.
+        </p>
+      )}
 
       <div className="card mt-6 max-w-md p-6">
         <AvatarUploader userId={user.id} currentAvatarUrl={profile?.avatar_url ?? null} />

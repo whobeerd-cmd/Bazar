@@ -1,7 +1,11 @@
 "use client";
 
 import { useActionState, useState, useTransition } from "react";
-import { approveListingAction, rejectListingAction } from "@/lib/actions/admin/listings";
+import {
+  adminDeleteListingAction,
+  approveListingAction,
+  rejectListingAction,
+} from "@/lib/actions/admin/listings";
 import type { AuthActionState } from "@/lib/actions/auth";
 
 export type PendingListing = {
@@ -74,6 +78,21 @@ export function ModerationRow({ listing }: { listing: PendingListing }) {
               className="btn-secondary py-1.5"
             >
               Отклонить
+            </button>
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => {
+                if (!confirm("Удалить объявление без возможности восстановления?")) return;
+                setError(null);
+                startTransition(async () => {
+                  const result = await adminDeleteListingAction(listing.id);
+                  if (result?.error) setError(result.error);
+                });
+              }}
+              className="btn-secondary py-1.5 text-red-600"
+            >
+              Удалить
             </button>
           </div>
         </div>

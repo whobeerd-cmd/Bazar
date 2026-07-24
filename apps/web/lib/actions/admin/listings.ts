@@ -46,6 +46,19 @@ export async function adminArchiveListingAction(listingId: string) {
   return { success: true };
 }
 
+// Удалить любое объявление без возможности восстановления — например, если
+// содержимое недопустимо и архивировать недостаточно.
+export async function adminDeleteListingAction(listingId: string) {
+  const { supabase, user } = await requireStaff();
+
+  const { error } = await supabase.from("listings").delete().eq("id", listingId);
+  if (error) return { error: error.message };
+
+  await logAdminAction(supabase, user.id, "delete", "listing", listingId);
+  revalidatePath("/admin/listings");
+  return { success: true };
+}
+
 const rejectSchema = z.object({
   listingId: z.string().uuid(),
   reason: z.string().trim().min(3, "Укажите причину отклонения"),

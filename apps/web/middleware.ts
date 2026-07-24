@@ -64,6 +64,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  // Новые пользователи (name_required = true, см. миграцию 0021) обязаны
+  // указать имя в профиле, прежде чем пользоваться личным кабинетом.
+  // /profile сама исключена из проверки, иначе редирект зациклится.
+  if (!request.nextUrl.pathname.startsWith("/profile")) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("full_name, name_required")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.name_required && !profile.full_name?.trim()) {
+      return NextResponse.redirect(new URL("/profile?required=1", request.url));
+    }
+  }
+
   return response;
 }
 

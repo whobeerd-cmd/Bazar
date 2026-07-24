@@ -8,7 +8,7 @@ import type { AuthActionState } from "@/lib/actions/auth";
 
 const DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 
-const businessSchema = z.object({
+export const businessSchema = z.object({
   name: z.string().trim().min(2, "Название должно быть не короче 2 символов").max(100),
   categoryId: z.coerce.number().int().positive("Выберите раздел"),
   cityId: z.coerce.number().int().positive("Выберите населённый пункт"),
@@ -33,7 +33,7 @@ function parseHours(formData: FormData) {
   return hours;
 }
 
-function parsedBusinessPayload(parsed: z.infer<typeof businessSchema>, formData: FormData) {
+export function parsedBusinessPayload(parsed: z.infer<typeof businessSchema>, formData: FormData) {
   return {
     name: parsed.name,
     category_id: parsed.categoryId,
