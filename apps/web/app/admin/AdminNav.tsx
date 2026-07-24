@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "Дашборд", hint: "Общая статистика сайта" },
   { href: "/admin/listings", label: "Объявления", hint: "Модерация и все объявления" },
+  { href: "/admin/businesses", label: "Бизнесы", hint: "Справочник компаний" },
   { href: "/admin/complaints", label: "Жалобы", hint: "Жалобы на объявления" },
   { href: "/admin/users", label: "Пользователи", hint: "Роли, блокировка" },
   { href: "/admin/categories", label: "Категории", hint: "Разделы каталога" },
