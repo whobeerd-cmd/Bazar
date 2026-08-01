@@ -40,44 +40,94 @@ export default async function HomePage() {
           }}
         />
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
-          <span className="inline-flex items-center rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
-            Республика Ингушетия
-          </span>
-          <h1 className="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl">
-            Объявления без лишнего шума
-          </h1>
-          <p className="mt-4 max-w-lg text-base text-muted-foreground sm:text-lg">
-            Недвижимость, авто, работа и услуги — рядом с вами. Никакой сторонней
-            рекламы, только то, что вы ищете.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/my-ads/new"
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-card-hover"
+          <div className="relative lg:grid lg:grid-cols-[1fr,340px] lg:gap-10">
+            <svg
+              aria-hidden
+              viewBox="0 0 1120 368"
+              preserveAspectRatio="none"
+              className="pointer-events-none absolute inset-0 hidden h-full w-full text-accent/60 lg:block"
+              fill="none"
             >
-              Разместить объявление
-            </Link>
-            <Link
-              href="/search"
-              className="rounded-full border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition hover:-translate-y-0.5 hover:border-border-strong hover:bg-muted"
-            >
-              Смотреть объявления
-            </Link>
-            <Link
-              href="/business"
-              className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent-foreground transition hover:-translate-y-0.5 hover:bg-accent/15"
-            >
-              <Building2 className="h-4 w-4" />
-              Бизнесы
-            </Link>
-          </div>
-          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2">
-            {VALUE_PROPS.map((item) => (
-              <span key={item} className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <Check className="h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
-                {item}
+              <path
+                d="M790 235C700 300 620 300 545 275C520 267 505 268 495 278"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeDasharray="5 6"
+                strokeLinecap="round"
+              />
+              <path
+                d="M472 268L493 280L487 302"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            <div>
+              <span className="inline-flex items-center rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
+                Республика Ингушетия
               </span>
-            ))}
+              <h1 className="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl">
+                Объявления без лишнего шума
+              </h1>
+              <p className="mt-4 max-w-lg text-base text-muted-foreground sm:text-lg">
+                Недвижимость, авто, работа и услуги — рядом с вами. Никакой сторонней
+                рекламы, только то, что вы ищете.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/my-ads/new"
+                  className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-card-hover"
+                >
+                  Разместить объявление
+                </Link>
+                <Link
+                  href="/search"
+                  className="rounded-full border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition hover:-translate-y-0.5 hover:border-border-strong hover:bg-muted"
+                >
+                  Смотреть объявления
+                </Link>
+                <Link
+                  id="hero-business-btn"
+                  href="/business"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent-foreground transition hover:-translate-y-0.5 hover:bg-accent/15"
+                >
+                  <Building2 className="h-4 w-4" />
+                  Бизнесы
+                </Link>
+              </div>
+              <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2">
+                {VALUE_PROPS.map((item) => (
+                  <span key={item} className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <Check className="h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative z-10 mt-12 hidden lg:mt-0 lg:block">
+              <div className="relative rounded-3xl border border-accent/25 bg-gradient-to-br from-accent/10 via-background to-background p-6 shadow-card">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
+                  <Building2 className="h-3.5 w-3.5" />
+                  Каталог бизнесов
+                </span>
+                <p className="mt-3 text-lg font-extrabold leading-snug tracking-tight text-foreground">
+                  Рестораны, мастера, магазины — рядом с вами
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Отдельный раздел для компаний Ингушетии — с фото, отзывами и рейтингом.
+                  Люди ищут, к кому обратиться, — здесь их находят.
+                </p>
+                <Link
+                  href="/my-business/new"
+                  className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+                >
+                  Добавить свой бизнес в каталог →
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
