@@ -7,10 +7,10 @@ import { createClient } from "@/lib/supabase/server";
 import type { AuthActionState } from "@/lib/actions/auth";
 
 const listingSchema = z.object({
-  title: z.string().trim().min(5, "Заголовок должен быть не короче 5 символов").max(100),
+  title: z.string().trim().min(1, "Введите заголовок").max(100),
   categoryId: z.coerce.number().int().positive("Выберите категорию"),
   cityId: z.coerce.number().int().positive("Выберите населённый пункт"),
-  description: z.string().trim().min(20, "Описание должно быть не короче 20 символов"),
+  description: z.string().trim().min(1, "Введите описание"),
   price: z.union([z.coerce.number().nonnegative(), z.literal("")]).optional(),
   priceType: z.enum(["fixed", "negotiable", "free"]),
   condition: z.enum(["new", "used"]),

@@ -71,6 +71,26 @@ export function ListingForm({
   const [subCategoryId, setSubCategoryId] = useState<number | "">(initialPath?.[1]?.id ?? "");
   const [priceType, setPriceType] = useState(defaultValues?.priceType ?? "fixed");
   const [dealType, setDealType] = useState(defaultValues?.dealType ?? "");
+  // Управляемые (не defaultValue) — иначе React сбрасывает эти поля при любой
+  // повторной отправке формы (включая отправку с ошибкой валидации), и
+  // введённый текст пропадает у пользователя.
+  const [title, setTitle] = useState(defaultValues?.title ?? "");
+  const [description, setDescription] = useState(defaultValues?.description ?? "");
+  const [addressText, setAddressText] = useState(defaultValues?.addressText ?? "");
+  const [price, setPrice] = useState(defaultValues?.price != null ? String(defaultValues.price) : "");
+  const [cityId, setCityId] = useState<number | "">(defaultValues?.cityId ?? "");
+  const [condition, setCondition] = useState(defaultValues?.condition ?? "used");
+  const [attrValues, setAttrValues] = useState<Record<number, string | boolean>>(() => {
+    const init: Record<number, string | boolean> = {};
+    if (attributeValues) {
+      for (const [id, val] of Object.entries(attributeValues)) {
+        init[Number(id)] = val as string | boolean;
+      }
+    }
+    return init;
+  });
+  const setAttrValue = (id: number, value: string | boolean) =>
+    setAttrValues((prev) => ({ ...prev, [id]: value }));
   const [attributes, setAttributes] = useState<CategoryAttribute[]>([]);
   const [showMap, setShowMap] = useState(false);
   const [pickedPoint, setPickedPoint] = useState<[number, number] | null>(
@@ -109,7 +129,18 @@ export function ListingForm({
   }, [categoryId]);
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form
+      onSubmit={(e) => {
+        // Явный перехват вместо action={formAction}: на некоторых сборках
+        // React/Next form action иногда не перехватывает сабмит на клиенте
+        // и уходит настоящим POST-ом с перезагрузкой страницы, из-за чего
+        // все введённые поля терялись. preventDefault() гарантирует, что
+        // отправка всегда идёт через React, без перезагрузки.
+        e.preventDefault();
+        formAction(new FormData(e.currentTarget));
+      }}
+      className="space-y-5"
+    >
       {defaultValues && <input type="hidden" name="id" value={defaultValues.id} />}
       <input type="hidden" name="categoryId" value={categoryId} />
 
@@ -121,7 +152,8 @@ export function ListingForm({
           id="title"
           name="title"
           required
-          defaultValue={defaultValues?.title}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           className={inputClass}
         />
       </div>
@@ -212,7 +244,8 @@ export function ListingForm({
           id="cityId"
           name="cityId"
           required
-          defaultValue={defaultValues?.cityId ?? ""}
+          value={cityId}
+          onChange={(e) => setCityId(e.target.value ? Number(e.target.value) : "")}
           className={inputClass}
         >
           <option value="">Выберите населённый пункт</option>
@@ -233,7 +266,8 @@ export function ListingForm({
           name="description"
           required
           rows={5}
-          defaultValue={defaultValues?.description}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           className={inputClass}
         />
       </div>
@@ -266,7 +300,8 @@ export function ListingForm({
             min={0}
             step="1"
             disabled={priceType !== "fixed"}
-            defaultValue={defaultValues?.price ?? ""}
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
             className={`${inputClass} disabled:opacity-50`}
           />
         </div>
@@ -281,7 +316,8 @@ export function ListingForm({
                 type="radio"
                 name="condition"
                 value="new"
-                defaultChecked={(defaultValues?.condition ?? "used") === "new"}
+                checked={condition === "new"}
+                onChange={() => setCondition("new")}
               />
               Новое
             </label>
@@ -290,7 +326,8 @@ export function ListingForm({
                 type="radio"
                 name="condition"
                 value="used"
-                defaultChecked={(defaultValues?.condition ?? "used") === "used"}
+                checked={condition === "used"}
+                onChange={() => setCondition("used")}
               />
               Б/у
             </label>
@@ -307,7 +344,8 @@ export function ListingForm({
         <input
           id="addressText"
           name="addressText"
-          defaultValue={defaultValues?.addressText ?? ""}
+          value={addressText}
+          onChange={(e) => setAddressText(e.target.value)}
           className={inputClass}
         />
       </div>
@@ -351,7 +389,6 @@ export function ListingForm({
         <div className="space-y-4 rounded-lg border border-border p-4">
           <p className="field-label">Характеристики категории</p>
           {attributes.map((attr) => {
-            const existing = attributeValues?.[attr.id];
             return (
               <div key={attr.id}>
                 <label className="text-sm">
@@ -362,7 +399,8 @@ export function ListingForm({
                   <select
                     name={`attr_${attr.id}`}
                     required={attr.is_required}
-                    defaultValue={existing ? String(existing) : ""}
+                    value={attrValues[attr.id] != null ? String(attrValues[attr.id]) : ""}
+                    onChange={(e) => setAttrValue(attr.id, e.target.value)}
                     className={inputClass}
                   >
                     <option value="">—</option>
@@ -378,7 +416,8 @@ export function ListingForm({
                     type="number"
                     name={`attr_${attr.id}`}
                     required={attr.is_required}
-                    defaultValue={existing !== undefined ? String(existing) : ""}
+                    value={attrValues[attr.id] != null ? String(attrValues[attr.id]) : ""}
+                    onChange={(e) => setAttrValue(attr.id, e.target.value)}
                     className={inputClass}
                   />
                 )}
@@ -387,13 +426,19 @@ export function ListingForm({
                     type="text"
                     name={`attr_${attr.id}`}
                     required={attr.is_required}
-                    defaultValue={existing !== undefined ? String(existing) : ""}
+                    value={attrValues[attr.id] != null ? String(attrValues[attr.id]) : ""}
+                    onChange={(e) => setAttrValue(attr.id, e.target.value)}
                     className={inputClass}
                   />
                 )}
                 {attr.type === "bool" && (
                   <label className="mt-1 flex items-center gap-2 text-sm">
-                    <input type="checkbox" name={`attr_${attr.id}`} defaultChecked={Boolean(existing)} />
+                    <input
+                      type="checkbox"
+                      name={`attr_${attr.id}`}
+                      checked={Boolean(attrValues[attr.id])}
+                      onChange={(e) => setAttrValue(attr.id, e.target.checked)}
+                    />
                     Да
                   </label>
                 )}
