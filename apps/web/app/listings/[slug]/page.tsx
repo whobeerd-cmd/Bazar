@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ChevronLeft, MapPin, Clock } from "lucide-react";
+import { ChevronLeft, MapPin, Clock, MessageCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { formatDealType, formatPrice } from "@/lib/format";
+import { buildWhatsAppLink, formatDealType, formatPrice } from "@/lib/format";
 import { ListingsMap } from "@/components/map/ListingsMap";
 import { Gallery } from "@/components/media/Gallery";
 import { ReportButton } from "./ReportButton";
@@ -124,8 +124,19 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
         </div>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 space-y-2">
         <PhoneReveal phone={seller?.phone ?? null} />
+        {seller?.phone && (
+          <a
+            href={buildWhatsAppLink(seller.phone)}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Написать в WhatsApp
+          </a>
+        )}
       </div>
 
       <div className="mt-3 flex items-center gap-2 border-t border-border pt-3">

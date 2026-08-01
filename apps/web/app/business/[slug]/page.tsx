@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { BadgeCheck, MapPin, Phone, MessageCircle, AtSign, Globe, Clock } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { buildWhatsAppLink } from "@/lib/format";
 import { Gallery } from "@/components/media/Gallery";
 import { StarRating } from "@/components/business/StarRating";
 import { getOpenStatus, DAY_KEYS, DAY_LABELS, type BusinessHours } from "@/lib/business/hours";
@@ -112,7 +113,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
         <div className="flex gap-2">
           {business.whatsapp && (
             <a
-              href={`https://wa.me/${business.whatsapp.replace(/\D/g, "")}`}
+              href={buildWhatsAppLink(business.whatsapp)}
               target="_blank"
               rel="noreferrer"
               className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted"

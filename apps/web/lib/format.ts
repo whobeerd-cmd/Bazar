@@ -14,3 +14,7 @@ const DEAL_TYPE_LABELS: Record<string, string> = {
 export function formatDealType(dealType: string | null) {
   return dealType ? DEAL_TYPE_LABELS[dealType] ?? null : null;
 }
+
+export function buildWhatsAppLink(phone: string) {
+  return `https://wa.me/${phone.replace(/\D/g, "")}`;
+}
