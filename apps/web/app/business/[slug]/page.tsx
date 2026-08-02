@@ -95,13 +95,24 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
     <div className="card p-5">
       <div className="space-y-2.5 text-sm">
         {city?.name && (
-          <p className="flex items-start gap-2 text-foreground">
+          <a
+            href={
+              business.lat != null && business.lng != null
+                ? `https://www.google.com/maps/dir/?api=1&destination=${business.lat},${business.lng}`
+                : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                    `${city.name}${business.address_text ? `, ${business.address_text}` : ""}`
+                  )}`
+            }
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-start gap-2 text-foreground transition hover:text-primary hover:underline"
+          >
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
             <span>
               {city.name}
               {business.address_text ? `, ${business.address_text}` : ""}
             </span>
-          </p>
+          </a>
         )}
         {openStatus && (
           <p className={`flex items-center gap-2 ${openStatus.isOpen ? "text-emerald-700" : "text-muted-foreground"}`}>
