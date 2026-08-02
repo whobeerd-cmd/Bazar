@@ -4,11 +4,15 @@ import type { Metadata } from "next";
 import { ChevronLeft, MapPin, Clock, MessageCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { buildWhatsAppLink, formatDealType, formatPrice } from "@/lib/format";
+import { queryListings } from "@/lib/listings/query";
 import { ListingsMap } from "@/components/map/ListingsMap";
 import { Gallery } from "@/components/media/Gallery";
+import { ListingCardView } from "@/components/listings/ListingCardView";
 import { ReportButton } from "./ReportButton";
 import { PhoneReveal } from "./PhoneReveal";
 import { StartChatButton } from "./StartChatButton";
+import { RecentlyViewedTracker } from "./RecentlyViewedTracker";
+import { ShareButton } from "@/components/ShareButton";
 import { FavoriteButton } from "./FavoriteButton";
 import { CommentForm } from "./CommentForm";
 import { DeleteCommentButton } from "./DeleteCommentButton";
@@ -64,7 +68,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
   const { data: listing } = await supabase
     .from("listings")
     .select(
-      "id, title, description, price, price_type, condition, deal_type, address_text, lat, lng, status, is_vip, created_at, user_id, categories(name, slug), cities(name, lat, lng), profiles!listings_user_id_fkey(full_name, avatar_url, phone)"
+      "id, title, description, price, price_type, condition, deal_type, address_text, lat, lng, status, is_vip, created_at, user_id, category_id, categories(name, slug), cities(name, lat, lng), profiles!listings_user_id_fkey(full_name, avatar_url, phone)"
     )
     .eq("slug", slug)
     .single();
@@ -93,6 +97,12 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
             .maybeSingle()
         : Promise.resolve({ data: null }),
     ]);
+
+  const { items: relatedRaw } = await queryListings(supabase, {
+    categoryIds: [listing.category_id],
+    pageSize: 9,
+  });
+  const relatedListings = relatedRaw.filter((l) => l.id !== listing.id).slice(0, 8);
 
   const category = Array.isArray(listing.categories) ? listing.categories[0] : listing.categories;
   const city = Array.isArray(listing.cities) ? listing.cities[0] : listing.cities;
@@ -151,6 +161,13 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
           </div>
         )}
       </div>
+
+      <div className="mt-2">
+        <ShareButton
+          title={listing.title}
+          className="flex w-full items-center justify-center gap-1.5 rounded-full border border-border px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted"
+        />
+      </div>
     </div>
   );
 
@@ -179,6 +196,20 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
       {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }} />
+      <RecentlyViewedTracker
+        listing={{
+          id: listing.id,
+          title: listing.title,
+          slug,
+          price: listing.price,
+          price_type: listing.price_type,
+          deal_type: listing.deal_type,
+          cover_image_url: images?.[0]?.url ?? null,
+          is_vip: listing.is_vip,
+          created_at: listing.created_at,
+          city_name: city?.name ?? null,
+        }}
+      />
       {listing.status !== "active" && (
         <p className="mb-5 rounded-lg bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
           Это объявление сейчас не опубликовано (статус: {listing.status}) — вам видно, потому что вы автор или модератор.
@@ -306,6 +337,17 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
           <div className="sticky top-20">{sellerCard}</div>
         </div>
       </div>
+
+      {relatedListings.length > 0 && (
+        <div className="mt-8">
+          <p className="mb-4 text-lg font-bold tracking-tight text-foreground">Похожие объявления</p>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {relatedListings.map((item) => (
+              <ListingCardView key={item.id} listing={item} />
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="card mt-8 p-5 sm:p-6">
         <p className="mb-4 text-sm font-semibold text-foreground">

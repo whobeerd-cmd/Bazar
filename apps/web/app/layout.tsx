@@ -63,6 +63,13 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: "ru_RU",
       type: "website",
     },
+    alternates: {
+      types: { "application/rss+xml": "/rss.xml" },
+    },
+    icons: {
+      icon: "/icons/icon-192.png",
+      apple: "/icons/icon-512.png",
+    },
   };
 }
 

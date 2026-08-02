@@ -5,6 +5,7 @@ import { CategoryIcon } from "@/components/CategoryIcon";
 import { getCategoryTree } from "@/lib/categories";
 import { queryBusinesses } from "@/lib/business/queries";
 import { BusinessCardView } from "@/components/business/BusinessCardView";
+import { RecentlyViewed } from "@/components/listings/RecentlyViewed";
 
 const VALUE_PROPS = ["Бесплатно для частных лиц", "Без посредников", "Публикация сразу, без ожидания"];
 
@@ -158,6 +159,8 @@ export default async function HomePage() {
             })}
           </div>
         )}
+
+        <RecentlyViewed />
 
         <div>
           <h2 className="text-2xl font-extrabold tracking-tight text-foreground">Категории</h2>

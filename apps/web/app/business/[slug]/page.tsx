@@ -9,7 +9,7 @@ import { StarRating } from "@/components/business/StarRating";
 import { getOpenStatus, DAY_KEYS, DAY_LABELS, type BusinessHours } from "@/lib/business/hours";
 import { ReviewForm } from "./ReviewForm";
 import { OwnerReplyForm } from "./OwnerReplyForm";
-import { ShareButton } from "./ShareButton";
+import { ShareButton } from "@/components/ShareButton";
 
 export async function generateMetadata({
   params,
@@ -20,7 +20,7 @@ export async function generateMetadata({
   const supabase = await createClient();
   const { data: business } = await supabase
     .from("businesses")
-    .select("name, description, status, cities(name)")
+    .select("id, name, description, status, cover_image_url, cities(name)")
     .eq("slug", slug)
     .eq("status", "active")
     .single();
@@ -33,7 +33,15 @@ export async function generateMetadata({
     ? `${city.name} · ${business.description.slice(0, 150) || business.name}`
     : business.description.slice(0, 150) || business.name;
 
-  return { title, description, openGraph: { title, description } };
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: business.cover_image_url ? [business.cover_image_url] : undefined,
+    },
+  };
 }
 
 function reviewsLabel(count: number) {
