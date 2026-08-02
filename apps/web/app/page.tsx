@@ -28,6 +28,28 @@ export default async function HomePage() {
     queryBusinesses(supabase, { sort: "rating", pageSize: 4 }),
   ]);
 
+  const businessSpotlightCard = (
+    <div className="relative rounded-3xl border border-accent/25 bg-gradient-to-br from-accent/10 via-background to-background p-6 shadow-card">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
+        <Building2 className="h-3.5 w-3.5" />
+        Каталог бизнесов
+      </span>
+      <p className="mt-3 text-lg font-extrabold leading-snug tracking-tight text-foreground">
+        Рестораны, мастера, магазины — рядом с вами
+      </p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Отдельный раздел для компаний Ингушетии — с фото, отзывами и рейтингом.
+        Люди ищут, к кому обратиться, — здесь их находят.
+      </p>
+      <Link
+        href="/my-business/new"
+        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+      >
+        Добавить свой бизнес в каталог →
+      </Link>
+    </div>
+  );
+
   return (
     <div>
       <section className="relative overflow-hidden border-b border-border">
@@ -49,14 +71,14 @@ export default async function HomePage() {
               fill="none"
             >
               <path
-                d="M790 235C700 300 620 300 545 275C520 267 505 268 495 278"
+                d="M790 225C710 260 650 275 590 280C578 281 568 282 560 284"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeDasharray="5 6"
                 strokeLinecap="round"
               />
               <path
-                d="M472 268L493 280L487 302"
+                d="M572 270L560 284L576 296"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
@@ -105,29 +127,11 @@ export default async function HomePage() {
                   </span>
                 ))}
               </div>
+
+              <div className="mt-8 max-w-lg lg:hidden">{businessSpotlightCard}</div>
             </div>
 
-            <div className="relative z-10 mt-12 hidden lg:mt-0 lg:block">
-              <div className="relative rounded-3xl border border-accent/25 bg-gradient-to-br from-accent/10 via-background to-background p-6 shadow-card">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
-                  <Building2 className="h-3.5 w-3.5" />
-                  Каталог бизнесов
-                </span>
-                <p className="mt-3 text-lg font-extrabold leading-snug tracking-tight text-foreground">
-                  Рестораны, мастера, магазины — рядом с вами
-                </p>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Отдельный раздел для компаний Ингушетии — с фото, отзывами и рейтингом.
-                  Люди ищут, к кому обратиться, — здесь их находят.
-                </p>
-                <Link
-                  href="/my-business/new"
-                  className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
-                >
-                  Добавить свой бизнес в каталог →
-                </Link>
-              </div>
-            </div>
+            <div className="relative z-10 mt-12 hidden lg:mt-0 lg:block">{businessSpotlightCard}</div>
           </div>
         </div>
       </section>
