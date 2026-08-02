@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: "/admin/businesses", label: "Бизнесы", hint: "Справочник компаний" },
   { href: "/admin/complaints", label: "Жалобы", hint: "Жалобы на объявления" },
   { href: "/admin/users", label: "Пользователи", hint: "Роли, блокировка" },
+  { href: "/admin/data-requests", label: "Запросы на удаление", hint: "Персональные данные, 152-ФЗ" },
   { href: "/admin/categories", label: "Категории", hint: "Разделы каталога" },
   { href: "/admin/banners", label: "Баннеры", hint: "Реклама на главной" },
   { href: "/admin/settings", label: "Настройки сайта", hint: "Название, лого, контакты" },

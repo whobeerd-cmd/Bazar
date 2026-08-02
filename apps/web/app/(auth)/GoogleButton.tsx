@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-export function GoogleButton({ next = "/profile" }: { next?: string }) {
+export function GoogleButton({ next = "/profile", disabled = false }: { next?: string; disabled?: boolean }) {
   const [isPending, setIsPending] = useState(false);
 
   async function handleClick() {
@@ -24,7 +24,7 @@ export function GoogleButton({ next = "/profile" }: { next?: string }) {
     <button
       type="button"
       onClick={handleClick}
-      disabled={isPending}
+      disabled={isPending || disabled}
       className="flex w-full items-center justify-center gap-2 rounded-full border border-border px-3 py-2.5 text-sm font-semibold transition hover:border-border-strong hover:bg-muted disabled:opacity-60"
     >
       <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">

@@ -221,6 +221,9 @@ export default async function RootLayout({
               <Link href="/rules" className="hover:text-foreground hover:underline">
                 Правила размещения
               </Link>
+              <Link href="/privacy" className="hover:text-foreground hover:underline">
+                Персональные данные
+              </Link>
               <p>© {new Date().getFullYear()} {siteName}</p>
             </div>
           </div>

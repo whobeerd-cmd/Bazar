@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ProfileForm } from "./ProfileForm";
 import { AvatarUploader } from "./AvatarUploader";
+import { DeleteDataRequestButton } from "./DeleteDataRequestButton";
 
 export default async function ProfilePage({
   searchParams,
@@ -23,6 +24,13 @@ export default async function ProfilePage({
     .select("full_name, phone, avatar_url, email_verified, created_at")
     .eq("id", user.id)
     .single();
+
+  const { data: pendingDataRequest } = await supabase
+    .from("data_requests")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("status", "pending")
+    .maybeSingle();
 
   return (
     <div>
@@ -51,6 +59,10 @@ export default async function ProfilePage({
           Email ещё не подтверждён — проверьте почту и перейдите по ссылке из письма.
         </p>
       )}
+
+      <div className="mt-8 max-w-md border-t border-border pt-6">
+        <DeleteDataRequestButton hasPendingRequest={Boolean(pendingDataRequest)} />
+      </div>
     </div>
   );
 }

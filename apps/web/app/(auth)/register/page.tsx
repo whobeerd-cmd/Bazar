@@ -19,6 +19,7 @@ export default function RegisterPage() {
 
   const [passwordCaptcha, setPasswordCaptcha] = useState("");
   const [magicCaptcha, setMagicCaptcha] = useState("");
+  const [consented, setConsented] = useState(false);
 
   return (
     <div>
@@ -30,8 +31,23 @@ export default function RegisterPage() {
         </Link>
       </p>
 
-      <div className="mt-6">
-        <GoogleButton next="/" />
+      <label className="mt-6 flex items-start gap-2 text-sm text-muted-foreground">
+        <input
+          type="checkbox"
+          checked={consented}
+          onChange={(e) => setConsented(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+        />
+        <span>
+          Я согласен(на) с{" "}
+          <Link href="/privacy" target="_blank" className="text-primary hover:underline">
+            политикой обработки персональных данных
+          </Link>
+        </span>
+      </label>
+
+      <div className="mt-4">
+        <GoogleButton next="/" disabled={!consented} />
       </div>
 
       <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
@@ -87,7 +103,7 @@ export default function RegisterPage() {
               </p>
             )}
 
-            <button type="submit" disabled={isPasswordPending} className="btn-primary w-full py-2.5">
+            <button type="submit" disabled={isPasswordPending || !consented} className="btn-primary w-full py-2.5">
               {isPasswordPending ? "Регистрируем..." : "Зарегистрироваться"}
             </button>
           </form>
@@ -133,7 +149,7 @@ export default function RegisterPage() {
               </p>
             )}
 
-            <button type="submit" disabled={isMagicPending} className="btn-primary w-full py-2.5">
+            <button type="submit" disabled={isMagicPending || !consented} className="btn-primary w-full py-2.5">
               {isMagicPending ? "Отправляем..." : "Отправить ссылку для входа"}
             </button>
           </form>
