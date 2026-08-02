@@ -103,7 +103,7 @@ export function Gallery({
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image.url} alt="" className="h-full w-full object-cover" />
+              <img src={image.url} alt={`${title} — фото ${i + 1}`} className="h-full w-full object-cover" />
             </button>
           ))}
         </div>

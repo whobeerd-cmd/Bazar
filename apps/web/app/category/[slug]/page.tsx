@@ -116,7 +116,14 @@ export default async function CategoryPage({
           <p className="mb-4 text-sm font-medium text-muted-foreground">Найдено: {count}</p>
           {items.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-              По этим фильтрам ничего не найдено — попробуйте изменить условия слева.
+              <p>По этим фильтрам ничего не найдено — попробуйте изменить условия слева.</p>
+              <p className="mt-3">
+                Или станьте первым:{" "}
+                <Link href="/my-ads/new" className="font-semibold text-primary hover:underline">
+                  разместите объявление
+                </Link>{" "}
+                в разделе «{category.name}».
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

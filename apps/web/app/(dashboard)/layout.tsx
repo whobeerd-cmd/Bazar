@@ -7,6 +7,7 @@ import { signOutAction } from "@/lib/actions/auth";
 const NAV_ITEMS = [
   { href: "/profile", label: "Профиль" },
   { href: "/my-ads", label: "Мои объявления" },
+  { href: "/messages", label: "Сообщения" },
   { href: "/favorites", label: "Избранное" },
 ];
 

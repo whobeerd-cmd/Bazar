@@ -14,7 +14,7 @@ export function ListingCardView({ listing }: { listing: ListingCard }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={listing.cover_image_url}
-            alt=""
+            alt={listing.title}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
           />
         ) : (

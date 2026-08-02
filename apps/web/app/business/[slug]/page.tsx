@@ -172,8 +172,39 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
     </div>
   );
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const businessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: business.name,
+    description: business.description,
+    url: `${siteUrl}/business/${slug}`,
+    image: (images ?? []).map((img) => img.url),
+    ...(business.phone ? { telephone: business.phone } : {}),
+    ...(business.address_text || city?.name
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            ...(city?.name ? { addressLocality: city.name } : {}),
+            ...(business.address_text ? { streetAddress: business.address_text } : {}),
+          },
+        }
+      : {}),
+    ...(business.rating_count > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: business.rating_avg,
+            reviewCount: business.rating_count,
+          },
+        }
+      : {}),
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }} />
       {business.status !== "active" && (
         <p className="mb-5 rounded-lg bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
           Этот бизнес сейчас скрыт (статус: {business.status}) — вам видно, потому что вы владелец или модератор.

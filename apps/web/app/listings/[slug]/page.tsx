@@ -8,6 +8,7 @@ import { ListingsMap } from "@/components/map/ListingsMap";
 import { Gallery } from "@/components/media/Gallery";
 import { ReportButton } from "./ReportButton";
 import { PhoneReveal } from "./PhoneReveal";
+import { StartChatButton } from "./StartChatButton";
 import { FavoriteButton } from "./FavoriteButton";
 import { CommentForm } from "./CommentForm";
 import { DeleteCommentButton } from "./DeleteCommentButton";
@@ -137,6 +138,9 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
             Написать в WhatsApp
           </a>
         )}
+        {user?.id !== listing.user_id && (
+          <StartChatButton listingId={listing.id} isAuthenticated={Boolean(user)} />
+        )}
       </div>
 
       <div className="mt-3 flex items-center gap-2 border-t border-border pt-3">
@@ -150,8 +154,31 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
     </div>
   );
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const listingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: listing.title,
+    description: listing.description,
+    image: (images ?? []).map((img) => img.url),
+    url: `${siteUrl}/listings/${slug}`,
+    ...(listing.price_type === "fixed" && listing.price
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: listing.price,
+            priceCurrency: "RUB",
+            availability: "https://schema.org/InStock",
+            url: `${siteUrl}/listings/${slug}`,
+          },
+        }
+      : {}),
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }} />
       {listing.status !== "active" && (
         <p className="mb-5 rounded-lg bg-amber-50 px-4 py-2.5 text-sm text-amber-800">
           Это объявление сейчас не опубликовано (статус: {listing.status}) — вам видно, потому что вы автор или модератор.

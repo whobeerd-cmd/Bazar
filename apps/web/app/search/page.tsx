@@ -5,6 +5,7 @@ import { parseListingFilters, flattenSearchParams, type RawSearchParams } from "
 import { FiltersForm } from "@/components/listings/FiltersForm";
 import { ListingCardView } from "@/components/listings/ListingCardView";
 import { Pagination } from "@/components/listings/Pagination";
+import Link from "next/link";
 
 // Динамические результаты поиска не индексируем — избегаем "тонкого"
 // дублирующегося контента в выдаче, категории индексируются отдельно.
@@ -45,7 +46,20 @@ export default async function SearchPage({
           <p className="mb-4 text-sm font-medium text-muted-foreground">Найдено: {count}</p>
           {items.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-              {filters.search ? "Ничего не найдено — попробуйте изменить запрос или фильтры." : "Введите запрос слева."}
+              <p>
+                {filters.search
+                  ? "Ничего не найдено — попробуйте изменить запрос или фильтры."
+                  : "Введите запрос слева."}
+              </p>
+              {filters.search && (
+                <p className="mt-3">
+                  Не нашли то, что искали?{" "}
+                  <Link href="/my-ads/new" className="font-semibold text-primary hover:underline">
+                    Разместите своё объявление
+                  </Link>{" "}
+                  — вдруг это как раз то, что ищут другие.
+                </p>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

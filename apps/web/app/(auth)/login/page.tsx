@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { signInAction, signInWithMagicLinkAction, type AuthActionState } from "@/lib/actions/auth";
 import { GoogleButton } from "../GoogleButton";
+import { Turnstile } from "@/components/Turnstile";
 
 export default function LoginPage() {
   return (
@@ -26,6 +27,7 @@ function LoginForm() {
   );
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/profile";
+  const [passwordCaptcha, setPasswordCaptcha] = useState("");
 
   return (
     <div>
@@ -87,6 +89,9 @@ function LoginForm() {
                 className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
               />
             </div>
+
+            <input type="hidden" name="captchaToken" value={passwordCaptcha} />
+            <Turnstile key={passwordState?.error ?? "initial"} onToken={setPasswordCaptcha} />
 
             {passwordState?.error && (
               <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">

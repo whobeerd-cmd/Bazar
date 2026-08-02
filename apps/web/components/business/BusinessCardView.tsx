@@ -14,7 +14,7 @@ export function BusinessCardView({ business }: { business: BusinessCard }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={business.cover_image_url}
-            alt=""
+            alt={business.name}
             className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
           />
         ) : (

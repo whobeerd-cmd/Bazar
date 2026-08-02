@@ -184,7 +184,7 @@ export default async function HomePage() {
                 </Link>
 
                 {category.children.length > 0 && (
-                  <div className="invisible absolute left-1/2 top-full z-20 w-64 -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition duration-150 md:group-hover:visible md:group-hover:translate-y-0 md:group-hover:opacity-100">
+                  <div className="invisible absolute left-1/2 top-full z-20 w-64 -translate-x-1/2 translate-y-1 pt-2 opacity-0 transition duration-150 md:group-hover:visible md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:visible md:group-focus-within:translate-y-0 md:group-focus-within:opacity-100">
                     <div className="rounded-2xl border border-border bg-background p-3 shadow-card-hover">
                       <ul>
                         {category.children.map((child) => (

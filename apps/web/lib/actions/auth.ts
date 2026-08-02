@@ -24,13 +24,18 @@ export async function signInAction(
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
   const next = String(formData.get("next") ?? "/profile");
+  const captchaToken = String(formData.get("captchaToken") ?? "") || undefined;
 
   if (!email || !password) {
     return { error: "Введите email и пароль" };
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+    options: { captchaToken },
+  });
 
   if (error) {
     return { error: translateAuthError(error.message) };
