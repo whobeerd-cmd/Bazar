@@ -95,30 +95,30 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
     <div className="card p-5">
       <div className="space-y-2.5 text-sm">
         {city?.name && (
-          <a
-            href={
-              business.lat != null && business.lng != null
-                ? `https://www.google.com/maps/dir/?api=1&destination=${business.lat},${business.lng}`
-                : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-                    `${city.name}${business.address_text ? `, ${business.address_text}` : ""}`
-                  )}`
-            }
-            target="_blank"
-            rel="noreferrer"
-            className="group flex items-start justify-between gap-2 text-foreground transition hover:text-primary"
-          >
-            <span className="flex items-start gap-2">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition group-hover:text-primary" />
-              <span className="group-hover:underline">
+          <div className="space-y-2">
+            <a
+              href={
+                business.lat != null && business.lng != null
+                  ? `https://www.google.com/maps/dir/?api=1&destination=${business.lat},${business.lng}`
+                  : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                      `${city.name}${business.address_text ? `, ${business.address_text}` : ""}`
+                    )}`
+              }
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-2 text-sm font-semibold text-primary transition hover:bg-primary/20"
+            >
+              <Navigation className="h-4 w-4" />
+              Проложить маршрут
+            </a>
+            <p className="flex items-start gap-2 text-foreground">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+              <span>
                 {city.name}
                 {business.address_text ? `, ${business.address_text}` : ""}
               </span>
-            </span>
-            <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs font-semibold text-primary">
-              <Navigation className="h-3.5 w-3.5" />
-              Маршрут
-            </span>
-          </a>
+            </p>
+          </div>
         )}
         {openStatus && (
           <p className={`flex items-center gap-2 ${openStatus.isOpen ? "text-emerald-700" : "text-muted-foreground"}`}>
