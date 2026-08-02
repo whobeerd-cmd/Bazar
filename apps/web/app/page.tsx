@@ -62,7 +62,7 @@ export default async function HomePage() {
               "radial-gradient(55% 70% at 12% 0%, hsl(var(--primary) / 0.12), transparent 60%), radial-gradient(45% 55% at 100% 5%, hsl(var(--accent) / 0.14), transparent 60%)",
           }}
         />
-        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
+        <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-16 sm:pb-14 sm:pt-24">
           <div className="relative lg:grid lg:grid-cols-[1fr,340px] lg:gap-10">
             <svg
               aria-hidden
@@ -137,7 +137,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+      <div className="mx-auto max-w-6xl px-4 pb-12 pt-8 sm:pb-16 sm:pt-10">
         {banners && banners.length > 0 && (
           <div className="mb-12 grid gap-4 sm:grid-cols-2">
             {banners.map((banner) => {
