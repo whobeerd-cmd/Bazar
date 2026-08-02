@@ -22,23 +22,22 @@
   --radius: 0.625rem;
 }
 
-/* Тёмная тема — та же палитра (тёплый нейтральный + зелёный акцент),
-   значения подобраны так, чтобы карточки/кнопки/поля не трогать по
-   отдельности: они уже все ссылаются на эти переменные через Tailwind. */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: 150 10% 8%;
-    --foreground: 40 15% 92%;
-    --primary: 152 40% 36%;
-    --primary-hover: 152 42% 42%;
-    --primary-foreground: 0 0% 100%;
-    --muted: 150 8% 15%;
-    --muted-foreground: 40 8% 64%;
-    --border: 150 8% 22%;
-    --border-strong: 150 8% 30%;
-    --accent: 38 60% 52%;
-    --accent-foreground: 38 55% 85%;
-  }
+/* Тёмная тема включается только вручную (кнопка-переключатель, см.
+   ThemeToggle.tsx) — по умолчанию всегда светлая, независимо от темы
+   ОС. Тот же набор переменных, что и в :root, поэтому карточки/кнопки/
+   поля не нужно трогать по отдельности — они уже все на этих переменных. */
+:root[data-theme="dark"] {
+  --background: 150 10% 8%;
+  --foreground: 40 15% 92%;
+  --primary: 152 40% 36%;
+  --primary-hover: 152 42% 42%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 150 8% 15%;
+  --muted-foreground: 40 8% 64%;
+  --border: 150 8% 22%;
+  --border-strong: 150 8% 30%;
+  --accent: 38 60% 52%;
+  --accent-foreground: 38 55% 85%;
 }
 
 body {

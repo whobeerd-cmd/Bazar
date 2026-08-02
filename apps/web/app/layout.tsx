@@ -5,6 +5,7 @@ import { CircleUserRound } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getCategoryTree } from "@/lib/categories";
 import { CategoryMegaMenu } from "@/components/CategoryMegaMenu";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import "./globals.css";
 
 const golosText = Golos_Text({
@@ -111,6 +112,16 @@ export default async function RootLayout({
 
   return (
     <html lang="ru" className={golosText.variable}>
+      <head>
+        {/* Блокирующий скрипт до отрисовки — иначе у вернувшегося
+            пользователя с включённой тёмной темой на миг мелькнёт светлая. */}
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('bazar-theme')==='dark'){document.documentElement.setAttribute('data-theme','dark')}}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <div aria-hidden className="h-[3px] bg-gradient-to-r from-primary via-primary to-accent" />
         <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur-sm">
@@ -235,6 +246,8 @@ export default async function RootLayout({
             </div>
           </div>
         </footer>
+
+        <ThemeToggle />
       </body>
     </html>
   );
