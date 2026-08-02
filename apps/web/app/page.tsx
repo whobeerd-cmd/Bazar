@@ -160,8 +160,6 @@ export default async function HomePage() {
           </div>
         )}
 
-        <RecentlyViewed />
-
         <div>
           <h2 className="text-2xl font-extrabold tracking-tight text-foreground">Категории</h2>
           <p className="mt-1 text-sm text-muted-foreground">Выберите раздел или наведите на карточку, чтобы увидеть подразделы</p>
@@ -234,6 +232,8 @@ export default async function HomePage() {
             </Link>
           </div>
         )}
+
+        <RecentlyViewed />
       </div>
     </div>
   );
