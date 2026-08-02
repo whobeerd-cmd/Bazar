@@ -47,6 +47,19 @@ export async function updateSiteSettingsAction(
   return { success: "Настройки сохранены" };
 }
 
+// Полностью закрывает сайт для всех, кроме админов/суперадминов — например,
+// на время проверки или пока не оформлено ИП. Ничего не удаляет.
+export async function toggleMaintenanceModeAction(enabled: boolean) {
+  const { supabase, user } = await requireAdmin();
+
+  const { error } = await supabase.from("site_settings").upsert({ key: "maintenance_mode", value: { enabled } });
+  if (error) return { error: error.message };
+
+  await logAdminAction(supabase, user.id, enabled ? "enable" : "disable", "maintenance_mode", null);
+  revalidatePath("/admin/settings");
+  return { success: true };
+}
+
 // Вызывается после загрузки нового лого в Storage на клиенте.
 export async function updateLogoUrlAction(logoUrl: string) {
   const { supabase, user } = await requireAdmin();

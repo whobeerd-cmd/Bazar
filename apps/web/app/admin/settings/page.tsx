@@ -1,17 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
 import { SettingsForm } from "./SettingsForm";
 import { LogoUploader } from "./LogoUploader";
+import { MaintenanceModeToggle } from "./MaintenanceModeToggle";
 
 export default async function AdminSettingsPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("site_settings")
     .select("key, value")
-    .in("key", ["site_name", "site_description", "logo_url", "contact_phone", "contact_email"]);
+    .in("key", ["site_name", "site_description", "logo_url", "contact_phone", "contact_email", "maintenance_mode"]);
 
   const settings = Object.fromEntries((data ?? []).map((row) => [row.key, row.value])) as Record<
     string,
-    { text?: string; url?: string } | undefined
+    { text?: string; url?: string; enabled?: boolean } | undefined
   >;
 
   return (
@@ -35,6 +36,17 @@ export default async function AdminSettingsPage() {
               contactEmail: settings.contact_email?.text ?? "",
             }}
           />
+        </div>
+      </div>
+
+      <div className="card mt-6 max-w-lg p-6">
+        <p className="text-sm font-semibold text-foreground">Режим техобслуживания</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Полностью закрывает сайт для всех, кроме админов — например, на время проверки. Ничего
+          не удаляется, объявления и бизнес-профили остаются на месте.
+        </p>
+        <div className="mt-4">
+          <MaintenanceModeToggle initialEnabled={settings.maintenance_mode?.enabled ?? false} />
         </div>
       </div>
     </div>
