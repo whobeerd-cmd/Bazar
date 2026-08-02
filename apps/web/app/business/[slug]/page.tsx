@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { BadgeCheck, MapPin, Phone, MessageCircle, AtSign, Globe, Clock } from "lucide-react";
+import { BadgeCheck, MapPin, Phone, MessageCircle, AtSign, Globe, Clock, Navigation } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { buildWhatsAppLink } from "@/lib/format";
 import { Gallery } from "@/components/media/Gallery";
@@ -105,12 +105,18 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
             }
             target="_blank"
             rel="noreferrer"
-            className="flex items-start gap-2 text-foreground transition hover:text-primary hover:underline"
+            className="group flex items-start justify-between gap-2 text-foreground transition hover:text-primary"
           >
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-            <span>
-              {city.name}
-              {business.address_text ? `, ${business.address_text}` : ""}
+            <span className="flex items-start gap-2">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition group-hover:text-primary" />
+              <span className="group-hover:underline">
+                {city.name}
+                {business.address_text ? `, ${business.address_text}` : ""}
+              </span>
+            </span>
+            <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs font-semibold text-primary">
+              <Navigation className="h-3.5 w-3.5" />
+              Маршрут
             </span>
           </a>
         )}
