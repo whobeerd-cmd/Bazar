@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check, Building2 } from "lucide-react";
+import { Check, Building2, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { getCategoryTree } from "@/lib/categories";
@@ -118,6 +118,13 @@ export default async function HomePage() {
                 >
                   <Building2 className="h-4 w-4" />
                   Бизнесы
+                </Link>
+                <Link
+                  href="/masters"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent-foreground transition hover:-translate-y-0.5 hover:bg-accent/15"
+                >
+                  <Users className="h-4 w-4" />
+                  Мастера
                 </Link>
               </div>
               <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2">
