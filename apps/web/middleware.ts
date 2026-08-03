@@ -11,7 +11,7 @@ declare global {
 }
 
 // Пути, доступные только авторизованным пользователям.
-const PROTECTED_PREFIXES = ["/profile", "/my-ads", "/my-business", "/drafts", "/favorites", "/messages", "/notifications", "/balance", "/admin"];
+const PROTECTED_PREFIXES = ["/profile", "/my-ads", "/my-business", "/masters/new", "/drafts", "/favorites", "/messages", "/notifications", "/balance", "/admin"];
 
 // Эти пути остаются доступны даже в режиме "сайт отключён" (техобслуживание) —
 // иначе владелец не сможет зайти и снова включить сайт.

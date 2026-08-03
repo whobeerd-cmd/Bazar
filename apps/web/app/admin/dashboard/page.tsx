@@ -13,6 +13,8 @@ export default async function AdminDashboardPage() {
     { count: bannersCount },
     { count: pendingListingsCount },
     { count: newComplaintsCount },
+    { count: businessesCount },
+    { count: mastersCount },
   ] = await Promise.all([
     supabase.from("profiles").select("*", { count: "exact", head: true }).eq("is_demo", false),
     supabase
@@ -24,6 +26,8 @@ export default async function AdminDashboardPage() {
     supabase.from("banners").select("*", { count: "exact", head: true }),
     supabase.from("listings").select("*", { count: "exact", head: true }).eq("status", "pending"),
     supabase.from("complaints").select("*", { count: "exact", head: true }).eq("status", "new"),
+    supabase.from("businesses").select("*", { count: "exact", head: true }).eq("type", "business"),
+    supabase.from("businesses").select("*", { count: "exact", head: true }).eq("type", "master"),
   ]);
 
   const stats = [
@@ -31,6 +35,8 @@ export default async function AdminDashboardPage() {
     { label: "Новых жалоб", value: newComplaintsCount ?? 0, href: "/admin/complaints" },
     { label: "Пользователей", value: usersCount ?? 0, href: "/admin/users" },
     { label: "Сейчас онлайн", value: onlineCount ?? 0, href: "/admin/users" },
+    { label: "Бизнесов", value: businessesCount ?? 0, href: "/admin/businesses" },
+    { label: "Анкет мастеров", value: mastersCount ?? 0, href: "/admin/businesses" },
     { label: "Категорий", value: categoriesCount ?? 0, href: "/admin/categories" },
     { label: "Баннеров", value: bannersCount ?? 0, href: "/admin/banners" },
   ];
@@ -40,6 +46,11 @@ export default async function AdminDashboardPage() {
       title: "Объявления",
       href: "/admin/listings",
       description: "Проверка новых объявлений перед публикацией, а также архивация или отметка VIP уже опубликованных.",
+    },
+    {
+      title: "Бизнесы и мастера",
+      href: "/admin/businesses",
+      description: "Справочник компаний и анкеты мастеров — проверить, отметить рекомендуемым, отредактировать или скрыть.",
     },
     {
       title: "Жалобы",
@@ -67,6 +78,11 @@ export default async function AdminDashboardPage() {
       description: "Название, логотип, описание для поисковиков, контактные телефон и email.",
     },
     {
+      title: "Запросы на удаление данных",
+      href: "/admin/data-requests",
+      description: "Заявки пользователей на удаление персональных данных (152-ФЗ).",
+    },
+    {
       title: "Журнал действий",
       href: "/admin/audit-log",
       description: "Кто из администраторов/модераторов что менял — для порядка и разбора спорных случаев.",
@@ -80,7 +96,7 @@ export default async function AdminDashboardPage() {
         Общая статистика. Доход появится здесь, когда будет реальная монетизация.
       </p>
 
-      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {stats.map((stat) => (
           <Link key={stat.label} href={stat.href}>
             <div className="card p-4 transition hover:border-border-strong hover:shadow-card-hover">

@@ -142,6 +142,21 @@ export default async function RootLayout({
               <CategoryMegaMenu tree={categoryTree} />
             </div>
 
+            <div className="hidden shrink-0 items-center gap-1 md:flex">
+              <Link
+                href="/business"
+                className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+              >
+                Бизнесы
+              </Link>
+              <Link
+                href="/masters"
+                className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+              >
+                Мастера
+              </Link>
+            </div>
+
             <form action="/search" method="get" className="hidden max-w-md flex-1 sm:block">
               <div className="relative">
                 <svg
@@ -236,6 +251,12 @@ export default async function RootLayout({
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="font-semibold text-foreground">{siteName}</p>
               <p>Площадка объявлений Республики Ингушетия</p>
+              <Link href="/business" className="hover:text-foreground hover:underline">
+                Бизнесы
+              </Link>
+              <Link href="/masters" className="hover:text-foreground hover:underline">
+                Мастера
+              </Link>
               <Link href="/rules" className="hover:text-foreground hover:underline">
                 Правила размещения
               </Link>
