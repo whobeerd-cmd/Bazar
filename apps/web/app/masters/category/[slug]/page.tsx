@@ -34,11 +34,11 @@ export default async function MasterCategoryPage({
 
   const { data: category } = await supabase
     .from("business_categories")
-    .select("id, name, slug, is_active")
+    .select("id, name, slug, is_active, for_masters")
     .eq("slug", slug)
     .single();
 
-  if (!category || !category.is_active) notFound();
+  if (!category || !category.is_active || !category.for_masters) notFound();
 
   const { data: cities } = await supabase.from("cities").select("id, name").order("name");
 

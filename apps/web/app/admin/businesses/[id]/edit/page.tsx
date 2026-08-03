@@ -24,7 +24,7 @@ export default async function AdminEditBusinessPage({ params }: { params: Promis
 
   const [{ data: images }, categories, { data: cities }] = await Promise.all([
     supabase.from("business_images").select("id, url").eq("business_id", id).order("sort_order"),
-    getBusinessCategories(supabase),
+    getBusinessCategories(supabase, business.type as "business" | "master"),
     supabase.from("cities").select("id, name").order("name"),
   ]);
 

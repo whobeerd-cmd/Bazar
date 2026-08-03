@@ -14,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .eq("status", "active")
         .order("updated_at", { ascending: false })
         .limit(5000),
-      supabase.from("business_categories").select("slug"),
+      supabase.from("business_categories").select("slug, for_business, for_masters").eq("is_active", true),
       supabase
         .from("businesses")
         .select("slug, type, updated_at")
@@ -45,8 +45,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const businessCategoryPages: MetadataRoute.Sitemap = (businessCategories ?? []).flatMap((c) => [
-    { url: `${siteUrl}/business/category/${c.slug}`, changeFrequency: "daily" as const, priority: 0.6 },
-    { url: `${siteUrl}/masters/category/${c.slug}`, changeFrequency: "daily" as const, priority: 0.6 },
+    ...(c.for_business ? [{ url: `${siteUrl}/business/category/${c.slug}`, changeFrequency: "daily" as const, priority: 0.6 }] : []),
+    ...(c.for_masters ? [{ url: `${siteUrl}/masters/category/${c.slug}`, changeFrequency: "daily" as const, priority: 0.6 }] : []),
   ]);
 
   const businessPages: MetadataRoute.Sitemap = (businesses ?? [])

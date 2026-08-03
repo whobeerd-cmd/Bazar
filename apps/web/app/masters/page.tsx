@@ -21,7 +21,7 @@ export default async function MastersDirectoryPage({
   const supabase = await createClient();
 
   const [categories, { data: cities }] = await Promise.all([
-    getBusinessCategories(supabase),
+    getBusinessCategories(supabase, "master"),
     supabase.from("cities").select("id, name").order("name"),
   ]);
 

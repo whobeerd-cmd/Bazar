@@ -11,7 +11,7 @@ export default async function NewMasterPage() {
   if (!user) redirect("/login?next=/masters/new");
 
   const [categories, { data: cities }] = await Promise.all([
-    getBusinessCategories(supabase),
+    getBusinessCategories(supabase, "master"),
     supabase.from("cities").select("id, name").order("name"),
   ]);
 

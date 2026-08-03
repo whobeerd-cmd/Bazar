@@ -83,11 +83,12 @@ export async function queryBusinesses(supabase: Supabase, filters: BusinessFilte
   return { items, count: count ?? 0, page, pageSize, error };
 }
 
-export async function getBusinessCategories(supabase: Supabase) {
+export async function getBusinessCategories(supabase: Supabase, type: BusinessType = "business") {
   const { data } = await supabase
     .from("business_categories")
     .select("id, name, slug, sort_order, group_label")
     .eq("is_active", true)
+    .eq(type === "master" ? "for_masters" : "for_business", true)
     .order("sort_order");
   return data ?? [];
 }

@@ -34,11 +34,11 @@ export default async function BusinessCategoryPage({
 
   const { data: category } = await supabase
     .from("business_categories")
-    .select("id, name, slug, is_active")
+    .select("id, name, slug, is_active, for_business")
     .eq("slug", slug)
     .single();
 
-  if (!category || !category.is_active) notFound();
+  if (!category || !category.is_active || !category.for_business) notFound();
 
   const { data: cities } = await supabase.from("cities").select("id, name").order("name");
 

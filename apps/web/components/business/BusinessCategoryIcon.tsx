@@ -21,10 +21,13 @@ import {
   Glasses,
   GraduationCap,
   Hammer,
+  HandHeart,
   HardHat,
+  HeartPulse,
   Landmark,
   Laptop,
   type LucideIcon,
+  Package,
   Pill,
   Plane,
   Printer,
@@ -118,6 +121,15 @@ const ICONS_BY_SLUG: Record<string, LucideIcon> = {
   "organizaciya-prazdnikov": PartyPopper,
 
   "drugoe-biznes": Boxes,
+
+  "nyani-i-sidelki": HandHeart,
+  "klining-i-uborka": WashingMachine,
+  "gruzchiki-i-perezdy": Package,
+  "uslugi-dlya-zhivotnyh": PawPrint,
+  massazh: HeartPulse,
+  "kompyuternaya-pomosch": Laptop,
+  "poshiv-i-remont-odezhdy": Scissors,
+  "personalnye-trenery": Dumbbell,
 };
 
 export function BusinessCategoryIcon({ slug, className }: { slug: string; className?: string }) {
