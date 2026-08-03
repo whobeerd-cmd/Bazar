@@ -50,10 +50,11 @@ export async function adminUpdateBusinessAction(
   const id = String(formData.get("id") ?? "");
   if (!id) return { error: "Некорректный id бизнеса" };
 
-  const { data: business } = await supabase.from("businesses").select("id, slug").eq("id", id).single();
+  const { data: business } = await supabase.from("businesses").select("id, slug, type").eq("id", id).single();
   if (!business) return { error: "Бизнес не найден" };
 
   const parsed = businessSchema.safeParse({
+    type: formData.get("type") || undefined,
     name: formData.get("name"),
     categoryId: formData.get("categoryId"),
     cityId: formData.get("cityId"),
@@ -63,21 +64,25 @@ export async function adminUpdateBusinessAction(
     whatsapp: formData.get("whatsapp"),
     instagram: formData.get("instagram"),
     website: formData.get("website"),
+    specializations: formData.get("specializations"),
+    priceFrom: formData.get("priceFrom") ?? "",
+    experienceYears: formData.get("experienceYears") ?? "",
+    houseCall: formData.get("houseCall") === "on",
   });
 
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
-  const { error } = await supabase
-    .from("businesses")
-    .update(parsedBusinessPayload(parsed.data, formData))
-    .eq("id", id);
+  // type не меняется через эту форму, даже если staff отредактирует чужую страницу.
+  const { type: _ignoredType, ...updatePayload } = parsedBusinessPayload(parsed.data, formData);
+
+  const { error } = await supabase.from("businesses").update(updatePayload).eq("id", id);
 
   if (error) return { error: "Не получилось сохранить: " + error.message };
 
   await logAdminAction(supabase, user.id, "edit", "business", id);
   revalidatePath(`/admin/businesses/${id}/edit`);
   revalidatePath("/admin/businesses");
-  revalidatePath(`/business/${business.slug}`);
+  revalidatePath(`/${business.type === "master" ? "masters" : "business"}/${business.slug}`);
   return { success: "Изменения сохранены" };
 }
 

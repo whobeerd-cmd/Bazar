@@ -10,12 +10,14 @@ export type CityOption = { id: number; name: string };
 
 export function BusinessForm({
   mode,
+  type,
   categories,
   cities,
   defaultValues,
   action: actionOverride,
 }: {
   mode: "create" | "edit";
+  type: "business" | "master";
   categories: BusinessCategoryOption[];
   cities: CityOption[];
   action?: typeof createBusinessAction;
@@ -31,10 +33,15 @@ export function BusinessForm({
     instagram: string | null;
     website: string | null;
     hours: BusinessHours;
+    specializations?: string[];
+    priceFrom?: number | null;
+    experienceYears?: number | null;
+    houseCall?: boolean;
   };
 }) {
   const action = actionOverride ?? (mode === "create" ? createBusinessAction : updateBusinessAction);
   const [state, formAction, isPending] = useActionState<AuthActionState, FormData>(action, null);
+  const isMaster = type === "master";
 
   const categoryGroups = new Map<string, BusinessCategoryOption[]>();
   for (const category of categories) {
@@ -46,12 +53,20 @@ export function BusinessForm({
   return (
     <form action={formAction} className="space-y-5">
       {defaultValues && <input type="hidden" name="id" value={defaultValues.id} />}
+      <input type="hidden" name="type" value={type} />
 
       <div>
         <label htmlFor="name" className="field-label">
-          Название
+          {isMaster ? "Имя и специальность" : "Название"}
         </label>
-        <input id="name" name="name" required defaultValue={defaultValues?.name} className="field-input" />
+        <input
+          id="name"
+          name="name"
+          required
+          defaultValue={defaultValues?.name}
+          className="field-input"
+          placeholder={isMaster ? "Например: Ахмед — мастер по ремонту техники" : undefined}
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -91,9 +106,25 @@ export function BusinessForm({
         </div>
       </div>
 
+      {isMaster && (
+        <div>
+          <label htmlFor="specializations" className="field-label">
+            Специализации
+          </label>
+          <input
+            id="specializations"
+            name="specializations"
+            defaultValue={defaultValues?.specializations?.join(", ") ?? ""}
+            className="field-input"
+            placeholder="Ремонт стиральных машин, ремонт холодильников"
+          />
+          <p className="mt-1.5 text-xs text-muted-foreground">Через запятую — покажем тегами на странице.</p>
+        </div>
+      )}
+
       <div>
         <label htmlFor="addressText" className="field-label">
-          Адрес
+          {isMaster ? "Адрес (необязательно)" : "Адрес"}
         </label>
         <input id="addressText" name="addressText" defaultValue={defaultValues?.addressText ?? ""} className="field-input" />
       </div>
@@ -109,9 +140,51 @@ export function BusinessForm({
           rows={4}
           defaultValue={defaultValues?.description}
           className="field-input"
-          placeholder="Чем занимается бизнес, что предлагаете клиентам..."
+          placeholder={isMaster ? "Опыт, какие задачи берёте, как работаете..." : "Чем занимается бизнес, что предлагаете клиентам..."}
         />
       </div>
+
+      {isMaster && (
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label htmlFor="priceFrom" className="field-label">
+              Цена, от ₽
+            </label>
+            <input
+              id="priceFrom"
+              name="priceFrom"
+              type="number"
+              min={0}
+              defaultValue={defaultValues?.priceFrom ?? ""}
+              className="field-input"
+              placeholder="1000"
+            />
+          </div>
+          <div>
+            <label htmlFor="experienceYears" className="field-label">
+              Опыт, лет
+            </label>
+            <input
+              id="experienceYears"
+              name="experienceYears"
+              type="number"
+              min={0}
+              defaultValue={defaultValues?.experienceYears ?? ""}
+              className="field-input"
+              placeholder="5"
+            />
+          </div>
+          <label className="col-span-2 mt-1 flex items-center gap-2 text-sm text-foreground">
+            <input
+              type="checkbox"
+              name="houseCall"
+              defaultChecked={defaultValues?.houseCall ?? false}
+              className="h-4 w-4 accent-primary"
+            />
+            Выезжаю к клиенту
+          </label>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -147,7 +220,7 @@ export function BusinessForm({
       </div>
 
       <div>
-        <p className="field-label mb-2">Часы работы</p>
+        <p className="field-label mb-2">{isMaster ? "Часы работы (необязательно)" : "Часы работы"}</p>
         <div className="space-y-2">
           {DAY_KEYS.map((day) => {
             const dayHours = defaultValues?.hours?.[day];
@@ -171,7 +244,7 @@ export function BusinessForm({
                   <input
                     type="checkbox"
                     name={`hours_${day}_closed`}
-                    defaultChecked={dayHours?.closed ?? false}
+                    defaultChecked={dayHours?.closed ?? (isMaster ? true : false)}
                     className="h-4 w-4 accent-primary"
                   />
                   Выходной
@@ -186,7 +259,7 @@ export function BusinessForm({
       {state?.success && <p className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">{state.success}</p>}
 
       <button type="submit" disabled={isPending} className="btn-primary">
-        {isPending ? "Сохраняем..." : mode === "create" ? "Создать бизнес" : "Сохранить"}
+        {isPending ? "Сохраняем..." : mode === "create" ? (isMaster ? "Создать анкету" : "Создать бизнес") : "Сохранить"}
       </button>
     </form>
   );

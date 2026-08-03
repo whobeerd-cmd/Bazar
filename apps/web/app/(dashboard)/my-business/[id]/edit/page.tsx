@@ -15,11 +15,15 @@ export default async function EditBusinessPage({ params }: { params: Promise<{ i
 
   const { data: business } = await supabase
     .from("businesses")
-    .select("id, owner_id, name, category_id, city_id, description, address_text, phone, whatsapp, instagram, website, hours, status, slug")
+    .select(
+      "id, owner_id, type, name, category_id, city_id, description, address_text, phone, whatsapp, instagram, website, hours, status, slug, specializations, price_from, experience_years, house_call"
+    )
     .eq("id", id)
     .single();
 
   if (!business || business.owner_id !== user.id) notFound();
+
+  const isMaster = business.type === "master";
 
   const [{ data: images }, categories, { data: cities }] = await Promise.all([
     supabase.from("business_images").select("id, url").eq("business_id", id).order("sort_order"),
@@ -30,19 +34,25 @@ export default async function EditBusinessPage({ params }: { params: Promise<{ i
   return (
     <div>
       <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Редактирование бизнеса</h1>
-        <a href={`/business/${business.slug}`} className="text-sm font-medium text-primary hover:underline">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
+          {isMaster ? "Редактирование анкеты мастера" : "Редактирование бизнеса"}
+        </h1>
+        <a
+          href={`/${isMaster ? "masters" : "business"}/${business.slug}`}
+          className="text-sm font-medium text-primary hover:underline"
+        >
           Смотреть страницу →
         </a>
       </div>
 
       <div className="card mt-6 max-w-xl p-6">
-        <p className="mb-3 text-sm font-semibold text-foreground">Фото</p>
+        <p className="mb-3 text-sm font-semibold text-foreground">{isMaster ? "Фото / портфолио" : "Фото"}</p>
         <BusinessImageUploader userId={user.id} businessId={id} initialImages={images ?? []} />
 
         <div className="mt-6 border-t border-border pt-6">
           <BusinessForm
             mode="edit"
+            type={business.type as "business" | "master"}
             categories={categories}
             cities={cities ?? []}
             defaultValues={{
@@ -57,6 +67,10 @@ export default async function EditBusinessPage({ params }: { params: Promise<{ i
               instagram: business.instagram,
               website: business.website,
               hours: (business.hours as BusinessHours) ?? {},
+              specializations: business.specializations ?? [],
+              priceFrom: business.price_from,
+              experienceYears: business.experience_years,
+              houseCall: business.house_call,
             }}
           />
         </div>

@@ -22,7 +22,7 @@ export default async function NewBusinessPage() {
         Заполните основные данные — бизнес появится в справочнике сразу. Фото добавите на следующем шаге.
       </p>
       <div className="card mt-6 max-w-xl p-6">
-        <BusinessForm mode="create" categories={categories} cities={cities ?? []} />
+        <BusinessForm mode="create" type="business" categories={categories} cities={cities ?? []} />
       </div>
     </div>
   );

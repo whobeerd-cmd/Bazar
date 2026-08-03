@@ -13,6 +13,7 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 
 export type MyBusiness = {
   id: string;
+  type: string;
   name: string;
   slug: string;
   status: string;
@@ -27,6 +28,7 @@ export function BusinessRow({ business }: { business: MyBusiness }) {
   const router = useRouter();
 
   const statusInfo = STATUS_LABELS[business.status] ?? { label: business.status, className: "bg-muted" };
+  const basePath = business.type === "master" ? "/masters" : "/business";
 
   function run(action: () => Promise<{ error?: string } | undefined>) {
     setError(null);
@@ -52,7 +54,7 @@ export function BusinessRow({ business }: { business: MyBusiness }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           {business.status === "active" ? (
-            <Link href={`/business/${business.slug}`} className="truncate font-medium text-foreground hover:underline">
+            <Link href={`${basePath}/${business.slug}`} className="truncate font-medium text-foreground hover:underline">
               {business.name}
             </Link>
           ) : (
@@ -60,6 +62,9 @@ export function BusinessRow({ business }: { business: MyBusiness }) {
           )}
           <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${statusInfo.className}`}>
             {statusInfo.label}
+          </span>
+          <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+            {business.type === "master" ? "Мастер" : "Бизнес"}
           </span>
         </div>
         <p className="mt-0.5 text-sm text-muted-foreground">

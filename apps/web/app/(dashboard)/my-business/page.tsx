@@ -12,7 +12,7 @@ export default async function MyBusinessPage() {
 
   const { data: businesses } = await supabase
     .from("businesses")
-    .select("id, name, slug, status, rating_avg, rating_count, cover_image_url")
+    .select("id, type, name, slug, status, rating_avg, rating_count, cover_image_url")
     .eq("owner_id", user.id)
     .order("created_at", { ascending: false });
 
@@ -20,16 +20,21 @@ export default async function MyBusinessPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Мои бизнесы</h1>
-        <Link href="/my-business/new" className="btn-primary">
-          + Добавить бизнес
-        </Link>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Мои бизнесы и анкеты</h1>
+        <div className="flex gap-2">
+          <Link href="/masters/new" className="btn-secondary">
+            + Анкета мастера
+          </Link>
+          <Link href="/my-business/new" className="btn-primary">
+            + Добавить бизнес
+          </Link>
+        </div>
       </div>
 
       {items.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-          У вас пока нет бизнесов в справочнике.
+          У вас пока нет бизнесов или анкет мастера в справочнике.
         </div>
       ) : (
         <div className="mt-8 space-y-3">

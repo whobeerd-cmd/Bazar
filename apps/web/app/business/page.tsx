@@ -51,7 +51,10 @@ export default async function BusinessDirectoryPage({
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Бизнес-справочник</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Все заведения и компании Ингушетии в одном месте — с фото, адресом и отзывами реальных людей.
+        Все заведения и компании Ингушетии в одном месте — с фото, адресом и отзывами реальных людей.{" "}
+        <Link href="/masters" className="font-medium text-primary hover:underline">
+          Ищете частного специалиста? Загляните в раздел «Мастера» →
+        </Link>
       </p>
 
       <div className="mt-6">

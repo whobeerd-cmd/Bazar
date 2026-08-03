@@ -3,10 +3,16 @@ import { BadgeCheck, Building2 } from "lucide-react";
 import { StarRating } from "./StarRating";
 import type { BusinessCard } from "@/lib/business/queries";
 
-export function BusinessCardView({ business }: { business: BusinessCard }) {
+export function BusinessCardView({
+  business,
+  basePath = "/business",
+}: {
+  business: BusinessCard;
+  basePath?: string;
+}) {
   return (
     <Link
-      href={`/business/${business.slug}`}
+      href={`${basePath}/${business.slug}`}
       className="group block overflow-hidden rounded-xl border border-border bg-background shadow-card transition hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover"
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
@@ -33,8 +39,12 @@ export function BusinessCardView({ business }: { business: BusinessCard }) {
           <p className="truncate text-sm font-semibold text-foreground">{business.name}</p>
           {business.is_verified && <BadgeCheck className="h-4 w-4 shrink-0 text-primary" />}
         </div>
-        {business.category_name && (
-          <p className="mt-0.5 truncate text-xs text-muted-foreground">{business.category_name}</p>
+        {business.specializations.length > 0 ? (
+          <p className="mt-0.5 truncate text-xs text-muted-foreground">{business.specializations.join(", ")}</p>
+        ) : (
+          business.category_name && (
+            <p className="mt-0.5 truncate text-xs text-muted-foreground">{business.category_name}</p>
+          )
         )}
         <div className="mt-1.5 flex items-center gap-1.5">
           <StarRating value={business.rating_avg} size={13} />
@@ -42,7 +52,12 @@ export function BusinessCardView({ business }: { business: BusinessCard }) {
             {business.rating_count > 0 ? `${business.rating_avg.toFixed(1)} (${business.rating_count})` : "Нет отзывов"}
           </span>
         </div>
-        {business.city_name && <p className="mt-1 truncate text-xs text-muted-foreground">{business.city_name}</p>}
+        <div className="mt-1 flex items-center justify-between gap-1">
+          {business.city_name && <p className="truncate text-xs text-muted-foreground">{business.city_name}</p>}
+          {business.price_from != null && (
+            <p className="shrink-0 text-xs font-semibold text-foreground">от {business.price_from.toLocaleString("ru-RU")} ₽</p>
+          )}
+        </div>
       </div>
     </Link>
   );

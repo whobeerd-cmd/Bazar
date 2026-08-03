@@ -3,8 +3,10 @@ import type { createClient } from "@/lib/supabase/server";
 type Supabase = Awaited<ReturnType<typeof createClient>>;
 
 export type BusinessSort = "rating" | "newest";
+export type BusinessType = "business" | "master";
 
 export type BusinessFilters = {
+  type?: BusinessType;
   categoryId?: number;
   cityId?: number;
   search?: string;
@@ -24,9 +26,12 @@ export type BusinessCard = {
   is_featured: boolean;
   city_name: string | null;
   category_name: string | null;
+  price_from: number | null;
+  specializations: string[];
 };
 
-// Общий построитель запроса бизнесов — используется витриной и страницей категории.
+// Общий построитель запроса бизнесов/мастеров — используется витриной и
+// страницей категории обоих разделов (type различает их).
 export async function queryBusinesses(supabase: Supabase, filters: BusinessFilters) {
   const page = Math.max(1, filters.page ?? 1);
   const pageSize = filters.pageSize ?? 24;
@@ -36,10 +41,11 @@ export async function queryBusinesses(supabase: Supabase, filters: BusinessFilte
   let query = supabase
     .from("businesses")
     .select(
-      "id, name, slug, cover_image_url, rating_avg, rating_count, is_verified, is_featured, cities(name), business_categories(name)",
+      "id, name, slug, cover_image_url, rating_avg, rating_count, is_verified, is_featured, price_from, specializations, cities(name), business_categories(name)",
       { count: "exact" }
     )
-    .eq("status", "active");
+    .eq("status", "active")
+    .eq("type", filters.type ?? "business");
 
   if (filters.categoryId) query = query.eq("category_id", filters.categoryId);
   if (filters.cityId) query = query.eq("city_id", filters.cityId);
@@ -69,6 +75,8 @@ export async function queryBusinesses(supabase: Supabase, filters: BusinessFilte
       is_featured: row.is_featured,
       city_name: city?.name ?? null,
       category_name: category?.name ?? null,
+      price_from: row.price_from,
+      specializations: row.specializations ?? [],
     };
   });
 

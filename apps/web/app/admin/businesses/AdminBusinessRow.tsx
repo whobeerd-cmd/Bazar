@@ -17,6 +17,7 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
 
 export type AdminBusiness = {
   id: string;
+  type: string;
   name: string;
   slug: string;
   status: string;
@@ -58,13 +59,16 @@ export function AdminBusinessRow({ business }: { business: AdminBusiness }) {
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <a
-            href={`/business/${business.slug}`}
+            href={`/${business.type === "master" ? "masters" : "business"}/${business.slug}`}
             target="_blank"
             rel="noreferrer"
             className="truncate font-medium text-foreground hover:underline"
           >
             {business.name}
           </a>
+          <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+            {business.type === "master" ? "Мастер" : "Бизнес"}
+          </span>
           <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${statusInfo.className}`}>{statusInfo.label}</span>
           {business.is_verified && (
             <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">Проверен</span>

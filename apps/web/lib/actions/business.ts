@@ -14,7 +14,7 @@ async function getOwnBusinessOrThrow(
 ) {
   const { data: business } = await supabase
     .from("businesses")
-    .select("id, owner_id, slug")
+    .select("id, owner_id, slug, type")
     .eq("id", businessId)
     .single();
 
@@ -38,6 +38,7 @@ export async function createBusinessAction(
   if (!user) return { error: "Нужно войти в аккаунт" };
 
   const parsed = businessSchema.safeParse({
+    type: formData.get("type") || undefined,
     name: formData.get("name"),
     categoryId: formData.get("categoryId"),
     cityId: formData.get("cityId"),
@@ -47,6 +48,10 @@ export async function createBusinessAction(
     whatsapp: formData.get("whatsapp"),
     instagram: formData.get("instagram"),
     website: formData.get("website"),
+    specializations: formData.get("specializations"),
+    priceFrom: formData.get("priceFrom") ?? "",
+    experienceYears: formData.get("experienceYears") ?? "",
+    houseCall: formData.get("houseCall") === "on",
   });
 
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
@@ -79,6 +84,7 @@ export async function updateBusinessAction(
   if (!business) return { error: "Бизнес не найден" };
 
   const parsed = businessSchema.safeParse({
+    type: formData.get("type") || undefined,
     name: formData.get("name"),
     categoryId: formData.get("categoryId"),
     cityId: formData.get("cityId"),
@@ -88,20 +94,25 @@ export async function updateBusinessAction(
     whatsapp: formData.get("whatsapp"),
     instagram: formData.get("instagram"),
     website: formData.get("website"),
+    specializations: formData.get("specializations"),
+    priceFrom: formData.get("priceFrom") ?? "",
+    experienceYears: formData.get("experienceYears") ?? "",
+    houseCall: formData.get("houseCall") === "on",
   });
 
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
-  const { error } = await supabase
-    .from("businesses")
-    .update(parsedBusinessPayload(parsed.data, formData))
-    .eq("id", id);
+  // type задаётся только при создании — при редактировании его нельзя
+  // подменить, даже если кто-то поправит скрытое поле формы руками.
+  const { type: _ignoredType, ...updatePayload } = parsedBusinessPayload(parsed.data, formData);
+
+  const { error } = await supabase.from("businesses").update(updatePayload).eq("id", id);
 
   if (error) return { error: "Не получилось сохранить: " + error.message };
 
   revalidatePath(`/my-business/${id}/edit`);
   revalidatePath("/my-business");
-  revalidatePath(`/business/${business.slug}`);
+  revalidatePath(`/${business.type === "master" ? "masters" : "business"}/${business.slug}`);
   return { success: "Изменения сохранены" };
 }
 
@@ -208,12 +219,12 @@ export async function submitReviewAction(
 
   const { data: business } = await supabase
     .from("businesses")
-    .select("owner_id")
+    .select("owner_id, type")
     .eq("id", parsed.data.businessId)
     .single();
 
   if (business?.owner_id === user.id) {
-    return { error: "Нельзя оставить отзыв на свой же бизнес" };
+    return { error: "Нельзя оставить отзыв на свою же страницу" };
   }
 
   const { error } = await supabase.from("business_reviews").upsert(
@@ -228,7 +239,7 @@ export async function submitReviewAction(
 
   if (error) return { error: "Не получилось отправить отзыв: " + error.message };
 
-  revalidatePath(`/business/${parsed.data.slug}`);
+  revalidatePath(`/${business?.type === "master" ? "masters" : "business"}/${parsed.data.slug}`);
   return { success: "Спасибо за отзыв!" };
 }
 
@@ -277,6 +288,6 @@ export async function replyToReviewAction(
 
   if (error) return { error: error.message };
 
-  revalidatePath(`/business/${parsed.data.slug}`);
+  revalidatePath(`/${business.type === "master" ? "masters" : "business"}/${parsed.data.slug}`);
   return { success: "Ответ опубликован" };
 }

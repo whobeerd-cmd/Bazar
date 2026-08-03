@@ -21,7 +21,7 @@ export default async function AdminBusinessesPage({
   let query = supabase
     .from("businesses")
     .select(
-      "id, name, slug, status, is_verified, is_featured, rating_avg, rating_count, cover_image_url, profiles!businesses_owner_id_fkey(full_name)"
+      "id, type, name, slug, status, is_verified, is_featured, rating_avg, rating_count, cover_image_url, profiles!businesses_owner_id_fkey(full_name)"
     )
     .order("created_at", { ascending: false });
 
@@ -33,6 +33,7 @@ export default async function AdminBusinessesPage({
     const owner = Array.isArray(b.profiles) ? b.profiles[0] : b.profiles;
     return {
       id: b.id,
+      type: b.type,
       name: b.name,
       slug: b.slug,
       status: b.status,
