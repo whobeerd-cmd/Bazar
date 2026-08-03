@@ -59,7 +59,12 @@ export default async function MastersDirectoryPage({
       </p>
 
       <div className="mt-6">
-        <BusinessFiltersForm basePath="/masters" cities={cities ?? []} current={{ q: raw.q, city: raw.city, sort: raw.sort }} />
+        <BusinessFiltersForm
+          basePath="/masters"
+          cities={cities ?? []}
+          current={{ q: raw.q, city: raw.city, sort: raw.sort }}
+          searchPlaceholder="Имя мастера или вид услуги..."
+        />
       </div>
 
       {isFiltering ? (

@@ -61,6 +61,7 @@ export default async function MasterCategoryPage({
           basePath={`/masters/category/${slug}`}
           cities={cities ?? []}
           current={{ q: raw.q, city: raw.city, sort: raw.sort }}
+          searchPlaceholder="Имя мастера или вид услуги..."
         />
       </div>
 

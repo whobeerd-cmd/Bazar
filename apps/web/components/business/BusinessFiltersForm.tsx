@@ -8,10 +8,12 @@ export function BusinessFiltersForm({
   basePath,
   cities,
   current,
+  searchPlaceholder = "Название бизнеса...",
 }: {
   basePath: string;
   cities: { id: number; name: string }[];
   current: BusinessFiltersValues;
+  searchPlaceholder?: string;
 }) {
   return (
     <form
@@ -23,7 +25,7 @@ export function BusinessFiltersForm({
         <label htmlFor="q" className={labelClass}>
           Поиск
         </label>
-        <input id="q" name="q" type="text" defaultValue={current.q} placeholder="Название бизнеса..." className={inputClass} />
+        <input id="q" name="q" type="text" defaultValue={current.q} placeholder={searchPlaceholder} className={inputClass} />
       </div>
 
       <div className="sm:w-56">
