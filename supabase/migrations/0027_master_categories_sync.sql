@@ -1,0 +1,76 @@
+-- 0026 использовал `on conflict (slug) do nothing` — безопасно при первом
+-- применении, но если в Supabase успел уйти более ранний черновик списка
+-- категорий мастеров (до финальной правки на ~50 штук), часть названий
+-- осталась старой: конфликтующие slug'и просто не обновлялись. На проде
+-- обнаружено расхождение: "Косметологи, брови и ресницы" вместо
+-- "Косметологи", "Повара на выезд (для торжеств)" вместо "Повара и
+-- кондитеры на заказ" и т.д.
+--
+-- Эта миграция идемпотентна и приводит все master-категории к финальному
+-- состоянию через upsert, независимо от того, что именно уже было в базе.
+
+insert into public.business_categories (name, slug, sort_order, group_label, for_business, for_masters) values
+  ('Сантехники', 'm-santehniki', 3010, 'Ремонт и стройка', false, true),
+  ('Электрики', 'm-elektriki', 3020, 'Ремонт и стройка', false, true),
+  ('Мастера по ремонту и отделке', 'm-otdelochniki', 3030, 'Ремонт и стройка', false, true),
+  ('Маляры', 'm-malyary', 3040, 'Ремонт и стройка', false, true),
+  ('Плиточники', 'm-plitochniki', 3050, 'Ремонт и стройка', false, true),
+  ('Сварщики', 'm-svarshiki', 3060, 'Ремонт и стройка', false, true),
+  ('Кровельщики', 'm-krovelshiki', 3070, 'Ремонт и стройка', false, true),
+  ('Мебельщики (сборка и ремонт)', 'm-mebelshiki', 3080, 'Ремонт и стройка', false, true),
+  ('Установка окон, дверей и кондиционеров', 'm-okna-dveri-kondicionery', 3090, 'Ремонт и стройка', false, true),
+  ('Разнорабочие (мастер на час)', 'm-raznorabochie', 3100, 'Ремонт и стройка', false, true),
+
+  ('Мастера по ремонту бытовой техники', 'm-remont-tehniki', 3210, 'Техника', false, true),
+  ('Ремонт телефонов и планшетов', 'm-remont-telefonov', 3220, 'Техника', false, true),
+  ('Компьютерная помощь', 'm-kompyuternaya-pomosch', 3230, 'Техника', false, true),
+  ('Программисты и IT-услуги', 'm-programmisty', 3240, 'Техника', false, true),
+  ('Установка и ремонт ТВ, антенн, видеонаблюдения', 'm-remont-tv-antenn', 3250, 'Техника', false, true),
+
+  ('Парикмахеры', 'm-parikmahery', 3310, 'Красота и здоровье', false, true),
+  ('Мастера маникюра и педикюра', 'm-manikyur', 3320, 'Красота и здоровье', false, true),
+  ('Мастера бровей и ресниц', 'm-brovi-resnicy', 3330, 'Красота и здоровье', false, true),
+  ('Косметологи', 'm-kosmetologi', 3340, 'Красота и здоровье', false, true),
+  ('Визажисты', 'm-vizazhisty', 3350, 'Красота и здоровье', false, true),
+  ('Массажисты', 'm-massazhisty', 3360, 'Красота и здоровье', false, true),
+  ('Тату и пирсинг-мастера', 'm-tatu', 3370, 'Красота и здоровье', false, true),
+
+  ('Автомеханики', 'm-avtomehaniki', 3410, 'Авто', false, true),
+  ('Автоэлектрики', 'm-avtoelektriki', 3420, 'Авто', false, true),
+  ('Мойка авто на выезд', 'm-moyka-avto', 3430, 'Авто', false, true),
+  ('Шиномонтажники', 'm-shinomontazhniki', 3440, 'Авто', false, true),
+  ('Таксисты (дальние поездки)', 'm-taksisty', 3450, 'Авто', false, true),
+  ('Эвакуаторы', 'm-evakuatory', 3460, 'Авто', false, true),
+
+  ('Репетиторы', 'm-repetitory', 3510, 'Образование', false, true),
+  ('Инструкторы по вождению', 'm-instruktory-vozhdeniya', 3520, 'Образование', false, true),
+  ('Логопеды', 'm-logopedy', 3530, 'Образование', false, true),
+  ('Психологи', 'm-psihologi', 3540, 'Образование', false, true),
+
+  ('Фотографы и видеооператоры', 'm-foto-video', 3610, 'Мероприятия', false, true),
+  ('Ведущие праздников', 'm-vedushie', 3620, 'Мероприятия', false, true),
+  ('Диджеи и музыканты', 'm-dj-muzykanty', 3630, 'Мероприятия', false, true),
+  ('Повара и кондитеры на заказ', 'm-povara', 3640, 'Мероприятия', false, true),
+  ('Декораторы и флористы', 'm-dekor-i-cvety', 3650, 'Мероприятия', false, true),
+
+  ('Няни и сиделки', 'm-nyani', 3710, 'Дом и быт', false, true),
+  ('Клинеры (уборка)', 'm-kliner', 3720, 'Дом и быт', false, true),
+  ('Грузчики и переезды', 'm-gruzchiki', 3730, 'Дом и быт', false, true),
+  ('Швеи и ателье на дому', 'm-shvei', 3740, 'Дом и быт', false, true),
+  ('Рукоделие и хендмейд', 'm-rukodelie', 3750, 'Дом и быт', false, true),
+  ('Уход за животными', 'm-zoomaster', 3760, 'Дом и быт', false, true),
+  ('Курьеры', 'm-kurery', 3770, 'Дом и быт', false, true),
+
+  ('Юристы', 'm-yuristy', 3810, 'Услуги', false, true),
+  ('Бухгалтеры', 'm-buhgaltery', 3820, 'Услуги', false, true),
+  ('Риелторы', 'm-rieltory', 3830, 'Услуги', false, true),
+  ('Переводчики', 'm-perevodchiki', 3840, 'Услуги', false, true),
+  ('Персональные тренеры', 'm-trenery', 3850, 'Услуги', false, true),
+
+  ('Другое', 'm-drugoe', 3999, 'Другое', false, true)
+on conflict (slug) do update set
+  name = excluded.name,
+  sort_order = excluded.sort_order,
+  group_label = excluded.group_label,
+  for_business = excluded.for_business,
+  for_masters = excluded.for_masters;
