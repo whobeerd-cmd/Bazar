@@ -6,6 +6,7 @@ import { getCategoryTree } from "@/lib/categories";
 import { queryBusinesses } from "@/lib/business/queries";
 import { BusinessCardView } from "@/components/business/BusinessCardView";
 import { RecentlyViewed } from "@/components/listings/RecentlyViewed";
+import { InstallAppBanner } from "@/components/InstallAppBanner";
 
 const VALUE_PROPS = ["Бесплатно для частных лиц", "Без посредников", "Публикация сразу, без ожидания"];
 
@@ -92,6 +93,8 @@ export default async function HomePage() {
 
   return (
     <div>
+      <InstallAppBanner />
+
       <section className="relative overflow-hidden border-b border-border">
         <div
           aria-hidden
