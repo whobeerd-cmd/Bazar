@@ -33,21 +33,28 @@ export default async function HomePage() {
     <div className="relative rounded-3xl border border-accent/25 bg-gradient-to-br from-accent/10 via-background to-background p-6 shadow-card">
       <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
         <Building2 className="h-3.5 w-3.5" />
-        Каталог бизнесов
+        Каталог бизнесов и мастеров
       </span>
       <p className="mt-3 text-lg font-extrabold leading-snug tracking-tight text-foreground">
         Рестораны, мастера, магазины — рядом с вами
       </p>
       <p className="mt-2 text-sm text-muted-foreground">
-        Отдельный раздел для компаний Ингушетии — с фото, отзывами и рейтингом.
-        Люди ищут, к кому обратиться, — здесь их находят.
+        Отдельный раздел для компаний и частных специалистов Ингушетии — с фото, отзывами и рейтингом.
       </p>
-      <Link
-        href="/my-business/new"
-        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
-      >
-        Добавить свой бизнес в каталог →
-      </Link>
+      <div className="mt-4 flex flex-col items-start gap-1.5">
+        <Link
+          href="/my-business/new"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+        >
+          Добавить свой бизнес →
+        </Link>
+        <Link
+          href="/masters/new"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+        >
+          Разместить анкету мастера →
+        </Link>
+      </div>
     </div>
   );
 
@@ -72,14 +79,28 @@ export default async function HomePage() {
               fill="none"
             >
               <path
-                d="M790 225C710 260 650 275 590 280C578 281 568 282 560 284"
+                d="M785 235C715 250 610 254 500 254"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeDasharray="5 6"
                 strokeLinecap="round"
               />
               <path
-                d="M572 270L560 284L576 296"
+                d="M488 242L500 254L512 244"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M785 235C765 244 695 250 636 253"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeDasharray="5 6"
+                strokeLinecap="round"
+              />
+              <path
+                d="M624 241L636 253L648 243"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
