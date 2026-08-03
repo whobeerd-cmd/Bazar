@@ -43,26 +43,43 @@ export function BannerForm() {
 
       <div>
         <label className="field-label">Картинка баннера</label>
-        <div className="mt-1 flex items-center gap-3">
-          {imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt="" className="h-12 w-24 rounded border border-border object-cover" />
-          )}
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            disabled={isUploading}
-            className="btn-secondary py-1.5"
-          >
-            {isUploading ? "Загружаем..." : imageUrl ? "Заменить картинку" : "Загрузить картинку"}
-          </button>
-          <input
-            ref={inputRef}
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-            onChange={handleFileChange}
-            className="hidden"
-          />
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          Широкое изображение, соотношение сторон примерно 3:1 (например, 1200×400) — так оно впишется без обрезки лишнего.
+        </p>
+        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-start">
+          <div className="w-full max-w-sm">
+            <p className="mb-1 text-xs font-medium text-muted-foreground">Так баннер будет выглядеть на сайте:</p>
+            {imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={imageUrl}
+                alt=""
+                className="aspect-[3/1] w-full rounded-xl border border-border object-cover shadow-card"
+              />
+            ) : (
+              <div className="flex aspect-[3/1] w-full items-center justify-center rounded-xl border border-dashed border-border bg-muted text-xs text-muted-foreground">
+                Превью появится после загрузки
+              </div>
+            )}
+          </div>
+
+          <div>
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              disabled={isUploading}
+              className="btn-secondary py-1.5"
+            >
+              {isUploading ? "Загружаем..." : imageUrl ? "Заменить картинку" : "Загрузить картинку"}
+            </button>
+            <input
+              ref={inputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </div>
         </div>
         {uploadError && <p className="mt-1 text-xs text-red-700">{uploadError}</p>}
       </div>
@@ -83,9 +100,8 @@ export function BannerForm() {
             defaultValue="home_top"
             className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm outline-none transition focus:border-border-strong focus:ring-2 focus:ring-primary/25"
           >
-            <option value="home_top">Верх главной</option>
-            <option value="home_middle">Середина главной</option>
-            <option value="sidebar">Боковая колонка</option>
+            <option value="home_top">Верх главной (над «Категории»)</option>
+            <option value="home_middle">Середина главной (перед «Проверенные бизнесы»)</option>
           </select>
         </div>
         <div>

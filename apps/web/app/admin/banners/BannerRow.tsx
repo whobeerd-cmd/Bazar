@@ -26,7 +26,7 @@ export function BannerRow({ banner }: { banner: Banner }) {
     <tr className="border-b border-border text-sm">
       <td className="p-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={banner.image_url} alt="" className="h-10 w-20 rounded object-cover" />
+        <img src={banner.image_url} alt="" className="aspect-[3/1] w-24 rounded object-cover" />
       </td>
       <td className="p-3 text-muted-foreground">{POSITION_LABELS[banner.position] ?? banner.position}</td>
       <td className="p-3 text-muted-foreground">{banner.sort_order}</td>

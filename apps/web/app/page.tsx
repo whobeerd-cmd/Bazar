@@ -17,14 +17,46 @@ function subcategoryLabel(count: number) {
   return `${count} подразделов`;
 }
 
+function BannerRow({ banners }: { banners: { id: number; image_url: string; link_url: string | null }[] }) {
+  if (banners.length === 0) return null;
+  return (
+    <div className="mb-12 grid gap-4 sm:grid-cols-2">
+      {banners.map((banner) => {
+        const image = (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={banner.image_url}
+            alt=""
+            className="aspect-[3/1] w-full rounded-xl border border-border object-cover shadow-card"
+          />
+        );
+        return banner.link_url ? (
+          <a key={banner.id} href={banner.link_url}>
+            {image}
+          </a>
+        ) : (
+          <div key={banner.id}>{image}</div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default async function HomePage() {
   const supabase = await createClient();
-  const [categories, { data: banners }, { items: featuredBusinesses }] = await Promise.all([
+  const [categories, { data: topBanners }, { data: middleBanners }, { items: featuredBusinesses }] = await Promise.all([
     getCategoryTree(),
     supabase
       .from("banners")
       .select("id, image_url, link_url")
       .eq("position", "home_top")
+      .eq("is_active", true)
+      .order("sort_order"),
+    supabase
+      .from("banners")
+      .select("id, image_url, link_url")
+      .eq("position", "home_middle")
+      .eq("is_active", true)
       .order("sort_order"),
     queryBusinesses(supabase, { sort: "rating", pageSize: 4 }),
   ]);
@@ -166,27 +198,7 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto max-w-6xl px-4 pb-12 pt-8 sm:pb-16 sm:pt-10">
-        {banners && banners.length > 0 && (
-          <div className="mb-12 grid gap-4 sm:grid-cols-2">
-            {banners.map((banner) => {
-              const image = (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={banner.image_url}
-                  alt=""
-                  className="w-full rounded-xl border border-border object-cover shadow-card"
-                />
-              );
-              return banner.link_url ? (
-                <a key={banner.id} href={banner.link_url}>
-                  {image}
-                </a>
-              ) : (
-                <div key={banner.id}>{image}</div>
-              );
-            })}
-          </div>
-        )}
+        <BannerRow banners={topBanners ?? []} />
 
         <div>
           <h2 className="text-2xl font-extrabold tracking-tight text-foreground">Категории</h2>
@@ -237,6 +249,12 @@ export default async function HomePage() {
           <p className="mt-8 text-sm text-muted-foreground">
             Категории пока не загружены — выполните supabase/seed.sql.
           </p>
+        )}
+
+        {middleBanners && middleBanners.length > 0 && (
+          <div className="mt-12">
+            <BannerRow banners={middleBanners} />
+          </div>
         )}
 
         {featuredBusinesses.length > 0 && (
