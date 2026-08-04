@@ -11,7 +11,9 @@ export default async function AdminUsersPage({
 
   let query = supabase
     .from("profiles")
-    .select("id, full_name, phone, avatar_url, is_blocked, created_at, last_seen_at, user_roles(roles(code))")
+    .select(
+      "id, full_name, avatar_url, is_blocked, created_at, last_seen_at, user_roles(roles(code)), profiles_private(phone)"
+    )
     .eq("is_demo", false)
     .order("created_at", { ascending: false })
     .limit(100);
@@ -23,18 +25,21 @@ export default async function AdminUsersPage({
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("is_demo", false),
   ]);
 
-  const users: AdminUser[] = (profiles ?? []).map((p: any) => ({
-    id: p.id,
-    full_name: p.full_name,
-    phone: p.phone,
-    avatar_url: p.avatar_url,
-    is_blocked: p.is_blocked,
-    created_at: p.created_at,
-    last_seen_at: p.last_seen_at,
-    roleCodes: (p.user_roles ?? [])
-      .map((ur: any) => (Array.isArray(ur.roles) ? ur.roles[0]?.code : ur.roles?.code))
-      .filter(Boolean),
-  }));
+  const users: AdminUser[] = (profiles ?? []).map((p: any) => {
+    const profilePrivate = Array.isArray(p.profiles_private) ? p.profiles_private[0] : p.profiles_private;
+    return {
+      id: p.id,
+      full_name: p.full_name,
+      phone: profilePrivate?.phone ?? null,
+      avatar_url: p.avatar_url,
+      is_blocked: p.is_blocked,
+      created_at: p.created_at,
+      last_seen_at: p.last_seen_at,
+      roleCodes: (p.user_roles ?? [])
+        .map((ur: any) => (Array.isArray(ur.roles) ? ur.roles[0]?.code : ur.roles?.code))
+        .filter(Boolean),
+    };
+  });
 
   const ONLINE_WINDOW_MS = 5 * 60 * 1000;
   const onlineCount = users.filter(

@@ -68,7 +68,7 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
   const { data: listing } = await supabase
     .from("listings")
     .select(
-      "id, title, description, price, price_type, condition, deal_type, address_text, lat, lng, status, is_vip, created_at, user_id, category_id, categories(name, slug), cities(name, lat, lng), profiles!listings_user_id_fkey(full_name, avatar_url, phone)"
+      "id, title, description, price, price_type, condition, deal_type, address_text, lat, lng, status, is_vip, created_at, user_id, category_id, categories(name, slug), cities(name, lat, lng), profiles!listings_user_id_fkey(full_name, avatar_url, profiles_private(phone))"
     )
     .eq("slug", slug)
     .single();
@@ -106,7 +106,11 @@ export default async function ListingPage({ params }: { params: Promise<{ slug: 
 
   const category = Array.isArray(listing.categories) ? listing.categories[0] : listing.categories;
   const city = Array.isArray(listing.cities) ? listing.cities[0] : listing.cities;
-  const seller = Array.isArray(listing.profiles) ? listing.profiles[0] : listing.profiles;
+  const sellerRow = Array.isArray(listing.profiles) ? listing.profiles[0] : listing.profiles;
+  const sellerPrivate = Array.isArray(sellerRow?.profiles_private)
+    ? sellerRow.profiles_private[0]
+    : sellerRow?.profiles_private;
+  const seller = sellerRow ? { ...sellerRow, phone: sellerPrivate?.phone ?? null } : null;
   const isFavorited = Boolean(favoriteRow?.data);
 
   const mapLat = listing.lat ?? city?.lat;

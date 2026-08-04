@@ -38,14 +38,20 @@ export async function updateProfileAction(
 
   const { error } = await supabase
     .from("profiles")
-    .update({
-      full_name: parsed.data.fullName,
-      phone: parsed.data.phone || null,
-    })
+    .update({ full_name: parsed.data.fullName })
     .eq("id", user.id);
 
   if (error) {
     return { error: "Не получилось сохранить профиль: " + error.message };
+  }
+
+  const { error: phoneError } = await supabase
+    .from("profiles_private")
+    .update({ phone: parsed.data.phone || null })
+    .eq("id", user.id);
+
+  if (phoneError) {
+    return { error: "Не получилось сохранить телефон: " + phoneError.message };
   }
 
   revalidatePath("/profile");

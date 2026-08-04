@@ -6,18 +6,19 @@ export default async function AdminDataRequestsPage() {
 
   const { data: requests } = await supabase
     .from("data_requests")
-    .select("id, user_id, status, created_at, profiles(full_name, phone)")
+    .select("id, user_id, status, created_at, profiles(full_name, profiles_private(phone))")
     .order("created_at", { ascending: false });
 
   const rows: DataRequest[] = (requests ?? []).map((r: any) => {
     const profile = Array.isArray(r.profiles) ? r.profiles[0] : r.profiles;
+    const profilePrivate = Array.isArray(profile?.profiles_private) ? profile.profiles_private[0] : profile?.profiles_private;
     return {
       id: r.id,
       userId: r.user_id,
       status: r.status,
       createdAt: r.created_at,
       userName: profile?.full_name ?? null,
-      userPhone: profile?.phone ?? null,
+      userPhone: profilePrivate?.phone ?? null,
     };
   });
 

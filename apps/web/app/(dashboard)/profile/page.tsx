@@ -21,9 +21,12 @@ export default async function ProfilePage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, phone, avatar_url, email_verified, created_at")
+    .select("full_name, avatar_url, email_verified, created_at, profiles_private(phone)")
     .eq("id", user.id)
     .single();
+  const profilePrivate = Array.isArray(profile?.profiles_private)
+    ? profile.profiles_private[0]
+    : profile?.profiles_private;
 
   const { data: pendingDataRequest } = await supabase
     .from("data_requests")
@@ -49,7 +52,7 @@ export default async function ProfilePage({
         <div className="mt-6 border-t border-border pt-6">
           <ProfileForm
             defaultFullName={profile?.full_name ?? ""}
-            defaultPhone={profile?.phone ?? ""}
+            defaultPhone={profilePrivate?.phone ?? ""}
           />
         </div>
       </div>
